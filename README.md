@@ -7,5 +7,5 @@ Mani Sarthak
 Devang Garg
 
 *** Current Message ***
-I expect everybody to learn git so it will be easy to collaborate. I have uploaded a short pdf for learning git. You can try it.
-Windows will work but Ubuntu is preferred.
+
+I expect everybody to learn git so it will be easy to collaborate. I have uploaded a short pdf for learning git. You can try it. Windows will work but Ubuntu is preferred.
