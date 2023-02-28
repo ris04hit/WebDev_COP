@@ -7,8 +7,8 @@ Mani Sarthak
 Devang Garg
 
 Links :
-1. Google Docs: https://docs.google.com/document/d/17qJPZJVf5_4kaMLvSoGbkcqOHYlwlpJArfUAp8kUY_I/edit?usp=sharing
-
+1. Google Docs(Actual): https://docs.google.com/document/d/17qJPZJVf5_4kaMLvSoGbkcqOHYlwlpJArfUAp8kUY_I/edit?usp=sharing
+2. Google Docs (Dummy / to be submitted on the excel sheet publically): https://docs.google.com/document/d/1A7xY-eQVEZhQBJzcvO8_SKRoKn7ePgZuTR-05LeoqFk/edit?usp=sharing
 
 *** Current Message ***
 
