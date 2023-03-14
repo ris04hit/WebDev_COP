@@ -1,4 +1,3 @@
-Setting left
 Institution not complete on figma
 Tex_file left
 
@@ -7,6 +6,7 @@ Classes:
         Id: Id.Post_id
         Author: Id.Account_id
         Time: date_time
+        Title: alphanumeric
         Textual_Content: Tex_file
         Upvotes: {Id.Account_id}*
         Post_Comment: {Id.Comment_id}*
@@ -37,6 +37,12 @@ Classes:
         Visited_Post: {Id.Post_id}*
         Activity: {Id.Comment_id|Id.Post_id}*
         tag_list: {Id.Tag_id}*
+        Country: alphanumeric
+        State: alphanumeric
+        City: alphanumeric
+        Website_address: alphanumeric
+        Github_handle: alphanumeric
+        Organisation: alphanumeric
         Visibility: Bool
         Report_list: {Id.Report_id}*
         API_visibility: Bool
@@ -86,7 +92,9 @@ Classes:
         Username: alphanumeric
         Domain: alphanumeric
         Domain_hash: hex
-        API_visibility: False
+        Visibility: Bool        (#By default False)
+        API_visibility: Bool
+            {Visibility = True}
     Id:
         obj: alphanumeric
         uniq: alphanumeric
@@ -117,6 +125,7 @@ API:
             Id: Id.Post_id
             Author: Id.Account_id
             Time: date_time
+            Title: alphanumeric
             Textual_Content: Tex_file
                                                                                             Upvotes: {Id.Account_id}*
             Post_Comment: {Id.Comment_id}*
@@ -134,7 +143,10 @@ API:
             Username: Alphanumeric
             Creation_time: date_time
             Name: alphabets
-                                                                                            Email_id: email
+            Email_id:
+                Condition:
+                    Email_id.API_visibility = True
+                {email}
             Institutes: {Id.Institution_id}*
             Posts: 
                 Conditon:
@@ -146,13 +158,19 @@ API:
             Bookmarks: {Id.Post_id}*
                                                                                             Followers: {Id.Account_id}*
                                                                                             Following: {Id.Account_id}*
-            Comments: {Id.Comment_id}* 
+            Comments:
                 Conditon:
                     Comment.API_visibility == True
                 {Id.Comment_id}*
                                                                                             Visited_Post: {Id.Post_id}*
                                                                                             Activity: {Id.Comment_id|Id.Post_id}*
             tag_list: {Id.Tag_id}*
+            Country: alphanumeric
+                                                                                            State: alphanumeric
+                                                                                            City: alphanumeric
+            Website_address: alphanumeric
+            Github_handle: alphanumeric
+            Organisation: alphanumeric
                                                                                             Visibility: Bool
                                                                                             Report_list: {Id.Report_id}*
                                                                                             API_visibility: Bool
