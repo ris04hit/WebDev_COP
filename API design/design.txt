@@ -244,12 +244,48 @@ API:
         Comment.get:
             Arguments: Id.Comment_id
             Returns: Comment
-        Account.Username:
+        Account_Username.get:
             Arguments: Username
             Returns: Account
-        Institution.Name:
+        Institution_Name.get:
             Arguments: Name
             Returns: Institution
-        Tag.Name:
+        Tag_Name.get:
             Arguments: Name
             Returns: Tag
+        Post.post:
+            Argument: Post
+            Returns: Id.Post_id
+        Account.post:
+            Argument: Account
+            Returns: Id.Account_id
+        Institution.post:
+            Argument: Institution
+            Returns: Id.Institution_id
+        Tag.post:
+            Argument: Tag
+            Returns: Id.Tag_id
+        Comment.post:
+            Argument: Comment
+            Returns: Id.Comment_id
+        Post.put:
+            Argument: Id.Post_id
+            Returns: None
+        Account.put:
+            Argument: Id.Account_id
+            Returns: None
+        Institution.put:
+            Argument: Id.Institution_id
+            Returns: None
+        Comment.put:
+            Argument: Id.Comment_id
+            Returns: None
+        Post.delete:
+            Argument: Id.Post_id
+            Returns: None
+        Account.delete:
+            Argument: Id.Account_id
+            Returns: None
+        Comment.delete:
+            Argument: Id.Comment_id
+            Returns: None
