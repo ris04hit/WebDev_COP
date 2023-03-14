@@ -226,3 +226,12 @@ API:
         Comment.get:
             Arguments: Id.Comment_id
             Returns: Comment
+        Account.Username:
+            Arguments: Username
+            Returns: Account
+        Institution.Name:
+            Arguments: Name
+            Returns: Institution
+        Tag.Name:
+            Arguments: Name
+            Returns: Tag
