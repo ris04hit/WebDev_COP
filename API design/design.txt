@@ -118,7 +118,7 @@ API:
             Author: Id.Account_id
             Time: date_time
             Textual_Content: Tex_file
-            Upvotes: {Id.Account_id}*
+                                                                                            Upvotes: {Id.Account_id}*
             Post_Comment: {Id.Comment_id}*
                                                                                             Report_list: {Id.Report_id}*
             Public_post: Bool
@@ -127,7 +127,8 @@ API:
             tag_list: {Id.Tag_id}*
                                                                                             API_visibility: Bool
             Customized:
-                Report_length = len(Report_list)
+                Report_num = len(Report_list)
+                Upvote_num = len(Upvotes)
         Account:
             Id: Id.Account_id
             Username: Alphanumeric
@@ -156,8 +157,9 @@ API:
                                                                                             Report_list: {Id.Report_id}*
                                                                                             API_visibility: Bool
             Customized:
-                Followers_num: len(Followers)
-                Following_num: len(Following)
+                Followers_num = len(Followers)
+                Following_num = len(Following)
+                Report_num = len(Report_list)
         Institution:
             Id: Id.Institution_id
             Name: Alphanumeric
@@ -173,9 +175,11 @@ API:
             Description: Tex_file
             Domains: {alphanumeric}*
             Admin: Id.Account_id
-            Email_id: email 
+                                                                                            Email_id: email 
                                                                                             Visibility: Bool
                                                                                             API_visibility: Bool
+            Customized:
+                Email: Email_id.Username + "@" + Email_id.Domain
         Tag:
             Id: Id.Tag_id
             Tag_Name: alphanumeric
@@ -193,9 +197,32 @@ API:
             Author: Id.Account_id
             Time: date_time
             Textual_Content: Tex_file
-            Upvotes: {Id.Account_id}*
+                                                                                            Upvotes: {Id.Account_id}*
             Comment_list: {Id.Comment_id}*
-            Comment_Report: {Id.Report_id}*
-            Visibility: Bool
-            Post: Id.Post_id
-            API_visibility: Bool
+                                                                                            Comment_Report: {Id.Report_id}*
+                                                                                            Visibility: Bool
+            Post:
+                Conditon:
+                    Post.API_visibility == True
+                {Id.Post_id}*
+                                                                                            API_visibility: Bool
+            Customized:
+                Upvote_num = len(Upvotes)
+                Report_num = len(Comment_Report)
+    
+    Methods:
+        Post.get:
+            Arguments: Id.Post_id
+            Returns: Post
+        Account.get:
+            Arguments: Id.Account_id
+            Returns: Account
+        Institution.get:
+            Arguments: Id.Institution_id
+            Returns: Institution
+        Tag.get:
+            Arguments: Id.Tag_id
+            Returns: Tag
+        Comment.get:
+            Arguments: Id.Comment_id
+            Returns: Comment
