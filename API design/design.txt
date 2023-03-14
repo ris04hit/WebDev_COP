@@ -28,7 +28,7 @@ Classes:
         Institutes: {Id.Institution_id}*
         Posts: {Id.Post_id}*
         Last_visit: date_time
-        Upvotes: {Id.Account_id}*
+        Upvotes: int
         Profile_photo: Tex_file (#Store and provide link in databse)
         Bookmarks: {Id.Post_id}*
         Followers: {Id.Account_id}*
