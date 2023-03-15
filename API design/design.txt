@@ -7,9 +7,9 @@ Classes:
         Author: Id.Account_id
         Time: date_time
         Title: alphanumeric
-        Textual_Content: Tex_file
+        Content: Tex_file
         Upvotes: {Id.Account_id}*
-        Post_Comment: {Id.Comment_id}*
+        Comment: {Id.Comment_id}*
         Report_list: {Id.Report_id}*
         Public_post: Bool
         Visibility: Bool {if Author.Visibility = True} else False
@@ -27,8 +27,8 @@ Classes:
         Email_id: email
         Institutes: {Id.Institution_id}*
         Posts: {Id.Post_id}*
-        Last_visit_time: date_time
-        Upvotes: int
+        Last_visit: date_time
+        Upvotes: {Id.Account_id}*
         Profile_photo: Tex_file (#Store and provide link in databse)
         Bookmarks: {Id.Post_id}*
         Followers: {Id.Account_id}*
@@ -73,7 +73,7 @@ Classes:
         Id: Id.Comment_id
         Author: Id.Account_id 
         Time: date_time
-        Textual_Content: Tex_file
+        Content: Tex_file
         Upvotes: {Id.Account_id}*
         Comment_list: {Id.Comment_id}*
         Comment_Report: {Id.Report_id}*
@@ -126,9 +126,9 @@ API:
             Author: Id.Account_id
             Time: date_time
             Title: alphanumeric
-            Textual_Content: Tex_file
+            Content: Tex_file
                                                                                             Upvotes: {Id.Account_id}*
-            Post_Comment: {Id.Comment_id}*
+            Comment: {Id.Comment_id}*
                                                                                             Report_list: {Id.Report_id}*
             Public_post: Bool
                                                                                             Visibility: Bool
@@ -152,7 +152,7 @@ API:
                 Conditon:
                     Post.API_visibility == True
                 {Id.Post_id}*
-            Last_visit_time: date_time
+            Last_visit: date_time
             Upvotes: int
             Profile_photo: Tex_file (#Store and provide link in databse)
             Bookmarks: {Id.Post_id}*
@@ -214,7 +214,7 @@ API:
             Id: Id.Comment_id
             Author: Id.Account_id
             Time: date_time
-            Textual_Content: Tex_file
+            Content: Tex_file
                                                                                             Upvotes: {Id.Account_id}*
             Comment_list: {Id.Comment_id}*
                                                                                             Comment_Report: {Id.Report_id}*
