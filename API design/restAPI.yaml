@@ -16,18 +16,16 @@ externalDocs:
 # servers:
 #   - url: https://petstore3.swagger.io/api/v3
 tags:
-  - name: pet
-    description: Everything about your Pets
-    externalDocs:
-      description: Find out more
-      url: http://swagger.io
-  - name: store
-    description: Access to Petstore orders
-    externalDocs:
-      description: Find out more about our store
-      url: http://swagger.io
-  - name: user
-    description: Operations about user
+  - name: Post
+    description: Everything about your Posts
+  - name: Account
+    description: Everything about Accounts
+  - name: Tag
+    description: Everything about Tags
+  - name: Institution
+    description: Everything about your Institution
+  - name: Comment
+    description: Everything about your Comments
 paths:
   /Post:
     put:
@@ -56,10 +54,6 @@ paths:
           description: Post not found
         '405':
           description: Validation exception
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     post:
       tags:
         - Post
@@ -82,10 +76,6 @@ paths:
                 $ref: '#/components/schemas/Post'          
         '405':
           description: Invalid input
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     delete:
       tags:
         - Post
@@ -97,10 +87,6 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Post not found
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
   /Post/{Id}:
     get:
       tags:
@@ -114,14 +100,14 @@ paths:
           description: Id of Post that needs to be fetched
           required: true
           schema:
-            $ref: '#/components/schemas/Id'
+            $ref: '#/components/schemas/Id.Post_Id'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Account'          
+                $ref: '#/components/schemas/Post'          
         '400':
           description: Invalid ID supplied
         '404':
@@ -153,10 +139,6 @@ paths:
           description: Account not found
         '405':
           description: Validation exception
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     post:
       tags:
         - Account
@@ -179,10 +161,6 @@ paths:
                 $ref: '#/components/schemas/Account'          
         '405':
           description: Invalid input
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     delete:
       tags:
         - Account
@@ -194,10 +172,6 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Account not found
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
   /Account/{Username}:
     get:
       tags:
@@ -326,10 +300,6 @@ paths:
           description: Institution not found
         '405':
           description: Validation exception
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     post:
       tags:
         - Institution
@@ -352,10 +322,6 @@ paths:
                 $ref: '#/components/schemas/Institution'          
         '405':
           description: Invalid input
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
   /Institution/{Id}:
     get:
       tags:
@@ -369,7 +335,7 @@ paths:
           description: Id of Institution that needs to be fetched
           required: true
           schema:
-            $ref: '#/components/schemas/Id'
+            $ref: '#/components/schemas/Id.Institution_Id'
       responses:
         '200':
           description: successful operation
@@ -408,10 +374,6 @@ paths:
           description: Tag not found
         '405':
           description: Validation exception
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     post:
       tags:
         - Tag
@@ -434,10 +396,6 @@ paths:
                 $ref: '#/components/schemas/Tag'          
         '405':
           description: Invalid input
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
   /Tag/{Id}:
     get:
       tags:
@@ -451,7 +409,7 @@ paths:
           description: Id of Tag that needs to be fetched
           required: true
           schema:
-            $ref: '#/components/schemas/Id'
+            $ref: '#/components/schemas/Id.Tag_Id'
       responses:
         '200':
           description: successful operation
@@ -490,10 +448,6 @@ paths:
           description: Comment not found
         '405':
           description: Validation exception
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     post:
       tags:
         - Comment
@@ -516,10 +470,6 @@ paths:
                 $ref: '#/components/schemas/Comment'          
         '405':
           description: Invalid input
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
     delete:
       tags:
         - Comment
@@ -531,10 +481,6 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Comment not found
-      security:
-        - petstore_auth:
-            - write:pets
-            - read:pets
   /Comment/{Id}:
     get:
       tags:
@@ -548,7 +494,7 @@ paths:
           description: Id of Comment that needs to be fetched
           required: true
           schema:
-            $ref: '#/components/schemas/Id'
+            $ref: '#/components/schemas/Id.Comment_Id'
       responses:
         '200':
           description: successful operation
@@ -562,204 +508,254 @@ paths:
           description: Account not found
 components:
   schemas:
-    Order:
+    Post:
+      required:
+        - Id
+        - Author
+        - Time
+        - Title
+        - Content
+        - Public_post
+        - Report_num
+        - Upvote_num
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        petId:
-          type: integer
-          format: int64
-          example: 198772
-        quantity:
-          type: integer
-          format: int32
-          example: 7
-        shipDate:
+        Id:
+          $ref: '#/components/schemas/Id.Post_Id'
+        Author:
+          $ref: '#/components/schemas/Id.Account_Id'
+        Time:
           type: string
           format: date-time
-        status:
+        Title:
           type: string
-          description: Order Status
-          example: approved
-          enum:
-            - placed
-            - approved
-            - delivered
-        complete:
-          type: boolean
-      xml:
-        name: order
-    Customer:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 100000
-        username:
+        Content:
           type: string
-          example: fehguy
-        address:
+        Comment:
           type: array
-          xml:
-            name: addresses
-            wrapped: true
           items:
-            $ref: '#/components/schemas/Address'
-      xml:
-        name: customer
-    Address:
-      type: object
-      properties:
-        street:
-          type: string
-          example: 437 Lytton
-        city:
-          type: string
-          example: Palo Alto
-        state:
-          type: string
-          example: CA
-        zip:
-          type: string
-          example: '94301'
-      xml:
-        name: address
-    Category:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-        name:
-          type: string
-          example: Dogs
-      xml:
-        name: category
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        username:
-          type: string
-          example: theUser
-        firstName:
-          type: string
-          example: John
-        lastName:
-          type: string
-          example: James
-        email:
-          type: string
-          example: john@email.com
-        password:
-          type: string
-          example: '12345'
-        phone:
-          type: string
-          example: '12345'
-        userStatus:
-          type: integer
-          description: User Status
-          format: int32
-          example: 1
-      xml:
-        name: user
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-      xml:
-        name: tag
-    Pet:
-      required:
-        - name
-        - photoUrls
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        name:
-          type: string
-          example: doggie
-        category:
-          $ref: '#/components/schemas/Category'
-        photoUrls:
+            $ref: '#/components/schemas/Id.Comment_Id'
+        Public_post:
+          type: boolean
+        Institutes:
           type: array
-          xml:
-            wrapped: true
+          items:
+            $ref: '#/components/schemas/Id.Institution_Id'
+        tag_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Tag_Id'
+        Report_num:
+          type: integer
+        Upvote_num:
+          type: integer
+    Account:
+      type: object
+      required:
+        - Id
+        - Username
+        - Creation_time
+        - Name
+        - Last_visit
+        - Upvotes
+        - Followers_num
+        - Following_num
+        - Report_num
+      properties:
+        Id:
+          $ref: '#/components/schemas/Id.Account_Id'
+        Username:
+          type: string
+        Creation_time:
+          type: string
+          format: date-time
+        Name:
+          type: string
+        Institutes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Institution_Id'
+        Posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Post_Id'
+        Last_visit:
+          type: string
+          format: date-time
+        Upvotes:
+          type: integer
+        Profile_photo:
+          type: string
+        Bookmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Post_Id'
+        Comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Comment_Id'
+        tag_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Tag_Id'
+        Country:
+          type: string
+        Website_address:
+          type: string
+        Github_handle:
+          type: string
+        Organisation:
+          type: string
+        Followers_num:
+          type: integer
+        Following_num:
+          type: integer
+        Report_num:
+          type: integer
+        Email:
+          type: string
+    Institution:
+      type: object
+      required:
+        - Id
+        - Name
+        - Members
+        - Creation_time
+        - Description
+        - Admin
+        - Email
+      properties:
+        Id:
+          $ref: '#/components/schemas/Id.Institution_Id'
+        Name:
+          type: string
+        Members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Account_Id'
+        Creation_time:
+          type: string
+          format: date-time
+        Posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Post_Id'
+        Description:
+          type: string
+        Domains:
+          type: array
           items:
             type: string
-            xml:
-              name: photoUrl
-        tags:
-          type: array
-          xml:
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
-        status:
+        Admin:
+          $ref: '#/components/schemas/Id.Account_Id'
+        Email:
           type: string
-          description: pet status in the store
-          enum:
-            - available
-            - pending
-            - sold
-      xml:
-        name: pet
-    ApiResponse:
+    Tag:
+      type: object
+      required:
+        - Id
+        - Tag_name
+        - Posts
+      properties:
+        Id:
+          $ref: '#/components/schemas/Id.Tag_Id'
+        Tag_name:
+          type: string
+        Posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Post_Id'
+        Members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Account_Id'
+    Comment:
+      type: object
+      required:
+        - Id
+        - Author
+        - Time
+        - Content
+        - Post
+        - Upvote_num
+        - Report_num
+      properties:
+        Id:
+          $ref: '#/components/schemas/Id.Comment_Id'
+        Author:
+          $ref: '#/components/schemas/Id.Account_Id'
+        Time:
+          type: string
+          format: date-time
+        Content:
+          type: string
+        Comment_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Comment_Id'
+        Posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id.Post_Id'
+        Upvote_num:
+          type: integer
+        Report_num:
+          type: integer
+    Id:
+      type: object
+      required:
+        - obj
+        - uniq
+      properties:
+        obj:
+          type: string
+        uniq:
+          type: string
+    Id.Account_Id:
+      allOf:
+        - $ref: '#/components/schemas/Id'
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        type:
+        obj:
           type: string
-        message:
+          enum: ["A"]
+    Id.Institution_Id:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+      type: object
+      properties:
+        obj:
           type: string
-      xml:
-        name: '##default'
-  requestBodies:
-    Pet:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Pet'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Pet'
-    UserArray:
-      description: List of user object
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
+          enum: ["I"]
+    Id.Tag_Id:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+      type: object
+      properties:
+        obj:
+          type: string
+          enum: ["T"]
+    Id.Comment_Id:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+      type: object
+      properties:
+        obj:
+          type: string
+          enum: ["C"]
+    Id.Post_Id:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+      type: object
+      properties:
+        obj:
+          type: string
+          enum: ["P"]
   securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
+    app_id:
       type: apiKey
-      name: api_key
-      in: header
+      description: API key to authorize requests
+      name: appid
+      in: query
+security:
+  - app_id: []
