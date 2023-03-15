@@ -143,10 +143,7 @@ API:
             Username: Alphanumeric
             Creation_time: date_time
             Name: alphabets
-            Email_id:
-                Condition:
-                    Email_id.API_visibility = True
-                {email}
+                                                                                            Email_id: email
             Institutes: {Id.Institution_id}*
             Posts: 
                 Conditon:
@@ -178,6 +175,10 @@ API:
                 Followers_num = len(Followers)
                 Following_num = len(Following)
                 Report_num = len(Report_list)
+                Email:
+                    Condition:
+                        Email_id.API_visibility = True
+                    {email.username+"@"+email.Domain}
         Institution:
             Id: Id.Institution_id
             Name: Alphanumeric
@@ -209,7 +210,7 @@ API:
                 Conditon:
                     Account.API_visibility == True
                 {Id.Account_id}*
-            API_visibility: Bool
+                                                                                            API_visibility: Bool
         Comment:
             Id: Id.Comment_id
             Author: Id.Account_id
@@ -222,12 +223,29 @@ API:
             Post:
                 Conditon:
                     Post.API_visibility == True
-                {Id.Post_id}*
+                {Id.Post_id}
                                                                                             API_visibility: Bool
             Customized:
                 Upvote_num = len(Upvotes)
                 Report_num = len(Comment_Report)
-    
+        Id:
+            obj: alphanumeric
+            uniq: alphanumeric
+            
+            SubClasses:
+                Post_id:
+                    obj = P
+                Account_id:
+                    obj = A
+                Institution_id:
+                    obj = I
+                Tag_id:
+                    obj = T
+                Comment_id:
+                    obj = C
+                Report_id:
+                    obj = R
+
     Methods:
         Post.get:
             Arguments: Id.Post_id
