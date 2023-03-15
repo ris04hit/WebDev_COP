@@ -10,9 +10,9 @@ info:
   #   name: Apache 2.0
   #   url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: "1.0"
-externalDocs:
-  description: Find out more about Swagger
-  url: http://swagger.io
+# externalDocs:
+#   description: Find out more about Swagger
+#   url: http://swagger.io
 # servers:
 #   - url: https://petstore3.swagger.io/api/v3
 tags:
@@ -347,6 +347,31 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Account not found
+  /Institution/{Name}:
+    get:
+      tags:
+        - Institution
+      summary: Find Institution by Name
+      description: Find Institution by Name
+      operationId: getInstitutionByName
+      parameters:
+        - name: Name
+          in: path
+          description: Name of Institution that needs to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institution'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Institution not found
   /Tag:
     put:
       tags:
@@ -421,6 +446,31 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Account not found
+  /Tag/{Name}:
+    get:
+      tags:
+        - Tag
+      summary: Find Tag by Name
+      description: Find Tag by Name
+      operationId: getTagByName
+      parameters:
+        - name: Name
+          in: path
+          description: Name of Tag that needs to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Tag not found
   /Comment:
     put:
       tags:
@@ -709,48 +759,64 @@ components:
       properties:
         obj:
           type: string
+          enum: ["A","I","T","C","P"]
         uniq:
           type: string
     Id.Account_Id:
-      allOf:
-        - $ref: '#/components/schemas/Id'
       type: object
+      required:
+        - obj
+        - uniq
       properties:
         obj:
           type: string
           enum: ["A"]
+        uniq:
+          type: string
     Id.Institution_Id:
-      allOf:
-        - $ref: '#/components/schemas/Id'
       type: object
+      required:
+        - obj
+        - uniq
       properties:
         obj:
           type: string
           enum: ["I"]
+        uniq:
+          type: string
     Id.Tag_Id:
-      allOf:
-        - $ref: '#/components/schemas/Id'
       type: object
+      required:
+        - obj
+        - uniq
       properties:
         obj:
           type: string
           enum: ["T"]
+        uniq:
+          type: string
     Id.Comment_Id:
-      allOf:
-        - $ref: '#/components/schemas/Id'
       type: object
+      required:
+        - obj
+        - uniq
       properties:
         obj:
           type: string
           enum: ["C"]
+        uniq:
+          type: string
     Id.Post_Id:
-      allOf:
-        - $ref: '#/components/schemas/Id'
       type: object
+      required:
+        - obj
+        - uniq
       properties:
         obj:
           type: string
           enum: ["P"]
+        uniq:
+          type: string
   securitySchemes:
     app_id:
       type: apiKey
