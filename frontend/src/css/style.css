@@ -1,0 +1,51 @@
+.button1 {
+    box-sizing: border-box;
+
+    position: absolute;
+    
+    background: rgba(143, 0, 255, 0.75);
+    border: 2px solid #B6EADA;
+}
+
+.text1 {
+    position: absolute;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    
+    color: #FFFFFF;
+}
+
+.form1 {
+    box-sizing: border-box;
+
+    position: absolute;
+    
+    background: #03001C;
+    border: 2px solid #B6EADA;
+
+    border-radius: 20px;
+
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    
+    color: #FFFFFF;
+}
+
+.form1::placeholder{
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    
+    color: #FFFFFF;
+}
+
+input {
+    padding: 20px 20px;
+}

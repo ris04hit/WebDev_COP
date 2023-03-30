@@ -1,0 +1,205 @@
+body {
+    position: relative;
+    width: 1440px;
+    height: 1100px;
+    
+    background: #03001C;
+}
+
+#text_signup1 {
+    position: absolute;
+    width: 370px;
+    height: 128px;
+    left: 59px;
+    top: 116px;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 64px;
+    
+    color: #FFFFFF;
+}
+
+#text_signup2 {
+    position: absolute;
+    width: 407px;
+    height: 376px;
+    left: 528px;
+    top: 271px;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 61px;
+    
+    color: #FFC0FB;
+}
+
+#text_signup3 {
+    position: absolute;
+    width: 232px;
+    height: 38px;
+    left: 59px;
+    top: 676px;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 38px;
+    
+    color: #FFFFFF;
+}
+
+#rect_profile_signup {
+    box-sizing: border-box;
+
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    left: 1019px;
+    top: 181px;
+    border-radius: 150px;
+    
+    background: #03001C;
+    border: 3px solid #B6EADA;
+}
+
+#text_profile_signup {
+    position: absolute;
+    width: 83px;
+    height: 50px;
+    left: 1127px;
+    top: 306px;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: center;
+    
+    color: #FFFFFF;
+}
+
+#send_otp_signup {
+    width: 110px;
+    height: 50px;
+    left: 319px;
+    top: 429px;
+    
+    border-radius: 20px;
+}
+
+#text_otp_signup {
+    width: 72px;
+    height: 25px;
+    left: 338px;
+    top: 441px;
+
+    font-size: 20px;
+    line-height: 25px;
+}
+
+#create_account_signup {
+    width: 240px;
+    height: 50px;
+    left: 600px;
+    top: 943px;
+
+    border-radius: 20px;
+}
+
+#account_signup {
+    width: 176px;
+    height: 38px;
+    left: 632px;
+    top: 949px;
+
+    font-size: 30px;
+    line-height: 38px;
+}
+
+#username_signup {
+    width: 370px;
+    height: 50px;
+    left: 59px;
+    top: 281px;
+}
+
+#email_signup{
+    width: 370px;
+    height: 50px;
+    left: 59px;
+    top: 355px;
+}
+
+#otp_signup{
+    width: 169px;
+    height: 50px;
+    left: 59px;
+    top: 429px;
+}
+
+#password_signup{
+    width: 260px;
+    height: 50px;
+    left: 59px;
+    top: 503px;
+}
+
+#confirm_signup{
+    position: absolute;
+    width: 260px;
+    height: 50px;
+    left: 59px;
+    top: 577px;
+    
+}
+
+#country_signup{
+    position: absolute;
+    width: 260px;
+    height: 50px;
+    left: 59px;
+    top: 726px;    
+}
+
+#state_signup{
+    position: absolute;
+    width: 260px;
+    height: 50px;
+    left: 367px;
+    top: 723px;
+}
+
+#city_signup{
+    width: 260px;
+    height: 50px;
+    left: 675px;
+    top: 720px;
+}
+
+#web_signup{
+    width: 260px;
+    height: 50px;
+    left: 59px;
+    top: 800px;
+}
+
+#git_signup{
+    width: 260px;
+    height: 50px;
+    left: 367px;
+    top: 800px;
+}
+
+#org_signup{
+    width: 260px;
+    height: 50px;
+    left: 59px;
+    top: 874px;
+}
