@@ -1,29 +1,29 @@
-#body_signup {
-    height: 1100px;
+#body_inst {
+    height: 1024px;
 }
 
-#text_signup1 {
+#text_inst1 {
     position: absolute;
     width: 370px;
-    height: 128px;
+    height: 114px;
     left: 59px;
-    top: 116px;
+    top: 126px;
     
     font-family: 'Abel';
     font-style: normal;
     font-weight: 400;
-    font-size: 50px;
-    line-height: 64px;
+    font-size: 45px;
+    line-height: 57px;
     
-    color: #FFFFFF;
+    color: #FFFFFF;    
 }
 
-#text_signup2 {
+#text_inst2 {
     position: absolute;
-    width: 407px;
-    height: 376px;
-    left: 528px;
-    top: 271px;
+    width: 478px;
+    height: 258px;
+    left: 538px;
+    top: 270px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -34,12 +34,12 @@
     color: #FFC0FB;
 }
 
-#text_signup3 {
+#text_inst3 {
     position: absolute;
     width: 232px;
     height: 38px;
     left: 59px;
-    top: 676px;
+    top: 599px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -47,29 +47,29 @@
     font-size: 30px;
     line-height: 38px;
     
-    color: #FFFFFF;
+    color: #FFFFFF;    
 }
 
-#rect_profile_signup {
+#rect_profile_inst {
     box-sizing: border-box;
 
     position: absolute;
     width: 300px;
     height: 300px;
-    left: 1019px;
-    top: 181px;
+    left: 1073px;
+    top: 152px;
     border-radius: 150px;
     
     background: #03001C;
     border: 3px solid #B6EADA;
 }
 
-#text_profile_signup {
+#text_profile_inst {
     position: absolute;
     width: 83px;
     height: 50px;
-    left: 1127px;
-    top: 306px;
+    left: 1182px;
+    top: 275px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -81,39 +81,39 @@
     color: #FFFFFF;
 }
 
-#send_otp_signup {
+#send_otp_inst {
     width: 110px;
     height: 50px;
     left: 319px;
-    top: 429px;
+    top: 427px;
     
     border-radius: 20px;
 }
 
-#text_otp_signup {
+#text_otp_inst {
     width: 72px;
     height: 25px;
     left: 338px;
-    top: 441px;
-
+    top: 439px;
+    
     font-size: 20px;
     line-height: 25px;
 }
 
-#create_account_signup {
+#create_institution_inst{
     width: 240px;
     height: 50px;
-    left: 600px;
-    top: 943px;
+    left: 647px;
+    top: 908px;
 
     border-radius: 20px;
 }
 
-#account_signup {
-    width: 176px;
+#institution_inst {
+    width: 182px;
     height: 38px;
-    left: 632px;
-    top: 949px;
+    left: 676px;
+    top: 914px;
 
     font-size: 30px;
     line-height: 38px;

@@ -1,3 +1,10 @@
+body {
+    position: relative;
+    width: 1440px;
+    
+    background: #03001C;
+}
+
 .button1 {
     box-sizing: border-box;
 
