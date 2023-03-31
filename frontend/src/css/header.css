@@ -147,6 +147,16 @@
     background: rgba(3, 3, 3, 0.75);
     border: 1px solid #B6EADA;
     border-radius: 10px;
+
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    padding-left: 54px;
+    padding-right: 9px;
+    
+    color: #FFFFFF;    
 }
 
 #circle_out_search {
@@ -182,19 +192,13 @@
     transform: rotate(50.19deg);
 }
 
-#search_text {
-    position: absolute;
-    width: 206px;
-    height: 25px;
-    left: 943px;
-    top: 33px;
-    
+#rect_search::placeholder {
     font-family: 'Abel';
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
     line-height: 25px;
-    
+
     color: #FFFFFF;    
 }
 
