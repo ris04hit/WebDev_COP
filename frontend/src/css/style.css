@@ -4,8 +4,13 @@ body {
     margin: 0px;
     background: #03001C;
 }
+
 input {
     outline: none;
+}
+
+a {
+text-decoration: none;
 }
 
 .button1 {
@@ -35,6 +40,65 @@ input {
     background: #B6EADA;
     border: 1px solid #000000;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.button4 {
+    position: absolute;
+    
+    background: #303030;
+    border: 1px solid #000000;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+    position: absolute;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: center;
+    vertical-align: middle;
+    
+    color: #FFFFFF;
+}
+
+.button5 {
+    position: absolute;
+    
+    background: #B6EADA;
+    border-radius: 10px;
+
+    position: absolute;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 28px;
+    /* identical to box height */
+    
+    
+    color: #000000;
+}
+
+.button6 {
+    box-sizing: border-box;
+
+    position: absolute;
+    
+    background: #03001C;
+    border: 1px solid #B6EADA;
+    border-radius: 15px;
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 22px;
+    /* identical to box height */
+    
+    
+    color: #FFFFFF;
 }
 
 .text1 {
@@ -105,6 +169,61 @@ input {
     line-height: 23px;
     
     color: #FFFFFF;
+}
+
+.text7 {
+    position: absolute;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    
+    color: #B6EADA;
+}
+
+.text8 {
+    position: absolute;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 28px;
+    /* identical to box height */
+    
+    
+    color: #008DFF;
+}
+
+.text9 {
+    position: absolute;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 23px;
+    line-height: 29px;
+    
+    color: #FFFFFF;
+}
+
+.text10 {
+    position: absolute;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    
+    color: #008DFF;
+}
+
+.text_profile{
+    color: #008DFF;
+    display: inline-block;
 }
 
 .form1 {
@@ -252,6 +371,67 @@ input {
 	border-bottom: 30px solid #B6EADA;
 }
 
+.triangle-up2 {
+    position: absolute;
+	width: 0;
+	height: 0;
+	border-left: 8.5px solid transparent;
+	border-right: 8.5px solid transparent;
+	border-bottom: 17px solid #B6EADA;
+}
+
 .list1{
     margin-bottom: 18px;
+}
+
+.list2 {
+    margin-bottom: 20px;
+    height: 40px;
+}
+
+.list2::marker {
+    display: inline-block;
+    vertical-align: middle;
+    height: 40px;
+    line-height: 40px;
+}
+
+.comment {
+    position: relative;
+    left: 57px;
+    margin-bottom: 30px;    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 22px;
+    /* identical to box height */
+    
+    
+    color: #FFFFFF;
+}
+
+.pfp_comment {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    left: 21px;
+    border-radius: 17.5px;
+    
+    background: #D9D9D9;
+}
+
+.name_comment {
+    position: relative;
+    width: 97px;
+    height: 22px;
+    left: 68px;
+    top: 7px;
+}
+
+.upvote_comment {
+    position: absolute;
+    left: 30px;
+    top: 2px;
+    bottom: 2px;
 }
