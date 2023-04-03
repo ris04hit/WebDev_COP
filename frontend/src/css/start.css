@@ -188,6 +188,8 @@
     line-height: 25px;
     
     color: #3300FF;
+
+    cursor: pointer;
 }
 
 #inp_start1 {
@@ -202,4 +204,90 @@
     height: 72px;
     left: 1635px;
     top: 445px;    
+}
+
+#rect_start6 {
+    position: absolute;
+    width: 503px;
+    height: 402px;
+    right: 500px;
+    top: 50px;
+    
+    border-radius: 10px;    
+}
+
+#close_pop_start {
+    position: absolute;
+    width: 43px;
+    height: 25px;
+    left: 17px;
+    top: -39px;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    
+    color: #7F7F7F;
+    cursor: pointer;
+}
+
+#rect_start7 {
+    position: absolute;
+    width: 487px;
+    height: 386px;
+    right: 8px;
+    top: 8px;
+    background: #03001C;
+    border-radius: 10px;  
+}
+
+#text_start8 {
+    width: 149px;
+    height: 29px;
+    left: 17px;
+    top: 10px;
+}
+
+#rect_start8 {
+    position: absolute;
+    width: 485px;
+    height: 0px;
+    left: 8px;
+    top: 50px;
+    
+    border: 1px solid #B6EADA;
+}
+
+#email_start {
+    width: 468px;
+    height: 69px;
+    left: 17px;
+    top: 95px;
+}
+
+#otp_start {
+    width: 468px;
+    height: 64px;
+    left: 17px;
+    top: 200px;
+}
+
+#button_start4 {
+    width: 104.68px;
+    height: 45.68px;
+    left: 199px;
+    top: 327.5px;
+    border-radius: 19.0323px;
+
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 25.6935px;
+    line-height: 33px;
+    /* identical to box height */
+    
+    
+    color: #FFFFFF;
 }

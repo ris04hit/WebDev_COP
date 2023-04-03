@@ -13,6 +13,20 @@ a {
 text-decoration: none;
 }
 
+button {
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.button_inv {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
 .button1 {
     box-sizing: border-box;
 
@@ -434,4 +448,12 @@ text-decoration: none;
     left: 30px;
     top: 2px;
     bottom: 2px;
+}
+
+.pop_up_grad {
+    background-image: linear-gradient(219.1deg, rgba(143, 0, 255, 0.75) 0%, rgba(250, 0, 255, 0.809443) 31.71%, rgba(130, 0, 255, 0.869973) 64%, #4C11FF 92.13%);;
+}
+
+.pop_up {
+    display: none;
 }

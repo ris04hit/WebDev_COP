@@ -4,6 +4,9 @@
         <link rel="stylesheet" href="../css/start.css">
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="../javascript/start.js"></script>
+        <script src="../javascript/main.js"></script>
     </head>
     <body  id="body_start">
         <video id="video_start" autoplay muted loop>
@@ -28,7 +31,7 @@
             Don't Have an account ?
         </div><br>
 
-        <button id="button_start1" class="button1">
+        <button id="button_start1" onclick="scroll_start()"  class="button1">
             <div id="text_start3" class="text1">
                 Get Started
             </div>
@@ -43,21 +46,41 @@
         <rect id="rect_start4"></rect>
         <rect id="rect_start5"></rect>
 
-        <button id="button_start3" class="button2">
-            <div id="text_start5" class="text1">
-                Start Your Journey...
-            </div>
-        </button>
-
-        <a href="forgot_password">
-            <div id="text_start7">
-                Forgot Password ?
-            </div>
+        <a href="loader2.html">
+            <button id="button_start3" class="button2">
+                <div id="text_start5" class="text1">
+                    Start Your Journey...
+                </div>
+            </button>
         </a>
+
+        <div id="text_start7">
+            Forgot Password ?
+        </div>
 
         <form>
             <input id="inp_start1" placeholder="Username/Email address" class="form2" type="text"><br>
             <input id="inp_start2" placeholder="Password" class="form2" type="text"><br>
         </form>
+
+        <div id="forgot_start" class="pop_up">
+            <rect id="rect_start6" class="pop_up_grad">
+                <div id="close_pop_start">
+                    Close
+                </div>
+                <rect id="rect_start7"></rect>
+                <div id="text_start8" class="text9">
+                    Forget Password
+                </div>
+                <rect id="rect_start8"></rect>
+                <form>
+                    <input  class="form1" id="email_start" type="text" placeholder="Enter Email Address">
+                    <input class="form1" id="otp_start" type="text" placeholder="Enter OTP">
+                </form>
+                <button class="button1" id="button_start4">
+                    Login
+                </button>
+            </rect>
+        </div>
     </body>
 </html>
