@@ -28,7 +28,7 @@ function autoType(elementClass, typingSpeed, specific_class){
 
 // display pfp
 function previewFile() {
-    var preview = document.querySelector('img');
+    var preview = document.querySelector("#rect_profile_signup");
     var file    = document.querySelector('input[type=file]').files[0];
     var reader  = new FileReader();
 
