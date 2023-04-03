@@ -9,13 +9,22 @@ function tag_click() {
     var top = 4;
     for (var count=0; count< tag_list.length; count++){
         top = top + 52;
-        var code = "<a href='tag.html'>\n\t<button class='buttons_tag_home' style='top:".concat(top);
+        var code = `<img src="../../data/comment.png" style="top: ${top+9}px" class="cross_tag_home" id="button_tag_home-${count}">`
+        var code = code.concat("<a href='tag.html'>\n\t<button class='buttons_tag_home' style='top:").concat(top);
         code = code.concat("px'>");
         code = code.concat(tag_list[count]);
         code = code.concat("</button>\n</a>\n");
         html = html.concat(code);
     }
     $("#button_tag_home").html(html);
+    var jsc = `<script>    // remove tag on clicking cross
+    $(".cross_tag_home").click(function(){
+        var par = $(this).attr('id');
+        var index = Number(par.slice(par.indexOf('-') + 1));
+        var spliced = tag_list.splice(index,1);
+        tag_click();
+    })</script>`
+    $("#button_tag_home").append(jsc);
 }
 
 function upvote(post_id) {
@@ -26,6 +35,7 @@ function upvote(post_id) {
     upv_int = upv_int + 1;
     $(up_id).html("".concat(upv_int));
 }
+
 
 $(document).ready(function(){
     $("#button_home2").click(function(){
@@ -54,7 +64,7 @@ $(document).ready(function(){
     $("#button_home3").click(function(){
         $("#sort_pop_home").show();
     })
-
+    
     // hover by time
     $("#button_sort_home1").hover(function(){
         $("#text_sort_home1").css("color","#6DD6CF");
@@ -89,17 +99,27 @@ $(document).ready(function(){
     }, function(){
         $(".post_author .text1").css("color","#FFFFFF");
     })
-
+    
     //hover follow
     $(".follow").hover(function(){
         $(".follow").css("color","#00FFFF");
     }, function(){
         $(".follow").css("color","#008DFF");
     })
-
+    
     //click upvote triangle
     $(".triangle-up").click(function(){
         var par = $(this).parent().attr('id');
         upvote(par);
+    })
+    
+    // remove tag on clicking cross
+    $("#button_tag_home-0").click(function(){
+        $("#button_tag_home-0").hide();
+        // console.log("A");
+        // var par = $(this).parent().attr('id');
+        // var index = Number(par.slice(par.indexOf('-') + 1));
+        // var spliced = tag_list.splice(index,1);
+        // tag_click();
     })
 })

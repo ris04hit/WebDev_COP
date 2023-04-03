@@ -6,8 +6,8 @@
         <link rel="stylesheet" href="../css/header.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="../javascript/home.js"></script>
         <script src="../javascript/header.js"></script>
+        <script src="../javascript/home.js"></script>
         <script src="../javascript/main.js" defer></script>
     </head>
     <body  id="body_home">
@@ -26,6 +26,37 @@
         <rect id="rect_home3"></rect>
 
         <div class="multiple_post" id="mul_post_home1">
+
+            <div id="tag_pop_home" class="pop_up">
+                <div class="close_pop">
+                    Close
+                </div>
+                <rect id="rect_tag_home">
+                    <form>
+                        <input type="text" id="search_tag_home" class="form1" placeholder="Search tag">
+                    </form>
+                    <rect id="hr_tag_home"></rect>
+                    <div id="button_tag_home"></div>
+                </rect>
+            </div>
+    
+            <div id="sort_pop_home" class="pop_up">
+                <rect id="rect_sort_home">
+                    <button id="button_sort_home1" class="button_inv">
+                        <rect id="rect_time_home"></rect>
+                        <div id="text_sort_home1" class="text7">
+                            By Time
+                        </div>
+                    </button>
+                    <button id="button_sort_home2" class="button_inv">
+                        <rect id="rect_up_home"></rect>
+                        <div id="text_sort_home2" class="text7">
+                            By upvotes
+                        </div>
+                    </button>
+                </rect>
+            </div>
+
             <div class="outer_post" id="out_post_home1">
                 <form>
                     <input class="form3" id="inp_home1" placeholder="Search">
@@ -204,37 +235,6 @@
                     Most viewed posts
                 </div>
             </div>
-        </div>
-
-        <div id="tag_pop_home" class="pop_up">
-            <div class="close_pop">
-                Close
-            </div>
-            <rect id="rect_tag_home">
-                <form>
-                    <input type="text" id="search_tag_home" class="form1" placeholder="Search tag">
-                </form>
-                <rect id="hr_tag_home"></rect>
-                <div id="button_tag_home">
-                </div>
-            </rect>
-        </div>
-
-        <div id="sort_pop_home" class="pop_up">
-            <rect id="rect_sort_home">
-                <button id="button_sort_home1" class="button_inv">
-                    <rect id="rect_time_home"></rect>
-                    <div id="text_sort_home1" class="text7">
-                        By Time
-                    </div>
-                </button>
-                <button id="button_sort_home2" class="button_inv">
-                    <rect id="rect_up_home"></rect>
-                    <div id="text_sort_home2" class="text7">
-                        By upvotes
-                    </div>
-                </button>
-            </rect>
         </div>
     </body>
 </html>

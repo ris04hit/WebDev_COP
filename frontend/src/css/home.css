@@ -351,8 +351,9 @@
 
 #tag_pop_home {
     position: absolute;
-    left: 805px;
-    top: 253px;
+    left: 680px;
+    top: 60px;
+    z-index: 100;
 }
 
 #rect_tag_home {
@@ -403,10 +404,19 @@
     color: #FFFFFF;
 }
 
+.cross_tag_home {
+    position: absolute;
+    height: 13px;
+    width: 13px;
+    left: 33px;
+    cursor: pointer;
+}
+
 #sort_pop_home {
     position: absolute;
-    left: 905px;
-    top: 253px;
+    left: 750px;
+    top: 80px;
+    z-index: 100;
 }
 
 #rect_sort_home {
