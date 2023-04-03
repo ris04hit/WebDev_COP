@@ -38,8 +38,10 @@ function previewFile() {
 
     if (file) {
         reader.readAsDataURL(file);
+        $("#text_profile_signup").css("top","506px");
     } else {
         preview.src = "";
+        $("#text_profile_signup").css("top","306px");
     }
 }
 
