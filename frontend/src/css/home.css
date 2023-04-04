@@ -76,6 +76,16 @@
     height: 1855px;
     left: 60px;
     top: 206px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#mul_post_home1 {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#mul_post_home1::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 #out_post_home1 {
@@ -187,6 +197,7 @@
     line-height: 25px;
     
     color: #008DFF;
+    cursor: pointer;
 }
 
 #rect_profile_home {
@@ -251,9 +262,16 @@
 
 #out_post_home3 {
     width: 878px;
-    height: 857.98px;
+    height: 858px;
     left: 12px;
-    top: 980.06px;
+    top: 980px;
+}
+
+#out_post_home40 {
+    width: 878px;
+    height: 858px;
+    left: 12px;
+    top: 1852px;
 }
 
 #mul_post_home2 {
@@ -329,4 +347,116 @@
     height: 300px;
     left: 12px;
     top: 1008px;
+}
+
+#tag_pop_home {
+    position: absolute;
+    left: 805px;
+    top: 253px;
+}
+
+#rect_tag_home {
+    position: absolute;
+    width: 218px;
+    height: 56px;
+    left: 0px;
+    top: 31px;
+    
+    background: #03001C;
+    border-radius: 15px;
+}
+
+#search_tag_home {
+    width: 166px;
+    height: 23px;
+    left: 6px;
+    top: 5px;
+    border-radius: 15px;
+}
+
+#hr_tag_home {
+    position: absolute;
+    width: 218px;
+    height: 0px;
+    left: 0px;
+    top: 35px;
+    
+    border: 1px solid #B6EADA;
+}
+
+.buttons_tag_home {
+    position: absolute;
+    width: 102px;
+    height: 31px;
+    left: 58px;
+    
+    background: rgba(143, 0, 255, 0.75);
+    border-radius: 15px;
+    border: none;
+
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    
+    color: #FFFFFF;
+}
+
+#sort_pop_home {
+    position: absolute;
+    left: 905px;
+    top: 253px;
+}
+
+#rect_sort_home {
+    box-sizing: border-box;
+
+    position: absolute;
+    width: 121px;
+    height: 92px;
+    left: 0px;
+    top: 0px;
+    
+    background: #03001C;
+    border: 1px solid #B6EADA;
+    border-radius: 10px;
+}
+
+#rect_time_home {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 10px;
+    top: 23px;
+    
+    background: #FFFFFF;
+    border-radius: 4px;
+}
+
+#rect_up_home {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 10px;
+    top: 63px;
+    
+    background: #FFFFFF;
+    border-radius: 4px;
+
+    display: none;
+}
+
+#text_sort_home1 {
+    width: 60px;
+    height: 25px;
+    left: 27px;
+    top: 15px;
+}
+
+#text_sort_home2 {
+    width: 84px;
+    height: 25px;
+    left: 27px;
+    top: 55px;
 }

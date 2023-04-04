@@ -206,32 +206,24 @@
     top: 445px;    
 }
 
+#forgot_start {
+    position: absolute;
+    width: 503px;
+    height: 433px;
+    right: 500px;
+    top: 19px;
+}
+
 #rect_start6 {
     position: absolute;
     width: 503px;
     height: 402px;
-    right: 500px;
-    top: 50px;
+    left: 0px;
+    top: 31px;
     
     border-radius: 10px;    
 }
 
-#close_pop_start {
-    position: absolute;
-    width: 43px;
-    height: 25px;
-    left: 17px;
-    top: -39px;
-    
-    font-family: 'Abel';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 25px;
-    
-    color: #7F7F7F;
-    cursor: pointer;
-}
 
 #rect_start7 {
     position: absolute;

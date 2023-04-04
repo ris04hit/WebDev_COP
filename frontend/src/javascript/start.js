@@ -30,4 +30,11 @@ $(document).ready(function(){
         // if (id password matches)
             window.location.href="loader1.html";
     })
+
+    //hover forgot
+    $("#text_start7").hover(function(){
+        $("#text_start7").css("color","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#text_start7").css("color","#3300FF");
+    })
 });

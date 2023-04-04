@@ -3,9 +3,15 @@
         <title>home</title>
         <link rel="stylesheet" href="../css/home.css">
         <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/header.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="../javascript/home.js"></script>
+        <script src="../javascript/header.js"></script>
+        <script src="../javascript/main.js" defer></script>
     </head>
     <body  id="body_home">
+        <header-component></header-component>
         <div id="text_home1">
             Got Something to share ?
         </div>
@@ -42,20 +48,24 @@
                 <div class="text1" id="text_home7">
                     Posted 6hrs ago
                 </div>
-                <rect id="rect_home5"></rect>
-                <a href="profile.html"> 
-                    <div class="text1" id="text_home8">
-                        Mechan
-                    </div>
-                </a>
-                <div id="text_home9">
-                    Follow
+                <div class="post_author">
+                    <rect id="rect_home5"></rect>
+                    <a href="profile.html">
+                        <div class="text1" id="text_home8">
+                            Mechan
+                        </div>
+                        <rect id="rect_profile_home"></rect>
+                    </a>
                 </div>
-                <rect id="rect_profile_home"></rect>
+                <div id="text_home9">
+                    <div class="follow">
+                        Follow
+                    </div>
+                </div>
 
                 <div class="triangle-up" id="del_home1"></div>
                 <div class="text1" id="text_home10">
-                    93
+                    <div class="upvote">0</div>
                 </div>
                 <rect id="rect_home4"></rect>
 
@@ -76,20 +86,52 @@
                 <div class="text1" id="text_home7">
                     Posted 6hrs ago
                 </div>
-                <rect id="rect_home5"></rect>
-                <a href="profile.html">
-                    <div class="text1" id="text_home8">
-                        Mechan
-                    </div>
-                </a>
-                <div id="text_home9">
-                    Follow
+                <div class="post_author">
+                    <rect id="rect_home5"></rect>
+                    <a href="profile.html">
+                        <div class="text1" id="text_home8">
+                            Mechan
+                        </div>
+                        <rect id="rect_profile_home"></rect>
+                    </a>
                 </div>
-                <rect id="rect_profile_home"></rect>
+                <div id="text_home9">
+                    <div class="follow">
+                        Follow
+                    </div>
+                </div>
 
                 <div class="triangle-up" id="del_home1"></div>
                 <div class="text1" id="text_home10">
-                    93
+                    <div class="upvote">93</div>
+                </div>
+                <rect id="rect_home4"></rect>
+            </div>
+            <div class="outer_post" id="out_post_home40">
+                <rect class="inner_post" id="inner_post_home"></rect>
+
+                <rect class="profile_bar" id="pbar_home"></rect>
+                <div class="text1" id="text_home7">
+                    Posted 6hrs ago
+                </div>
+                <div class="post_author">
+                    <rect id="rect_home5"></rect>
+                    <a href="profile.html">
+                        <div class="text1" id="text_home8">
+                            Mechan
+                        </div>
+                        <rect id="rect_profile_home"></rect>
+                    </a>
+                </div>
+                <div id="text_home9">
+                    <div class="follow">
+                        Follow
+                    </div>
+                </div>
+
+                <div class="triangle-up" id="del_home1"></div>
+                <div class="text1" id="text_home10">
+                    <div class="upvote">93</div>
                 </div>
                 <rect id="rect_home4"></rect>
             </div>
@@ -162,6 +204,37 @@
                     Most viewed posts
                 </div>
             </div>
+        </div>
+
+        <div id="tag_pop_home" class="pop_up">
+            <div class="close_pop">
+                Close
+            </div>
+            <rect id="rect_tag_home">
+                <form>
+                    <input type="text" id="search_tag_home" class="form1" placeholder="Search tag">
+                </form>
+                <rect id="hr_tag_home"></rect>
+                <div id="button_tag_home">
+                </div>
+            </rect>
+        </div>
+
+        <div id="sort_pop_home" class="pop_up">
+            <rect id="rect_sort_home">
+                <button id="button_sort_home1" class="button_inv">
+                    <rect id="rect_time_home"></rect>
+                    <div id="text_sort_home1" class="text7">
+                        By Time
+                    </div>
+                </button>
+                <button id="button_sort_home2" class="button_inv">
+                    <rect id="rect_up_home"></rect>
+                    <div id="text_sort_home2" class="text7">
+                        By upvotes
+                    </div>
+                </button>
+            </rect>
         </div>
     </body>
 </html>

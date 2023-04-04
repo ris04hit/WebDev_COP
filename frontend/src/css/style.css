@@ -257,7 +257,7 @@ input[type="file"] {
     line-height: 25px;
     
     color: #FFFFFF;
-
+    
     padding: 12px 20px;
 }
 
@@ -383,6 +383,7 @@ input[type="file"] {
 	border-left: 15px solid transparent;
 	border-right: 15px solid transparent;
 	border-bottom: 30px solid #B6EADA;
+    cursor: pointer;
 }
 
 .triangle-up2 {
@@ -392,6 +393,7 @@ input[type="file"] {
 	border-left: 8.5px solid transparent;
 	border-right: 8.5px solid transparent;
 	border-bottom: 17px solid #B6EADA;
+    cursor: pointer;
 }
 
 .list1{
@@ -456,4 +458,21 @@ input[type="file"] {
 
 .pop_up {
     display: none;
+}
+
+.close_pop {
+    position: absolute;
+    width: 43px;
+    height: 25px;
+    left: 3px;
+    top: 3px;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    
+    color: #7F7F7F;
+    cursor: pointer;
 }
