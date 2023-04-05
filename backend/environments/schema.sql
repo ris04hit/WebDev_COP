@@ -1,15 +1,21 @@
--- Create a new table called "Account"
-
+-- check condition for the length of string where fixed length is needed !
 -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
 
+
+DROP SCHEMA IF EXISTS Synergy_db;
+CREATE SCHEMA Synergy_db;
+
+USE Synergy_db;
+
+DROP TABLE IF EXISTS Account;
 CREATE TABLE Account (
-    id_obj CHAR(1),
-    id_uniq VARCHAR(200), 
-    uesrname VARCHAR(50),
-    creation_time DATETIME,
-    name VARCHAR(150),
-    email_id VARCHAR(150),
-    institutes VARCHAR(100),
+    id_obj CHAR(1) DEFAULT 'A',
+    id_uniq VARCHAR(200) NOT NULL UNIQUE, 
+    uesrname VARCHAR(50) NOT NULL UNIQUE,
+    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    name VARCHAR(150) NOT NULL,
+    email_id VARCHAR(150) NOT NULL UNIQUE,
+    institutes VARCHAR(100) ,
     posts INT,
     last_visit DATETIME,
     upvotes VARCHAR(100),
@@ -33,6 +39,7 @@ CREATE TABLE Account (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+DROP TABLE IF EXISTS Institution;
 CREATE TABLE Institution (
     id_obj CHAR(1),
     id_uniq VARCHAR(200),
@@ -49,6 +56,8 @@ CREATE TABLE Institution (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+
+DROP TABLE IF EXISTS Tag;
 CREATE TABLE Tag (
     id_obj CHAR(1),
     id_uniq VARCHAR(200),
@@ -59,6 +68,8 @@ CREATE TABLE Tag (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+
+DROP TABLE IF EXISTS Post;
 CREATE TABLE Post (
     id_obj CHAR(1),
     id_uniq VARCHAR(200),
@@ -79,7 +90,7 @@ CREATE TABLE Post (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
-
+DROP TABLE IF EXISTS Comment;
 CREATE TABLE Comment (
     id_obj CHAR(1),
     id_uniq VARCHAR(200),
@@ -87,7 +98,7 @@ CREATE TABLE Comment (
     author_uniq VARCHAR(200),
     FOREIGN KEY (author_obj, author_uniq) REFERENCES Account(id_obj, id_uniq),
     creation_time DATETIME,
-    content TEXT, --- isko change karna hai !
+    content TEXT, -- isko change karna hai !
     upvotes VARCHAR(100),
     comments VARCHAR(100),
     report_list VARCHAR(100),
@@ -99,7 +110,7 @@ CREATE TABLE Comment (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
-
+DROP TABLE IF EXISTS Report;
 CREATE TABLE Report (
     id_obj CHAR(1),
     id_uniq VARCHAR(200),
@@ -111,4 +122,4 @@ CREATE TABLE Report (
     description TEXT,
     api_visibility BOOLEAN,
     PRIMARY KEY (id_obj, id_uniq)
-):
+);

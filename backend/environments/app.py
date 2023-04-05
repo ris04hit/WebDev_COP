@@ -1,10 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, url_for, redirect, session
+from flask_mysqldb import MySQL
 import MySQLdb.cursors
-
 app = Flask(__name__)
+
+app.config["MYSQL_HOST"] = "localhost"
+app.config["MYSQL_USER"] = "root"
+app.config["MYSQL_PASSWORD"] = "password"
+app.config["MYSQL_DB"] = "Synergy_db"
+mysql = MySQL(app)
+
+
 
 @app.route('/')
 def start():
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
     return render_template('html/start.html')
 
 @app.route('/js')
@@ -118,3 +130,50 @@ def tag():
 @app.route('/js/tag')
 def tag_js():
     return render_template('js/tag.js')
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    if request.method == "POST":
+        userid = request.form.get('userid')
+        password = request.form.get('user_password')
+        # cursor.exec
+        # cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM user WHERE name = %s", (userid,))
+        # mysql.connection.commit()
+        # report=cursor.fetchall()
+        # print(report)
+        # return "Report: " + report
+        user = cur.fetchall()
+        cur.close()
+        if user:
+            # print("oks ", type(user))
+            # print(user[0]['id'])
+            # if(type(user) == tuple):
+            #     print("hi")
+            #     render_template("./signup.html")
+            # return render_template('searchResult.html', results=user[0])
+            if user[0]['password'] != password:
+                return render_template('searchResult.html', results="Incorrect Password")
+            return render_template('./home.html', results="Not a valid username")
+        return render_template('searchResult.html', results="Not a valid username")
+    return render_template("./signup.html")
+
+def init_db():
+    with app.app_context():
+        try:
+            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        except:
+            print("Can not connect to database in init_db")
+        with app.open_resource('schema.sql', mode='r') as sql_file:
+            cur.execute(sql_file.read())
+        cur.close()
+        mysql.connection.commit()
+        sql_file.close()
+
+if __name__ == "__main__":
+    init_db()
+    app.run(debug=True)
