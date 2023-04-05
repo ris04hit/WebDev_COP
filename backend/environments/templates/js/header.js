@@ -9,23 +9,23 @@ class Header extends HTMLElement {
                 <rect id="rect_header"></rect>
 
                 <div id = "not_show_signup">
-                    <a href="home.html">
+                    <a href="{{url_for('home')}}">
                         <rect id = "rect_home"></rect>
                         <div id = "home">Home</div><br>
                     </a>
                 
-                    <a href="about_us.html">
+                    <a href="{{url_for('about')}}">
                         <rect id = "rect_about"></rect>
                         <div id = "about">About</div><br>
                     </a>
                 
-                    <a href="apis.html">
+                    <a href="{{url_for('apis')}}">
                         <rect id = "rect_apis"></rect>
                         <div id = "apis">APIs</div><br>
                     </a>
                 
                     <rect id = "profile_rect"></rect>
-                    <a href="profile.html">
+                    <a href="{{url_for('profile')}}">
                         <rect id = "profile_photo"></rect>
                         <div id = "profile_name">Excitedleopard</div><br>
                     </a>
@@ -36,8 +36,8 @@ class Header extends HTMLElement {
                     <rect id = "line_search"></rect>
                 </div>
                 
-                <a href="loader3.html">
-                    <img src = "../../data/logo.jpg" id = "logo"></img>
+                <a href="{{url_for('loader3')}}">
+                    <img src = "{{url_for('static',filename='/data/logo.jpg')}}" id = "logo"></img>
                 </a>
 
             </header>

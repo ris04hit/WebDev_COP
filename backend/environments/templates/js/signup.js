@@ -28,7 +28,7 @@ function autoType(elementClass, typingSpeed, specific_class){
 
 // display pfp
 function previewFile() {
-    var preview = document.querySelector("#rect_profile_inst");
+    var preview = document.querySelector("#rect_profile_signup");
     var file    = document.querySelector('input[type=file]').files[0];
     var reader  = new FileReader();
 
@@ -38,10 +38,10 @@ function previewFile() {
 
     if (file) {
         reader.readAsDataURL(file);
-        $("#text_profile_inst").css("top","476px");
+        $("#text_profile_signup").css("top","506px");
     } else {
         preview.src = "";
-        $("#text_profile_inst").css("top","275px");
+        $("#text_profile_signup").css("top","306px");
     }
 }
 
@@ -54,17 +54,17 @@ function specificType(clas,ids){
 
   $(document).ready(function(){
     // choosing which text to display
-    $('#username_inst').focus(function(){
-        specificType(".pop_inst1","#pop_inst1");
+    $('#username_signup').focus(function(){
+        specificType(".pop_signup1","#pop_sign1");
     })
 
-    $('#email_inst').focus(function(){
-        specificType(".pop_inst2","#pop_inst2");
+    $('#email_signup').focus(function(){
+        specificType(".pop_signup2","#pop_sign2");
     })
 
     // signup
-    $('#create_institution_inst').click(function(){
+    $('#create_account_signup').click(function(){
         // if everything is correct
-        window.location.href = "loader4.html";
+        window.location.href = "{{url_for('loader3')}}";
     })
   });

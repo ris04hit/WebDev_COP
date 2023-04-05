@@ -1,14 +1,14 @@
 <!DOCTYPE html>
     <head>
         <title>home</title>
-        <link rel="stylesheet" href="../css/home.css">
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/header.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/home.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="../javascript/header.js"></script>
-        <script src="../javascript/home.js"></script>
-        <script src="../javascript/main.js" defer></script>
+        <script src="{{url_for('header_js')}}"></script>
+        <script src="{{url_for('home_js')}}"></script>
+        <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_home">
         <header-component></header-component>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="post_author">
                     <rect id="rect_home5"></rect>
-                    <a href="profile.html">
+                    <a href="{{url_for('profile')}}">
                         <div class="text1" id="text_home8">
                             Mechan
                         </div>
@@ -104,7 +104,7 @@
                 <div class="text3" id="text_home3">
                     Good resources to study Dynamic Programming ?
                 </div>
-                <img src="../../data/Dynamic_prog.jpg" id="img_start1">
+                <img src="{{url_for('static',filename='../../data/Dynamic_prog.jpg')}}" id="img_start1">
                 <div class="text4" id="text_home4">
                     I have prepared a video playlist on dynamic programming. The playlist contains 35 lectures in total whose content ranges from contains theory lectures, notes, question solving lectures, solutions of those questions and
                     many more. 
@@ -119,7 +119,7 @@
                 </div>
                 <div class="post_author">
                     <rect id="rect_home5"></rect>
-                    <a href="profile.html">
+                    <a href="{{url_for('profile')}}">
                         <div class="text1" id="text_home8">
                             Mechan
                         </div>
@@ -147,7 +147,7 @@
                 </div>
                 <div class="post_author">
                     <rect id="rect_home5"></rect>
-                    <a href="profile.html">
+                    <a href="{{url_for('profile')}}">
                         <div class="text1" id="text_home8">
                             Mechan
                         </div>
@@ -181,35 +181,35 @@
                 </div>
                 <ol class="text6" id="list_home1">
                     <li class="list1">
-                        <a href="institute.html">
+                        <a href="{{url_for('institute')}}">
                             <div class="text6">
                                 Indian Institute Of Technology Delhi
                             </div>
                         </a>
                     </li>
                     <li class="list1">
-                        <a href="institute.html">
+                        <a href="{{url_for('institute')}}">
                             <div class="text6">
                                 Indian Institute Of Technology Delhi
                             </div>
                         </a>
                     </li>
                     <li class="list1">
-                        <a href="institute.html">
+                        <a href="{{url_for('institute')}}">
                             <div class="text6">
                                 Indian Institute Of Technology Delhi
                             </div>
                         </a>
                     </li>
                     <li class="list1">
-                        <a href="institute.html">
+                        <a href="{{url_for('institute')}}">
                             <div class="text6">
                                 Indian Institute Of Technology Delhi
                             </div>
                         </a>
                     </li>
                     <li class="list1">
-                        <a href="institute.html">
+                        <a href="{{url_for('institute')}}">
                             <div class="text6">
                                 Indian Institute Of Technology Delhi
                             </div>

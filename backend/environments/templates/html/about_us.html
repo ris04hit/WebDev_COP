@@ -1,13 +1,13 @@
 <!DOCTYPE html>
     <head>
         <title>About Us</title>
-        <link rel="stylesheet" href="../css/about_us.css">
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/header.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/about_us.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="../javascript/header.js"></script>
-        <script src="../javascript/main.js" defer></script>
+        <script src="{{url_for('header_js')}}"></script>
+        <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body id="body_about">
         <header-component></header-component>
@@ -72,25 +72,25 @@
             <div id="text_about11">
                 Twitter
             </div>
-            <img src="../../data/twit.jpg" id="twit_about">
+            <img src="{{url_for('static',filename='/data/twit.jpg')}}" id="twit_about">
         </a>
         <a href="https://instagram.com">
             <div id="text_about12">
                 Instagram
             </div>
-            <img src="../../data/insta.jpg" id="insta_about">
+            <img src="{{url_for('static',filename='/data/insta.jpg')}}" id="insta_about">
         </a>
         <a href="https://reddit.com">
             <div id="text_about13">
                 Reddit
             </div>
-            <img src="../../data/reddit-logo-2436.jpg" id="reddit_about">
+            <img src="{{url_for('static',filename='/data/reddit-logo-2436.jpg')}}" id="reddit_about">
         </a>
         <a href="https://github.com">
             <div id="text_about14">
                 Github
             </div>
-            <img src="../../data/git.png" id="git_about">
+            <img src="{{url_for('static',filename='/data/git.png')}}" id="git_about">
         </a>
     </body>
 </html>

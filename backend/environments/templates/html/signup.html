@@ -1,14 +1,14 @@
 <!DOCTYPE html>
     <head>
         <title>signup</title>
-        <link rel="stylesheet" href="../css/signup.css">
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/header.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/signup.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="../javascript/signup.js"></script>
-        <script src="../javascript/header.js"></script>
-        <script src="../javascript/main.js" defer></script>
+        <script src="{{url_for('header_js')}}"></script>
+        <script src="{{url_for('signup_js')}}"></script>
+        <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body id="body_signup">
         <header-component></header-component>

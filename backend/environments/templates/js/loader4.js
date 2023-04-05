@@ -3,6 +3,6 @@ $(document).ready(function(){
         width: "420px"
     }, 2000);
     setTimeout(function (){
-        window.location.href = "home.html";
+        window.location.href = "{{url_for('institute')}}";
       }, 2000);
 })

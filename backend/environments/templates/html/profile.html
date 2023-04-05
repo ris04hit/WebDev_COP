@@ -1,14 +1,14 @@
 <!DOCTYPE html>
     <head>
         <title>profile</title>
-        <link rel="stylesheet" href="../css/profile.css">
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/header.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/profile.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="../javascript/header.js"></script>
-        <script src="../javascript/profile.js"></script>
-        <script src="../javascript/main.js" defer></script>
+        <script src="{{url_for('header_js')}}"></script>
+        <script src="{{url_for('profile_js')}}"></script>
+        <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_profile">
         <header-component></header-component>
@@ -42,7 +42,7 @@
             </div>
             <div class="text7" id="org_profile">
                 Organisation - 
-                <a href="../html/institute.html">
+                <a href="{{url_for('institute')}}">
                     <div class="text_profile">
                         IIT-Delhi
                     </div>
@@ -91,25 +91,25 @@
                 <div class="text4" id="interest_text_profile">
                     Interests
                 </div>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button4" id="button_profile1">Chemistry</button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button4" id="button_profile2">Physics</button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button4" id="button_profile3">Linux</button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button4" id="button_profile4">Chess</button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button4" id="button_profile5">Stock Market</button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button4" id="button_profile6">Computer Science</button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button4" id="button_profile7">Cosmology</button>
                 </a>
             </div>

@@ -1,14 +1,13 @@
 var next_url = "home.html"
 
 $(function(){
-    $("#header").load("header.html"); 
-    // $("#footer").load("footer.html"); 
+    $("#header").load("{{url_for('header')}}"); 
   });
 
 $(document).ready(function(){
     var href = document.location.href;
     var lastPathSegment = href.substr(href.lastIndexOf('/') + 1);
-    if (lastPathSegment === "signup.html"){
+    if (lastPathSegment === "{{url_for('signup')}}"){
         $("#not_show_signup").hide();
     }
 

@@ -11,7 +11,7 @@ $(document).ready(function(){
     $("#button_start2").click(function(){
         $("input").val("");
         // if (id password matches)
-            window.location.href="loader1.html";
+            window.location.href="{{url_for('loader1')}}";
     })
 
     // forgot password
@@ -28,7 +28,7 @@ $(document).ready(function(){
     $("#button_start4").click(function(){
         $("input").val("");
         // if (id password matches)
-            window.location.href="loader1.html";
+            window.location.href="{{url_for('loader1')}}";
     })
 
     //hover forgot

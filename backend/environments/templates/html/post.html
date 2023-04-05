@@ -1,9 +1,14 @@
 <!DOCTYPE html>
     <head>
         <title>post</title>
-        <link rel="stylesheet" href="../css/post.css">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/post.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="{{url_for('header_js')}}"></script>
+        <script src="{{url_for('post_js')}}"></script>
+        <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_post">
         <div id="mul_tag_post">
@@ -11,22 +16,22 @@
                 <div class="text3" id="text_tag_post">
                     Tags
                 </div>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button5" id="button_post1">
                         Chess Openings
                     </button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button5" id="button_post2">
                         London System
                     </button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button5" id="button_post3">
                         Sicilian defence
                     </button>
                 </a>
-                <a href="tag.html">
+                <a href="{{url_for('tag')}}">
                     <button class="button5" id="button_post4">
                         Caro Kann defence
                     </button>
@@ -42,7 +47,7 @@
                 Posted 6hrs ago
             </div>
             <rect id="rect_post1"></rect>
-            <a href="profile.html"> 
+            <a href="{{url_for('profile')}}"> 
                 <div class="text4" id="text_post2">
                     Mechan
                 </div>
@@ -57,14 +62,14 @@
             </div>
 
             <video controls id="video_post">
-                <source src="../../data/Chess Game.mp4" type="video/mp4">
+                <source src="{{url_for('static',filename='data/Chess Game.mp4')}}" type="video/mp4">
             </video>
             <div id="text_post4" class="text4">
                 There are many openings for white in chess, namely the London System, French system,
                 Sicilian Najdorf, etc. For beginners, the most popular opening is the London system
                 because it is easy to remember and the variations are fairly simple. 
             </div>
-            <img src="../../data/ch.gif" id="gif_post">
+            <img src="{{url_for('static',filename='data/ch.gif')}}" id="gif_post">
             <div id="text_post5" class="text4">
                 There are many openings for white in chess, namely the London System, French system,
                 Sicilian Najdorf, etc. For beginners, the most popular opening is the London system
@@ -76,7 +81,7 @@
             <div class="text9" id="text_post6">
                 193
             </div>
-            <img src="../../data/comment.png" id="image_post">
+            <img src="{{url_for('static',filename='data/comment.png')}}" id="image_post">
             <div class="text9" id="text_post7">
                 Comment
             </div> 
@@ -101,7 +106,7 @@
 
             <div id="mul_comment_post">
                 <div class="comment" id="comment_post1">
-                    <a href="profile.html" class="text1">
+                    <a href="{{url_for('profile')}}" class="text1">
                         <rect class="pfp_comment"></rect> 
                         <div class="name_comment">
                             Excitedleopard
@@ -129,7 +134,7 @@
                     <rect id="nest_comment_post1"></rect>
 
                     <div class="comment" id="comment_post2">
-                        <a href="profile.html" class="text1">
+                        <a href="{{url_for('profile')}}" class="text1">
                             <rect class="pfp_comment"></rect> 
                             <div class="name_comment">
                                 Excitedleopard

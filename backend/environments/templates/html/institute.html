@@ -1,9 +1,13 @@
 <!DOCTYPE html>
     <head>
-        <title>institute</title>
-        <link rel="stylesheet" href="../css/institute.css">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/institute.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="{{url_for('header_js')}}"></script>
+        <script src="{{url_for('institute_js')}}"></script>
+        <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_insti">
         <div id="top-contribute">
@@ -14,7 +18,7 @@
 
                 <ol class="text7" id="top_ol_insti">
                     <li class="list2">
-                        <a href="profile.html">
+                        <a href="{{url_for('profile')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -24,7 +28,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="profile.html">
+                        <a href="{{url_for('profile')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -34,7 +38,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="profile.html">
+                        <a href="{{url_for('profile')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -44,7 +48,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="profile.html">
+                        <a href="{{url_for('profile')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -54,7 +58,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="profile.html">
+                        <a href="{{url_for('profile')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -64,7 +68,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="profile.html">
+                        <a href="{{url_for('profile')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -74,7 +78,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="profile.html">
+                        <a href="{{url_for('profile')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
