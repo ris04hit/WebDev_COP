@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
+import helper
 app = Flask(__name__)
 
 app.config["MYSQL_HOST"] = "localhost"
@@ -17,6 +18,7 @@ def start():
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
+        return
     return render_template('html/start.html')
 
 @app.route('/js')
@@ -132,35 +134,24 @@ def tag_js():
     return render_template('js/tag.js')
 
 @app.route('/login', methods = ['GET', 'POST'])
-def login():
+def login_form():
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
     if request.method == "POST":
-        userid = request.form.get('userid')
-        password = request.form.get('user_password')
-        # cursor.exec
-        # cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM user WHERE name = %s", (userid,))
-        # mysql.connection.commit()
-        # report=cursor.fetchall()
-        # print(report)
-        # return "Report: " + report
+        username = request.form.get("inp_start1")
+        password = request.form.get('inp_start2')
+        cur.execute("SELECT * FROM Account WHERE name = %s", username)
         user = cur.fetchall()
-        cur.close()
+        msg = None
         if user:
-            # print("oks ", type(user))
-            # print(user[0]['id'])
-            # if(type(user) == tuple):
-            #     print("hi")
-            #     render_template("./signup.html")
-            # return render_template('searchResult.html', results=user[0])
+            print(user)
             if user[0]['password'] != password:
                 return render_template('searchResult.html', results="Incorrect Password")
             return render_template('./home.html', results="Not a valid username")
-        return render_template('searchResult.html', results="Not a valid username")
-    return render_template("./signup.html")
+        msg = "Not a valid username"
+        return render_template('start.html', results=msg)
 
 def init_db():
     with app.app_context():
@@ -168,6 +159,7 @@ def init_db():
             cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         except:
             print("Can not connect to database in init_db")
+            return
         with app.open_resource('schema.sql', mode='r') as sql_file:
             cur.execute(sql_file.read())
         cur.close()

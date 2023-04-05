@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="{{url_for('start_js')}}"></script>
-        <script src="{{url_for('static', filename='js/main.js')}}"></script>
+        <script src="{{url_for('main_js')}}"></script>
     </head>
     <body  id="body_start">
         <video id="video_start" autoplay muted loop>
@@ -36,16 +36,7 @@
                 Get Started
             </div>
         </button>
-
-        <button id="button_start2" class="button2">
-            <div id="text_start4" class="text1">
-                Log In
-            </div>
-        </button>
-        <rect id="rect_start3"></rect>
-        <rect id="rect_start4"></rect>
-        <rect id="rect_start5"></rect>
-
+        
         <a href="{{url_for('loader2')}}">
             <button id="button_start3" class="button2">
                 <div id="text_start5" class="text1">
@@ -53,14 +44,22 @@
                 </div>
             </button>
         </a>
-
+        
         <div id="text_start7">
             Forgot Password ?
         </div>
-
-        <form>
+        
+        <form action="{{url_for('login_form')}}">
             <input id="inp_start1" placeholder="Username/Email address" class="form2" type="text"><br>
-            <input id="inp_start2" placeholder="Password" class="form2" type="text"><br>
+            <input id="inp_start2" placeholder="Password" class="form2" type="text"><br>    
+            <button id="button_start2" class="button2" type="submit">
+                <div id="text_start4" class="text1">
+                    Log In
+                </div>
+                <rect id="rect_start5"></rect>
+                <rect id="rect_start3"></rect>
+                <rect id="rect_start4"></rect>
+            </button>
         </form>
 
         <div id="forgot_start" class="pop_up">
