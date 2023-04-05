@@ -144,14 +144,14 @@ def login_form():
         password = request.form.get('inp_start2')
         cur.execute("SELECT * FROM Account WHERE name = %s", username)
         user = cur.fetchall()
-        msg = None
+        msg = ""
         if user:
             print(user)
             if user[0]['password'] != password:
                 return render_template('searchResult.html', results="Incorrect Password")
-            return render_template('./home.html', results="Not a valid username")
+            return render_template('./home.html', message="Not a valid username")
         msg = "Not a valid username"
-        return render_template('start.html', results=msg)
+        return render_template('start.html', message=msg)
 
 def init_db():
     with app.app_context():

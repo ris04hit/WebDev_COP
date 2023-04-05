@@ -283,3 +283,9 @@
     
     color: #FFFFFF;
 }
+
+#message1 {
+    left: 1000px;
+    top: 400px;
+    width: 100px;
+}

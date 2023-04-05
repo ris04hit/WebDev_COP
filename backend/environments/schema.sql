@@ -6,11 +6,6 @@
 -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
 
 
-DROP DATABASE IF EXISTS Synergy_db;
-Create DATABASE Synergy_db;
-
-USE Synergy_db;
-
 -- DROP SCHEMA IF EXISTS Base;
 -- CREATE SCHEMA Base;
 
@@ -141,6 +136,13 @@ CREATE TABLE Report (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+DROP TABLE IF EXISTS Personal;
+CREATE TABLE Personal (
+    id_obj CHAR(1) NOT NULL,
+    id_uniq VARCHAR(200) NOT NULL UNIQUE,
+    pass VARCHAR(300) NOT NULL,
+    PRIMARY KEY (id_obj, id_uniq)
+);
 
 -- DROP SCHEMA IF EXISTS Linked;
 -- CREATE SCHEMA Linked;
