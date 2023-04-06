@@ -49,7 +49,7 @@
             Forgot Password ?
         </div>
         
-        <form action="{{url_for('login_form')}}">
+        <form action="{{url_for('login_form')}}" method="post">
             <input id="inp_start1" placeholder="Username/Email address" class="form2" type="text" name="inp_start1"><br>
             <input id="inp_start2" placeholder="Password" class="form2" type="text" name="inp_start2"><br>    
             <button id="button_start2" class="button2" type="submit">
@@ -62,7 +62,7 @@
             </button>
         </form>
 
-        <div id="forgot_start" class="pop_up">
+        <div id="forgot_start" class="{{'pop_up' if not show_forget}}">
             <div class="close_pop" id="close_pop_start">
                 Close
             </div>
@@ -72,22 +72,20 @@
                     Forget Password
                 </div>
                 <rect id="rect_start8"></rect>
-                <form>
-                    <input  class="form1" id="email_start" type="text" placeholder="Enter Email Address">
-                    <button class="button1" id="button_start5">
-                        Send OTP
-                    </button>
-                </form>
-                <form>
-                    <input class="form1" id="otp_start" type="text" placeholder="Enter OTP">
-                    <button class="button1" id="button_start4">
+                <form action="{{url_for('login_otp_form')}}" method="post">
+                    <input class="form1" id="email_start" type="text" placeholder="Enter Email Address" name="email_start"  value="{{otp_email}}">
+                    <button class="button1" id="button_start4" type="submit" name="submit_button_start" value="submit_start2">
                         Login
                     </button>
+                    <button class="button1" id="button_start5" type="submit" name="submit_button_start" value="submit_start1">
+                        Send OTP
+                    </button>
+                    <input class="form1" id="otp_start" type="text" placeholder="Enter OTP" name="otp_start">
                 </form>
-                <div id="message_start2" class="error_message">error</div>
+                <div id="message_start2" class="error_message">{{message2}}</div>
             </rect>
         </div>
 
-        <div id="message_start1" class="error_message">{{message}}</div>
+        <div id="message_start1" class="error_message">{{message1}}</div>
     </body>
 </html>

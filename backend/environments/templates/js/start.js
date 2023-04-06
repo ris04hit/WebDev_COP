@@ -7,14 +7,6 @@ $(document).ready(function(){
         })
     });
 
-    // Login
-    // $("#button_start2").click(function(){
-    //     $("input").val("");
-    //     // if (id password matches)
-    //         window.location.href="{{url_for('loader1')}}";
-    // })
-
-    // forgot password
     $("#text_start7").click(function(){
         $("#forgot_start").show();
 
@@ -25,12 +17,12 @@ $(document).ready(function(){
         $("#forgot_start").hide();
     })
 
-    // login forgot password
-    $("#button_start4").click(function(){
-        $("input").val("");
-        // if (id password matches)
-            window.location.href="{{url_for('loader1')}}";
-    })
+    // // login forgot password
+    // $("#button_start4").click(function(){
+    //     $("input").val("");
+    //     // if (id password matches)
+    //         window.location.href="{{url_for('loader1')}}";
+    // })
 
     //hover forgot
     $("#text_start7").hover(function(){

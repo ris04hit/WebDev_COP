@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import helper
+
 app = Flask(__name__)
 
 app.config["MYSQL_HOST"] = "localhost"
@@ -9,6 +10,8 @@ app.config["MYSQL_USER"] = "root"
 app.config["MYSQL_PASSWORD"] = "password"
 app.config["MYSQL_DB"] = "Synergy_db"
 mysql = MySQL(app)
+
+otp = {}
 
 
 
@@ -19,7 +22,7 @@ def start():
     except:
         print("Can not connect to database in start page")
         return
-    return render_template('html/start.html', message="")
+    return render_template('html/start.html', message1="", message2="", show_forget=False)
 
 @app.route('/js')
 def start_js():
@@ -133,16 +136,16 @@ def tag():
 def tag_js():
     return render_template('js/tag.js')
 
-@app.route('/login', methods = ['GET', 'POST'])
+@app.route('/login', methods = ['POST'])
 def login_form():
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
-    if request.method == "GET":
-        username = request.form.get("inp_start1")
-        password = request.form.get("inp_start2")
-        query = "SELECT id_obj, id_uniq FROM Account WHERE name = %s"
+    if request.method == "POST":
+        username = request.form["inp_start1"]
+        password = request.form["inp_start2"]
+        query = "SELECT id_obj, id_uniq FROM Account WHERE username = %s"
         cur.execute(query, (username,))
         user = cur.fetchall()
         msg = ""
@@ -152,12 +155,58 @@ def login_form():
             query = "SELECT pass FROM Personal WHERE id_obj = %s AND id_uniq = %s"
             cur.execute(query, (id_obj, id_uniq))
             user = cur.fetchall()
-            if helper.check_pwd(password,user[0]['pass']):
+            cur.close()
+            if helper.hash_pwd(password)==user[0]['pass']:
                 return render_template('html/home.html', curr_user = id_uniq)
             msg = "Invalid Password"
-            return render_template('./home.html', message=msg)
+            return render_template('html/start.html', message1=msg, message2 = "", show_forget=False)
+        cur.close()
         msg = "Invalid Username"
-        return render_template('html/start.html', message=msg)
+        return render_template('html/start.html', message1=msg, message2 = "", show_forget=False)
+    
+@app.route('/login/otp', methods = ['POST'])
+def login_otp_form():
+        try:
+            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        except:
+            print("Can not connect to database in start page")
+        if request.method == "POST":
+            if request.form["submit_button_start"] == "submit_start1":
+                email = request.form["email_start"]
+                query = "SELECT email_id FROM Account WHERE email_id = %s"
+                cur.execute(query, (email,))
+                user = cur.fetchall()
+                if user:
+                    msg = "Enter OTP"
+                    global otp
+                    otp[email] = helper.gen_otp()
+                    print(otp) #instead send mail function
+                    cur.close()
+                    return render_template("html/start.html", message1="", message2=msg, show_forget=True, otp_email = email)
+                msg = "Email not Registered, Please SignUp"
+                cur.close()
+                return render_template("html/start.html", message1="", message2=msg, show_forget=True)
+            elif request.form["submit_button_start"] == "submit_start2":
+                email = request.form["email_start"]
+                otp_user = request.form["otp_start"]
+                if email in otp:
+                    if otp_user == otp[email]:
+                        query = "SELECT id_uniq FROM Account WHERE email_id = %s"
+                        cur.execute(query, (email,))
+                        user = cur.fetchall()
+                        id_uniq = user[0]['id_uniq']
+                        cur.close()
+                        return render_template('html/home.html', curr_user = id_uniq)
+                    else:
+                        msg = "Invalid OTP"
+                        cur.close()
+                        return render_template("html/start.html", message1 = "", message2 = msg, show_forget = True, otp_email = email)
+                else:
+                    msg = "There was some error, try again"
+                    cur.close()
+                    return render_template("html/start.html", message1 = "", message2 = msg, show_forget = True)
+            cur.close()
+            return render_template("html/start.html", message1 = "", message2 = "", show_forget=False)
 
 def init_db():
     with app.app_context():

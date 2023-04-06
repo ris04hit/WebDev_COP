@@ -1,5 +1,7 @@
 from re import search
-from bcrypt import hashpw, gensalt, checkpw
+from bcrypt import hashpw
+from cryptography.fernet import Fernet
+from random import randint
 
 def password_strength(password):
     length = len(password)
@@ -16,8 +18,10 @@ def password_strength(password):
     return 0
 
 def hash_pwd(password):
-    password = "MyP@ssw0rd!"
-    hashed_password = hashpw(password.encode('utf-8'), gensalt())
+    salt = b'$2b$12$BPgM2TZNwWMnrCl5d5Bjme'
+    hashed_password = hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
 
-def check_pwd(password, hashed_password):
-    checkpw(password.encode('utf-8'), hashed_password)
+def gen_otp():
+    otp=randint(100000,999999)
+    return str(otp)
