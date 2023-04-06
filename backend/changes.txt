@@ -1,10 +1,5 @@
 Login:
-    forget pwd: close white colour
     background blur
-    typing password ***
-
-Header:
-    hover text color change
 
 Home:
     tag pop up boundary

@@ -56,9 +56,16 @@ def header():
 def header_js():
     return render_template('js/header.js')
 
-@app.route('/home')
-def home():
-    return render_template('html/home.html')
+@app.route('/home/<string:username>')
+def home(username):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    query = "SELECT * from Account WHERE username = %s"
+    cur.execute(query,(username,))
+    user = cur.fetchall()
+    return render_template('html/home.html', user = user)
 
 @app.route('/js/home')
 def home_js():
@@ -145,7 +152,7 @@ def login_form():
     if request.method == "POST":
         username = request.form["inp_start1"]
         password = request.form["inp_start2"]
-        query = "SELECT id_obj, id_uniq FROM Account WHERE username = %s"
+        query = "SELECT id_obj, id_uniq,  username FROM Account WHERE username = %s"
         cur.execute(query, (username,))
         user = cur.fetchall()
         msg = ""
@@ -154,10 +161,10 @@ def login_form():
             id_uniq = user[0]['id_uniq']
             query = "SELECT pass FROM Personal WHERE id_obj = %s AND id_uniq = %s"
             cur.execute(query, (id_obj, id_uniq))
-            user = cur.fetchall()
+            ids = cur.fetchall()
             cur.close()
-            if helper.hash_pwd(password)==user[0]['pass']:
-                return render_template('html/home.html', curr_user = id_uniq)
+            if helper.hash_pwd(password)==ids[0]['pass']:
+                return redirect("/home/"+user[0]['username'])
             msg = "Invalid Password"
             return render_template('html/start.html', message1=msg, message2 = "", show_forget=False)
         cur.close()
@@ -191,12 +198,12 @@ def login_otp_form():
                 otp_user = request.form["otp_start"]
                 if email in otp:
                     if otp_user == otp[email]:
-                        query = "SELECT id_uniq FROM Account WHERE email_id = %s"
+                        query = "SELECT username FROM Account WHERE email_id = %s"
                         cur.execute(query, (email,))
                         user = cur.fetchall()
-                        id_uniq = user[0]['id_uniq']
+                        username = user[0]['username']
                         cur.close()
-                        return render_template('html/home.html', curr_user = id_uniq)
+                        return redirect("/home/"+username)
                     else:
                         msg = "Invalid OTP"
                         cur.close()

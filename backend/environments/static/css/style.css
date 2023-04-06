@@ -458,7 +458,7 @@ input[type="file"] {
 
 .pop_up {
     display: none;
-    backdrop-filter: saturate(40%);
+    /* backdrop-filter: saturate(40%); */
     background-color: transparent;
 }
 

@@ -13,20 +13,26 @@ $(document).ready(function(){
 
     $("#rect_home, #home").hover(function(){
         $("#rect_home").css("background-color", "#B6EADA");
+        $("#home").css("color", "#03001C");
         }, function(){
         $("#rect_home").css("background-color", "#03001C");
+        $("#home").css("color", "#FFFFFF");
       });
 
       $("#rect_about, #about").hover(function(){
         $("#rect_about").css("background-color", "#B6EADA");
+        $("#about").css("color", "#03001C");
         }, function(){
         $("#rect_about").css("background-color", "#03001C");
+        $("#about").css("color", "#FFFFFF");
       });
 
       $("#rect_apis, #apis").hover(function(){
         $("#rect_apis").css("background-color", "#B6EADA");
+        $("#apis").css("color", "#03001C");
         }, function(){
         $("#rect_apis").css("background-color", "#03001C");
+        $("#apis").css("color", "#FFFFFF");
       });
 
       $("#profile_rect, #profile_photo, #profile_name").hover(function(){
@@ -34,4 +40,10 @@ $(document).ready(function(){
         }, function(){
         $("#profile_rect").css("background-color", "#03001C");
       });      
+
+      $(".close_pop").hover(function(){
+        $(this).css("color", "#FFFAFA");
+      }, function(){
+        $(this).css("color", "#7F7F7F");
+      })
 })
