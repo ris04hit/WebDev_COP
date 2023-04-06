@@ -19,7 +19,7 @@ def start():
     except:
         print("Can not connect to database in start page")
         return
-    return render_template('html/start.html')
+    return render_template('html/start.html', message="")
 
 @app.route('/js')
 def start_js():
@@ -139,19 +139,25 @@ def login_form():
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
-    if request.method == "POST":
+    if request.method == "GET":
         username = request.form.get("inp_start1")
-        password = request.form.get('inp_start2')
-        cur.execute("SELECT * FROM Account WHERE name = %s", username)
+        password = request.form.get("inp_start2")
+        query = "SELECT id_obj, id_uniq FROM Account WHERE name = %s"
+        cur.execute(query, (username,))
         user = cur.fetchall()
         msg = ""
         if user:
-            print(user)
-            if user[0]['password'] != password:
-                return render_template('searchResult.html', results="Incorrect Password")
-            return render_template('./home.html', message="Not a valid username")
-        msg = "Not a valid username"
-        return render_template('start.html', message=msg)
+            id_obj = user[0]['id_obj']
+            id_uniq = user[0]['id_uniq']
+            query = "SELECT pass FROM Personal WHERE id_obj = %s AND id_uniq = %s"
+            cur.execute(query, (id_obj, id_uniq))
+            user = cur.fetchall()
+            if helper.check_pwd(password,user[0]['pass']):
+                return render_template('html/home.html', curr_user = id_uniq)
+            msg = "Invalid Password"
+            return render_template('./home.html', message=msg)
+        msg = "Invalid Username"
+        return render_template('html/start.html', message=msg)
 
 def init_db():
     with app.app_context():

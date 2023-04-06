@@ -8,15 +8,16 @@ $(document).ready(function(){
     });
 
     // Login
-    $("#button_start2").click(function(){
-        $("input").val("");
-        // if (id password matches)
-            window.location.href="{{url_for('loader1')}}";
-    })
+    // $("#button_start2").click(function(){
+    //     $("input").val("");
+    //     // if (id password matches)
+    //         window.location.href="{{url_for('loader1')}}";
+    // })
 
     // forgot password
     $("#text_start7").click(function(){
         $("#forgot_start").show();
+
     })
 
     // close forgot password

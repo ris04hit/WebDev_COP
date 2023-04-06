@@ -1,8 +1,6 @@
 Login:
     forget pwd: close white colour
     background blur
-    send otp button
-    grayish placeholder
 
 Header:
     hover text color change

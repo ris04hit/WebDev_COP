@@ -50,8 +50,8 @@
         </div>
         
         <form action="{{url_for('login_form')}}">
-            <input id="inp_start1" placeholder="Username/Email address" class="form2" type="text"><br>
-            <input id="inp_start2" placeholder="Password" class="form2" type="text"><br>    
+            <input id="inp_start1" placeholder="Username/Email address" class="form2" type="text" name="inp_start1"><br>
+            <input id="inp_start2" placeholder="Password" class="form2" type="text" name="inp_start2"><br>    
             <button id="button_start2" class="button2" type="submit">
                 <div id="text_start4" class="text1">
                     Log In
@@ -74,15 +74,20 @@
                 <rect id="rect_start8"></rect>
                 <form>
                     <input  class="form1" id="email_start" type="text" placeholder="Enter Email Address">
-                    <input class="form1" id="otp_start" type="text" placeholder="Enter OTP">
+                    <button class="button1" id="button_start5">
+                        Send OTP
+                    </button>
                 </form>
-                <button class="button1" id="button_start4">
-                    Login
-                </button>
-                <div id="message2" class="error_message">error</div>
+                <form>
+                    <input class="form1" id="otp_start" type="text" placeholder="Enter OTP">
+                    <button class="button1" id="button_start4">
+                        Login
+                    </button>
+                </form>
+                <div id="message_start2" class="error_message">error</div>
             </rect>
         </div>
 
-        <div id="message1" class="error_message">error</div>
+        <div id="message_start1" class="error_message">{{message}}</div>
     </body>
 </html>

@@ -267,12 +267,30 @@
 }
 
 #button_start4 {
-    width: 104.68px;
+    width: 120px;
     height: 45.68px;
-    left: 199px;
+    left: 300px;
     top: 327.5px;
     border-radius: 19.0323px;
+    
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 25.6935px;
+    line-height: 33px;
+    /* identical to box height */
+    
+    
+    color: #FFFFFF;  
+}
 
+#button_start5 {
+    width: 120px;
+    height: 45.68px;
+    left: 100px;
+    top: 327.5px;
+    border-radius: 19.0323px;
+    
     font-family: 'Abel';
     font-style: normal;
     font-weight: 400;
@@ -284,9 +302,13 @@
     color: #FFFFFF;
 }
 
-#message1 {
-    position: absolute;
-    left: 1000px;
-    top: 400px;
-    width: 100px;
+#message_start1 {
+    left: 1660px;
+    top: 280px;
+}
+
+#message_start2 {
+    left: 30px;
+    top: 50px;
+    font-size: 25px;
 }
