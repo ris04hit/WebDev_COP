@@ -85,6 +85,7 @@ CREATE TABLE Post (
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     author_obj CHAR(1) NOT NULL,
     author_uniq VARCHAR(200),
+    INDEX (author_obj, author_uniq),
     FOREIGN KEY (author_obj, author_uniq) REFERENCES Id(id_obj, id_uniq),
     creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     title TEXT,
@@ -105,6 +106,7 @@ CREATE TABLE Comment (
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     author_obj CHAR(1) NOT NULL,
     author_uniq VARCHAR(200),
+    INDEX (author_obj, author_uniq),
     FOREIGN KEY (author_obj, author_uniq) REFERENCES Id(id_obj, id_uniq), 
     creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     content TEXT, -- isko change karna hai !
@@ -114,6 +116,7 @@ CREATE TABLE Comment (
     visibility BOOLEAN DEFAULT true,
     post_obj CHAR(1) NOT NULL,
     post_uniq VARCHAR(200),
+    INDEX (post_obj, post_uniq),
     FOREIGN KEY (post_obj, post_uniq) REFERENCES Id(id_obj, id_uniq),
     api_visibility BOOLEAN DEFAULT true,
     PRIMARY KEY (id_obj, id_uniq)
@@ -124,9 +127,11 @@ CREATE TABLE Report (
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     from_obj CHAR(1) NOT NULL,
     from_uniq VARCHAR(200),
+    INDEX (from_obj, from_uniq),
     FOREIGN KEY (from_obj, from_uniq) REFERENCES Id(id_obj, id_uniq),
     to_obj CHAR(1) NOT NULL,
     to_uniq VARCHAR(200),
+    INDEX (to_obj, to_uniq),
     FOREIGN KEY (to_obj, to_uniq) REFERENCES Id(id_obj, id_uniq),
     description TEXT,
     api_visibility BOOLEAN DEFAULT true,
@@ -141,6 +146,8 @@ CREATE TABLE Personal (
 );
 
 
+use Synergy_db;
+show tables;
 
 insert into Id (id_obj, id_uniq) values ('A', "asdfgh12345");
 insert into Id (id_obj, id_uniq) values ('A', "asdfgh12987");
@@ -151,6 +158,9 @@ insert into Id (id_obj, id_uniq) values ('P', "mksdnq82910");
 insert into Id (id_obj, id_uniq) values ('P', "niokwq85573");
 insert into Id (id_obj, id_uniq) values ('R', "moqwid98530");
 insert into Id (id_obj, id_uniq) values ('T', "dfniew20935");
+insert into Id (id_obj, id_uniq) values ('P', "viunsd74850");
+insert into Id (id_obj, id_uniq) values ('P', "wmdisd30930");
+
 
 insert into Personal (id_obj, id_uniq, pass) values ('A', "asdfgh12345", '$2b$12$BPgM2TZNwWMnrCl5d5Bjme9DToqZVRTe9CkKpLCOYgXj0VdPcCozi');  -- "password"
 insert into Personal (id_obj, id_uniq, pass) values ('A', "asdfgh12987", '$2b$12$kdK1jlmB.UH2jcfR2RrhJOAxPS1HuOc3K62TZib6oZqoxQjtgb4/W'); -- "kuruasfad"
@@ -158,6 +168,32 @@ insert into Personal (id_obj, id_uniq, pass) values ('I', "njniuw98530", '$2b$12
 
 insert into Account (id_obj, id_uniq, username, creation_time, name, email_id, institutes, posts, last_visit, upvotes, bookmarks, followers, following, comments, visited_post, activity, tag_list, country, state, city, website_address, github_handle, organisation, visibility, report_list, api_visibility) values ('A', "asdfgh12345", "Aman_Zod", "2023-04-05 21:32:36", "Aman Singh Dalawat", "ris04hit@gmail.com", "asdfgh12345_ins", "asdfgh12345_pos", "2023-04-05 21:59:36", "asdfgh12345_upv", "asdfgh12345_boo", "asdfgh12345_ers", "asdfgh12345_ing", "asdfgh12345_com", "asdfgh12345_vis", "asdfgh12345_act", "asdfgh12345_tag", "India", "Rajasthan", "Udaipur", "www.giguschadus.com", "excitedleopard", "IIT_Delhi", 1, "asdfgh12345_rep", 1);
 insert into Account (id_obj, id_uniq, username, name, email_id, institutes, posts, last_visit, upvotes, bookmarks, followers, following, comments, visited_post, activity, tag_list, country, state, city, website_address, github_handle, organisation, visibility, report_list, api_visibility) values ('A', "asdfgh12987", "Matki Mutthal", "Mani Sarthak", "manisarthak@gmail.com", "asdfgh12987_ins", "asdfgh12987_pos", "2023-04-05 23:59:36", "asdfgh12987_upv", "asdfgh12987_boo", "asdfgh12987_ers", "asdfgh12987_ing", "asdfgh12987_com", "asdfgh12987_vis", "asdfgh12987_act", "asdfgh12987_tag", "India", "Bihar", "Chapra", "www.betussimpus.com", "mani-sarthak", "IIT_Delhi", 1, "asdfgh12987_rep", 0);
+
+insert into Comment (id_obj, id_uniq, author_obj, author_uniq, creation_time, content, upvotes, comments, report_list, visibility, post_obj, post_uniq, api_visibility) values ('C', "asfnjk78495", 'A', "asdfgh12345", "2023-04-05 21:59:36", "This is a chess tutorial on how to open as white", "asfnjk78495_upv", "asfnjk78495_com", "asfnjk78495_rep", 1, 'P', "viunsd74850", 0);
+insert into Comment (id_obj, id_uniq, author_obj, author_uniq, creation_time, content, upvotes, comments, report_list, visibility, post_obj, post_uniq, api_visibility) values ('C', "ahwkmk92835", 'A', "asdfgh12987", "2023-04-05 23:59:36", "Hi, this post is for those who want a quick tutorial on linux commands", "ahwkmk92835_upv", "ahwkmk92835_com", "ahwkmk92835_rep", 1, 'P', "wmdisd30930", 0);
+
+insert into Institution (id_obj, id_uniq, name, members, creation_time, posts, description, admin_obj, admin_uniq, email_id, visibility, api_visibility) values ('I', "njniuw98530", "IIT_Delhi", "njniuw98530_mem", "2023-04-05 23:59:36", "njniuw98530_pos", "baby shark doo dododo", 'A', "asdfgh12345", "iitdelhi@iitd.ac.in", 1, 1);
+
+insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "mksdnq82910", 'A', "asdfgh12345", "2023-04-05 23:59:36", "This is the best Post ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "mksdnq82910_upv", "mksdnq82910_com", "mksdnq82910_rep", 1, 0, "mksdnq82910_ins", "mksdnq82910_tag", 1);
+insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "niokwq85573", 'A', "asdfgh12987", "2023-04-05 23:59:36", "This is the worst shitpost ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "niokwq85573_upv", "niokwq85573_com", "niokwq85573_rep", 1, 1, "niokwq85573_ins", "niokwq85573_tag", 1);
+
+insert into Report (id_obj, id_uniq, from_obj, from_uniq, to_obj, to_uniq, description, api_visibility) values ('R', "moqwid98530", 'A', "asdfgh12345", 'A', "asdfgh12987", "This is the worst tutorial I have ever seen, the content of this tutorial is very bad", 1);
+
+insert into Tag (id_obj, id_uniq, name, posts, members, api_visibility) values ('T', "dfniew20935", "Chess", "dfniew20935_pos", "dfniew20935_mem", 0);
+
+
+-- select * from Account;
+-- select * from Id;
+-- select * from Tag;
+-- select * from Institution;
+-- select * from Post;
+-- select * from Comment;
+-- select * from Report;
+-- select * from Personal;
+
+
+
+
 
 
 
