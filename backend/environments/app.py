@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
+import helper
+
 app = Flask(__name__)
 
 app.config["MYSQL_HOST"] = "localhost"
@@ -8,6 +10,8 @@ app.config["MYSQL_USER"] = "root"
 app.config["MYSQL_PASSWORD"] = "12345678"
 app.config["MYSQL_DB"] = "Synergy_db"
 mysql = MySQL(app)
+
+otp = {}
 
 
 
@@ -17,7 +21,8 @@ def start():
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
-    return render_template('html/start.html')
+        return
+    return render_template('html/start.html', message1="", message2="", show_forget=False)
 
 @app.route('/js')
 def start_js():
@@ -51,9 +56,16 @@ def header():
 def header_js():
     return render_template('js/header.js')
 
-@app.route('/home')
-def home():
-    return render_template('html/home.html')
+@app.route('/home/<string:username>')
+def home(username):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    query = "SELECT * from Account WHERE username = %s"
+    cur.execute(query,(username,))
+    user = cur.fetchall()
+    return render_template('html/home.html', user = user)
 
 @app.route('/js/home')
 def home_js():
@@ -131,36 +143,77 @@ def tag():
 def tag_js():
     return render_template('js/tag.js')
 
-@app.route('/login', methods = ['GET', 'POST'])
-def login():
+@app.route('/login', methods = ['POST'])
+def login_form():
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
     if request.method == "POST":
-        userid = request.form.get('userid')
-        password = request.form.get('user_password')
-        # cursor.exec
-        # cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM user WHERE name = %s", (userid,))
-        # mysql.connection.commit()
-        # report=cursor.fetchall()
-        # print(report)
-        # return "Report: " + report
+        username = request.form["inp_start1"]
+        password = request.form["inp_start2"]
+        query = "SELECT id_obj, id_uniq,  username FROM Account WHERE username = %s"
+        cur.execute(query, (username,))
         user = cur.fetchall()
-        cur.close()
+        msg = ""
         if user:
-            # print("oks ", type(user))
-            # print(user[0]['id'])
-            # if(type(user) == tuple):
-            #     print("hi")
-            #     render_template("./signup.html")
-            # return render_template('searchResult.html', results=user[0])
-            if user[0]['password'] != password:
-                return render_template('searchResult.html', results="Incorrect Password")
-            return render_template('./home.html', results="Not a valid username")
-        return render_template('searchResult.html', results="Not a valid username")
-    return render_template("./signup.html")
+            id_obj = user[0]['id_obj']
+            id_uniq = user[0]['id_uniq']
+            query = "SELECT pass FROM Personal WHERE id_obj = %s AND id_uniq = %s"
+            cur.execute(query, (id_obj, id_uniq))
+            ids = cur.fetchall()
+            cur.close()
+            if helper.hash_pwd(password)==ids[0]['pass']:
+                return redirect("/home/"+user[0]['username'])
+            msg = "Invalid Password"
+            return render_template('html/start.html', message1=msg, message2 = "", show_forget=False)
+        cur.close()
+        msg = "Invalid Username"
+        return render_template('html/start.html', message1=msg, message2 = "", show_forget=False)
+    
+@app.route('/login/otp', methods = ['POST'])
+def login_otp_form():
+        try:
+            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        except:
+            print("Can not connect to database in start page")
+        if request.method == "POST":
+            if request.form["submit_button_start"] == "submit_start1":
+                email = request.form["email_start"]
+                query = "SELECT email_id FROM Account WHERE email_id = %s"
+                cur.execute(query, (email,))
+                user = cur.fetchall()
+                if user:
+                    msg = "Enter OTP"
+                    global otp
+                    otp[email] = helper.gen_otp()
+                    print(otp) #instead send mail function
+                    cur.close()
+                    return render_template("html/start.html", message1="", message2=msg, show_forget=True, otp_email = email)
+                msg = "Email not Registered, Please SignUp"
+                cur.close()
+                return render_template("html/start.html", message1="", message2=msg, show_forget=True)
+            elif request.form["submit_button_start"] == "submit_start2":
+                email = request.form["email_start"]
+                otp_user = request.form["otp_start"]
+                if email in otp:
+                    if otp_user == otp[email]:
+                        query = "SELECT username FROM Account WHERE email_id = %s"
+                        cur.execute(query, (email,))
+                        user = cur.fetchall()
+                        username = user[0]['username']
+                        cur.close()
+                        return redirect("/home/"+username)
+                    else:
+                        msg = "Invalid OTP"
+                        cur.close()
+                        return render_template("html/start.html", message1 = "", message2 = msg, show_forget = True, otp_email = email)
+                else:
+                    msg = "There was some error, try again"
+                    cur.close()
+                    return render_template("html/start.html", message1 = "", message2 = msg, show_forget = True)
+            cur.close()
+            return render_template("html/start.html", message1 = "", message2 = "", show_forget=False)
 
 def init_db():
     with app.app_context():
@@ -168,6 +221,7 @@ def init_db():
             cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         except:
             print("Can not connect to database in init_db")
+            return
         with app.open_resource('schema.sql', mode='r') as sql_file:
             cur.execute(sql_file.read())
         cur.close()

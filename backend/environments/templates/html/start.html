@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="{{url_for('start_js')}}"></script>
-        <script src="{{url_for('static', filename='js/main.js')}}"></script>
+        <script src="{{url_for('main_js')}}"></script>
     </head>
     <body  id="body_start">
         <video id="video_start" autoplay muted loop>
@@ -36,16 +36,7 @@
                 Get Started
             </div>
         </button>
-
-        <button id="button_start2" class="button2">
-            <div id="text_start4" class="text1">
-                Log In
-            </div>
-        </button>
-        <rect id="rect_start3"></rect>
-        <rect id="rect_start4"></rect>
-        <rect id="rect_start5"></rect>
-
+        
         <a href="{{url_for('loader2')}}">
             <button id="button_start3" class="button2">
                 <div id="text_start5" class="text1">
@@ -53,17 +44,25 @@
                 </div>
             </button>
         </a>
-
+        
         <div id="text_start7">
             Forgot Password ?
         </div>
-
-        <form>
-            <input id="inp_start1" placeholder="Username/Email address" class="form2" type="text"><br>
-            <input id="inp_start2" placeholder="Password" class="form2" type="text"><br>
+        
+        <form action="{{url_for('login_form')}}" method="post">
+            <input id="inp_start1" placeholder="Username/Email address" class="form2" type="text" name="inp_start1"><br>
+            <input id="inp_start2" placeholder="Password" class="form2" type="password" name="inp_start2"><br>    
+            <button id="button_start2" class="button2" type="submit">
+                <div id="text_start4" class="text1">
+                    Log In
+                </div>
+                <rect id="rect_start5"></rect>
+                <rect id="rect_start3"></rect>
+                <rect id="rect_start4"></rect>
+            </button>
         </form>
 
-        <div id="forgot_start" class="pop_up">
+        <div id="forgot_start" class="{{'pop_up' if not show_forget}}">
             <div class="close_pop" id="close_pop_start">
                 Close
             </div>
@@ -73,14 +72,20 @@
                     Forget Password
                 </div>
                 <rect id="rect_start8"></rect>
-                <form>
-                    <input  class="form1" id="email_start" type="text" placeholder="Enter Email Address">
-                    <input class="form1" id="otp_start" type="text" placeholder="Enter OTP">
+                <form action="{{url_for('login_otp_form')}}" method="post">
+                    <input class="form1" id="email_start" type="text" placeholder="Enter Email Address" name="email_start"  value="{{otp_email}}">
+                    <button class="button1" id="button_start4" type="submit" name="submit_button_start" value="submit_start2">
+                        Login
+                    </button>
+                    <button class="button1" id="button_start5" type="submit" name="submit_button_start" value="submit_start1">
+                        Send OTP
+                    </button>
+                    <input class="form1" id="otp_start" type="password" placeholder="Enter OTP" name="otp_start">
                 </form>
-                <button class="button1" id="button_start4">
-                    Login
-                </button>
+                <div id="message_start2" class="error_message">{{message2}}</div>
             </rect>
         </div>
+
+        <div id="message_start1" class="error_message">{{message1}}</div>
     </body>
 </html>
