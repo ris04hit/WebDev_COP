@@ -61,7 +61,8 @@ CREATE TABLE Institution (
     posts VARCHAR(100) NOT NULL UNIQUE,
     description TEXT, -- needed to be tex file !
     -- domains VARCHAR(100) NOT NULL UNIQUE, -- what was this if anyone remembers ??
-    admins VARCHAR(100) NOT NULL UNIQUE, 
+    admin_obj CHAR(1) DEFAULT 'A', 
+    admin_uniq VARCHAR(200) NOT NULL UNIQUE,
     email_id VARCHAR(150) NOT NULL UNIQUE,
     visibility BOOLEAN DEFAULT true,
     api_visibility BOOLEAN DEFAULT true,
