@@ -24,7 +24,7 @@ CREATE TABLE Account (
     id_obj CHAR(1) DEFAULT 'A',
     id_uniq VARCHAR(200) NOT NULL UNIQUE, 
     username VARCHAR(50) NOT NULL UNIQUE,
-    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(150) NOT NULL,
     email_id VARCHAR(150) NOT NULL UNIQUE,
     institutes VARCHAR(100) NOT NULL UNIQUE, 
@@ -58,7 +58,7 @@ CREATE TABLE Institution (
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     name VARCHAR(150) NOT NULL UNIQUE,
     members VARCHAR(100) NOT NULL UNIQUE,
-    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     posts VARCHAR(100) NOT NULL UNIQUE,
     description TEXT, -- needed to be tex file !
     -- domains VARCHAR(100) NOT NULL UNIQUE, -- what was this if anyone remembers ??
@@ -193,12 +193,40 @@ insert into Comment (id_obj, id_uniq, author_obj, author_uniq, creation_time, co
 
 -- insert into Institution (id_obj, id_uniq, name, members, creation_time, posts, description, admin_obj, admin_uniq, email_id, visibility, api_visibility) values ('I', "njniuw98530", "IIT_Delhi", "njniuw98530_mem", "2023-04-05 23:59:36", "njniuw98530_pos", "baby shark doo dododo", 'A', "asdfgh12345", "iitdelhi@iitd.ac.in", 1, 1);
 
-insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "mksdnq82910", 'A', "asdfgh12345", "2023-04-05 23:59:36", "This is the best Post ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "mksdnq82910_upv", "mksdnq82910_com", "mksdnq82910_rep", 1, 0, "mksdnq82910_ins", "mksdnq82910_tag", 1);
+insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "mksdnq82910", 'A', "asdfgh12345", "2023-04-05 23:59:36", "This is the best Post ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "mksdnq82910_upv", "mksdnq82910_com", "mksdnq82910_rep", 1, 1, "mksdnq82910_ins", "mksdnq82910_tag", 1);
 insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "niokwq85573", 'A', "asdfgh12987", "2023-04-05 23:59:36", "This is the worst shitpost ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "niokwq85573_upv", "niokwq85573_com", "niokwq85573_rep", 1, 1, "niokwq85573_ins", "niokwq85573_tag", 1);
 
 insert into Report (id_obj, id_uniq, from_obj, from_uniq, to_obj, to_uniq, description, api_visibility) values ('R', "moqwid98530", 'A', "asdfgh12345", 'A', "asdfgh12987", "This is the worst tutorial I have ever seen, the content of this tutorial is very bad", 1);
 
 insert into Tag (id_obj, id_uniq, name, posts, members, api_visibility) values ('T', "dfniew20935", "Chess", "dfniew20935_pos", "dfniew20935_mem", 0);
+
+DROP TABLE IF EXISTS asdfgh12345_tag;
+CREATE TABLE asdfgh12345_tag (
+    id_obj CHAR(1) DEFAULT 'T' NOT NULL,
+    id_uniq VARCHAR(200) NOT NULL UNIQUE,
+    INDEX (id_obj, id_uniq)
+);
+
+insert into asdfgh12345_tag (id_obj, id_uniq) values ('T', "dfniew20935");
+
+DROP TABLE IF EXISTS dfniew20935_pos;
+CREATE TABLE dfniew20935_pos (
+    id_obj CHAR(1) NOT NULL,
+    id_uniq VARCHAR(200) NOT NULL UNIQUE,
+    Primary key (id_obj, id_uniq)
+);
+
+insert into dfniew20935_pos (id_obj, id_uniq) values ('P', "mksdnq82910");
+
+DROP TABLE IF EXISTS mksdnq82910_upv;
+CREATE TABLE mksdnq82910_upv (
+    id_obj CHAR(1) NOT NULL,
+    id_uniq VARCHAR(200) NOT NULL UNIQUE,
+    Primary key (id_obj, id_uniq)
+);
+
+insert into mksdnq82910_upv (id_obj, id_uniq) values ('A', "asdfgh12345");
+
 
 
 -- DROP SCHEMA IF EXISTS Linked;

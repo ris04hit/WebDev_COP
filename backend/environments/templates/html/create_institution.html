@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="{{url_for('create_institution_js')}}"></script>
-        <script src="{{url_for('header_js')}}"></script>
+        <script src="{{url_for('header_js',user=user)}}"></script>
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body id="body_inst">
