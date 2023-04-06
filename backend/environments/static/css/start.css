@@ -285,6 +285,7 @@
 }
 
 #message1 {
+    position: absolute;
     left: 1000px;
     top: 400px;
     width: 100px;

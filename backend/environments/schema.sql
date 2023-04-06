@@ -11,7 +11,16 @@
 
 -- USE Base;
 
+DROP TABLE IF EXISTS Personal;
+DROP TABLE IF EXISTS Report;
+DROP TABLE IF EXISTS Comment;
+DROP TABLE IF EXISTS Post;
+DROP TABLE IF EXISTS Id;
+DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Institution;
 DROP TABLE IF EXISTS Account;
+
+
 CREATE TABLE Account (
     id_obj CHAR(1) DEFAULT 'A',
     id_uniq VARCHAR(200) NOT NULL UNIQUE, 
@@ -43,7 +52,6 @@ CREATE TABLE Account (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
-DROP TABLE IF EXISTS Institution;
 CREATE TABLE Institution (
     id_obj CHAR(1) DEFAULT 'I',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
@@ -61,7 +69,6 @@ CREATE TABLE Institution (
 );
 
 
-DROP TABLE IF EXISTS Tag;
 CREATE TABLE Tag (
     id_obj CHAR(1) DEFAULT 'T',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
@@ -72,7 +79,6 @@ CREATE TABLE Tag (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
-DROP TABLE IF EXISTS Id;
 CREATE TABLE Id (
     id_obj CHAR(1) NOT NULL,
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
@@ -80,7 +86,6 @@ CREATE TABLE Id (
 );
 
 
-DROP TABLE IF EXISTS Post;
 CREATE TABLE Post (
     id_obj CHAR(1) DEFAULT 'P',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
@@ -101,7 +106,6 @@ CREATE TABLE Post (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
-DROP TABLE IF EXISTS Comment;
 CREATE TABLE Comment (
     id_obj CHAR(1) DEFAULT 'C',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
@@ -121,7 +125,6 @@ CREATE TABLE Comment (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
-DROP TABLE IF EXISTS Report;
 CREATE TABLE Report (
     id_obj CHAR(1) DEFAULT 'R',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
@@ -136,7 +139,6 @@ CREATE TABLE Report (
     PRIMARY KEY (id_obj, id_uniq)
 );
 
-DROP TABLE IF EXISTS Personal;
 CREATE TABLE Personal (
     id_obj CHAR(1) NOT NULL,
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
