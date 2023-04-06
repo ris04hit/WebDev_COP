@@ -14,6 +14,169 @@ mysql = MySQL(app)
 otp = {}
 
 
+def follow(from_acc, to_acc):
+    ''' inputs are the uniq values ! '''
+    try:
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(to_acc)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Can not follow {}", (account_name[0]['name'],))
+        cur.close()
+        return
+    to_table = to_acc + str('_ers')
+    from_table = from_acc + str('_ing')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(to_table, from_acc))
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0 :
+        query = ("INSERT INTO {} (id_obj, id_uniq) VALUES ( '{}', '{}');".format(to_table, 'A', from_acc))
+        cur.execute(query)
+        # insert into the following list !
+        query = "SELECT * from {} WHERE id_uniq= '{}' ;".format(from_table, to_acc)
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) == 0 :
+            query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(from_table, 'A', to_acc)
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        uniq = value[0]['id_uniq']
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print('You have already followed {}'.format(account_name[0]['name']))
+    mysql.connection.commit()
+    cur.close()
+    return
+
+
+def unfollow(from_acc, to_acc):
+    ''' Inputs values are id_uniq type !'''
+    try:
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(to_acc)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Can not unfollow {}", (account_name[0]['name'],))
+        cur.close()
+        print('err1')
+        return
+    # following from mani's ac to mecan's ac
+    from_table = from_acc + str('_ing')
+    mechan = to_acc + str('_ers')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(mechan, from_acc))
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) > 0 :
+        query = "DELETE FROM {} WHERE id_uniq = '{}';".format(mechan, value[0]['id_uniq'])
+        cur.execute(query)
+        # deleting from the following list !
+        query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(from_table, to_acc))
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) > 0:
+            query = "DELETE FROM {} WHERE id_uniq = '{}';".format(from_table, value[0]['id_uniq'])
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(to_acc)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Already unfollowed ")
+    mysql.connection.commit()
+    cur.close()
+    return 
+
+
+def upvote_for_post(from_acc, to_post):
+    ''' input values are id_uniq type !'''
+    try:
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(to_post)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Can not upvote {}'s post", (account_name[0]['author_uniq'],)) #
+        cur.close()
+        return
+    post = to_post + str('_upv')
+    acc = from_acc + str('_pos')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(post, from_acc))
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0 :
+        query = ("INSERT INTO {} (id_obj, id_uniq) VALUES ( '{}', '{}');".format(post, 'A', from_acc))
+        cur.execute(query)
+        # insert into the following list !
+        query = "SELECT * from {} WHERE id_uniq= '{}' ;".format(acc, to_post)
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) == 0 :
+            query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(acc, 'P', to_post)
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        uniq = value[0]['id_uniq']
+        query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(uniq)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        uniq = account_name[0]['author_uniq']
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Can not upvote {}'s post more than once".format(account_name[0]['name'])) #
+    mysql.connection.commit()
+    cur.close()
+    return
+
+def downvote_for_post(from_acc, to_post):
+    ''' Inputs values are id_uniq type !'''
+    try:
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(to_post)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Can not upvote {}'s post", (account_name[0]['author_uniq'],)) #
+        cur.close()
+        return
+    # following from mani's ac to mecan's ac
+    mechan_post = to_post + str('_upv')
+    mani = from_acc + str('_pos')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(mechan_post, from_acc))
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) > 0 :
+        query = "DELETE FROM {} WHERE id_uniq = '{}';".format(mechan_post, value[0]['id_uniq'])
+        cur.execute(query)
+        # deleting from the following list !
+        query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(mani, to_post))
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) > 0:
+            query = "DELETE FROM {} WHERE id_uniq = '{}';".format(mani, value[0]['id_uniq'])
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(to_post)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        uniq = account_name[0]['author_uniq']
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Can not downvote {}'s post ".format(account_name[0]['name'])) #
+    mysql.connection.commit()
+    cur.close()
+    return 
+
 
 @app.route('/')
 def start():
@@ -22,6 +185,12 @@ def start():
     except:
         print("Can not connect to database in start page")
         return
+    print('start ')
+    # follow(str("asdfgh12345"),str("asdfgh12987"))
+    # unfollow(str("asdfgh12345"),str("asdfgh12987"))
+    # upvote_for_post( "mksdnq82910", "asdfgh12987")
+    # downvote_for_post("asdfgh12987", "mksdnq82910")
+    print('end ')
     return render_template('html/start.html', message1="", message2="", show_forget=False)
 
 @app.route('/js')
