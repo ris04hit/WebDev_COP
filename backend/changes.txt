@@ -12,3 +12,4 @@ Institute Website in backend is not present so insert it.
 In backend Institution table admin_uniq should not be UNI so change it
 account / institution update remove current_timestamp
 checks condition enum
+pass encryption takes time according to Devang so that could be a problem during testing.
