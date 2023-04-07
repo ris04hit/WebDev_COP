@@ -221,9 +221,21 @@ animation: flash 0.5s none infinite alternate;
     top: 800px;
 }
 
+#name_signup {
+    width: 260px;
+    height: 50px;
+    left: 675px;
+    top: 800px;   
+}
+
 #org_signup{
     width: 260px;
     height: 50px;
     left: 59px;
     top: 874px;
+}
+
+#message_signup1 {
+    left: 60px;
+    top: 240px;
 }
