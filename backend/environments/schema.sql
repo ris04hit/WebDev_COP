@@ -4,6 +4,11 @@
 -- abhi ke liye TEXT likh diye hai but usko as a tex file implement karna hai !
 -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
 
+DROP DATABASE If EXISTS Synergy_db;
+CREATE DATABASE Synergy_db;
+USE Synergy_db;
+
+
 DROP TABLE IF EXISTS Personal;
 DROP TABLE IF EXISTS Report;
 DROP TABLE IF EXISTS Comment;

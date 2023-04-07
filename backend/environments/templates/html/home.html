@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="{{url_for('header_js',user=user)}}"></script>
+        <script src="{{url_for('header_js')}}"></script>
         <script src="{{url_for('home_js')}}"></script>
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
@@ -72,45 +72,53 @@
                     </div>
                 </button>
             </div>
-            <div class="outer_post" id="out_post_home2">
-                <rect class="inner_post" id="inner_post_home"></rect>
+            {% for post_info in feed %}
+                <div class="outer_post out_post_home2" style="{{post_info[9]}}">
+                    <rect class="inner_post" id="inner_post_home"></rect>
 
-                <rect class="profile_bar" id="pbar_home"></rect>
-                <div class="text1" id="text_home7">
-                    Posted 6hrs ago
-                </div>
-                <div class="post_author">
-                    <rect id="rect_home5"></rect>
-                    <a href="{{url_for('profile')}}">
-                        <div class="text1" id="text_home8">
-                            Mechan
+                    <rect class="profile_bar" id="pbar_home"></rect>
+                    <div class="text1">
+                        <div class="text_home7">
+                            Posted {{post_info[3]}} ago
                         </div>
-                        <rect id="rect_profile_home"></rect>
-                    </a>
-                </div>
-                <div id="text_home9">
-                    <div class="follow">
-                        Follow
                     </div>
-                </div>
+                    <div class="post_author">
+                        <rect id="rect_home5"></rect>
+                        <a href="{{url_for('profile', username=post_info[4])}}">
+                            <div class="text1">
+                                <div class="text_home8">
+                                    {{post_info[4]}}
+                                </div>
+                            </div>
+                            <rect id="rect_profile_home"></rect>
+                        </a>
+                    </div>
+                    <div id="text_home9">
+                        <div class="follow">
+                            Follow
+                        </div>
+                    </div>
 
-                <div class="triangle-up" id="del_home1"></div>
-                <div class="text1" id="text_home10">
-                    <div class="upvote">0</div>
+                    <div class="triangle-up" id="del_home1"></div>
+                    <div class="text1" id="text_home10">
+                        <div class="upvote">0</div>
+                    </div>
+                    <rect id="rect_home4"></rect>
+                    <div class="text3 text_home3">
+                        {{post_info[6]}}
+                    </div>
+                    <!-- css varies below -->
+                    <!-- <div class="text3" id="text_home3">
+                        Good resources to study Dynamic Programming ?
+                    </div>
+                    <img src="{{url_for('static',filename='/data/Dynamic_prog.jpg')}}" id="img_start1">
+                    <div class="text4" id="text_home4">
+                        I have prepared a video playlist on dynamic programming. The playlist contains 35 lectures in total whose content ranges from contains theory lectures, notes, question solving lectures, solutions of those questions and
+                        many more. 
+                    </div> -->
                 </div>
-                <rect id="rect_home4"></rect>
-
-                <!-- css varies below -->
-                <div class="text3" id="text_home3">
-                    Good resources to study Dynamic Programming ?
-                </div>
-                <img src="{{url_for('static',filename='/data/Dynamic_prog.jpg')}}" id="img_start1">
-                <div class="text4" id="text_home4">
-                    I have prepared a video playlist on dynamic programming. The playlist contains 35 lectures in total whose content ranges from contains theory lectures, notes, question solving lectures, solutions of those questions and
-                    many more. 
-                </div>
-            </div>
-            <div class="outer_post" id="out_post_home3">
+            {% endfor %}
+            <!-- <div class="outer_post" id="out_post_home3">
                 <rect class="inner_post" id="inner_post_home"></rect>
 
                 <rect class="profile_bar" id="pbar_home"></rect>
@@ -137,8 +145,8 @@
                     <div class="upvote">93</div>
                 </div>
                 <rect id="rect_home4"></rect>
-            </div>
-            <div class="outer_post" id="out_post_home40">
+            </div> -->
+            <!-- <div class="outer_post" id="out_post_home40">
                 <rect class="inner_post" id="inner_post_home"></rect>
 
                 <rect class="profile_bar" id="pbar_home"></rect>
@@ -165,7 +173,7 @@
                     <div class="upvote">93</div>
                 </div>
                 <rect id="rect_home4"></rect>
-            </div>
+            </div> -->
         </div>
 
         <div class="multiple_post" id="mul_post_home2">

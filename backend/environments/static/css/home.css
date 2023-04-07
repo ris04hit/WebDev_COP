@@ -134,11 +134,12 @@
     line-height: 28px;
 }
 
-#out_post_home2 {
+.out_post_home2 {
+    position: absolute;
     width: 878px;
-    height: 857.98px;
+    /* height: 857.98px; */
     left: 12px;
-    top: 107px;
+    /* top: 107px; */
 }
 
 #inner_post_home {
@@ -155,10 +156,11 @@
     top: 14px;
 }
 
-#text_home7 {
-    width: 97px;
+.text_home7 {
+    position: absolute;
+    width: 120px;
     height: 19px;
-    left: 752px;
+    left: 730px;
     top: 29px;
     font-size: 15px;
     line-height: 19px;
@@ -174,10 +176,11 @@
     border: 1.5px solid #B6EADA;
 }
 
-#text_home8 {
+.text_home8 {
+    position: absolute;
     width: 59px;
     height: 25px;
-    left: 96px;
+    left: 80px;
     top: 26px;
     font-size: 20px;
     line-height: 25px;
@@ -225,7 +228,8 @@
     line-height: 29px;
 }
 
-#text_home3 {
+.text_home3 {
+    position: absolute;
     width: 780px;
     height: 35px;
     left: 35px;
@@ -468,4 +472,8 @@
     height: 25px;
     left: 27px;
     top: 55px;
+}
+
+.follow{
+    cursor: pointer;
 }

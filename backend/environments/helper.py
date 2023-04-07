@@ -6,6 +6,8 @@ from smtplib import SMTP
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from base64 import b64encode
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 def password_strength(password):
@@ -74,7 +76,9 @@ def feed(cur, user):
     num = 50    # number of posts in feed
     post_list_specific = sorted(post_dic, key=post_dic.get)
     count = 0
-    feed = []   # stores (post_id, upvotes_count, already_upvoted, time, author_username,title, content)
+    feed = []   # stores (post_id, upvotes_count, already_upvoted, time, author_username,title, content, top, height, style)
+    top = 107
+    height = 1000
     for post_id in post_list_specific:
         if count == num:
             break
@@ -87,19 +91,31 @@ def feed(cur, user):
             query = "SELECT count(id_uniq) from {}".format(upvote_table)
             cur.execute(query)
             upvotes_count = cur.fetchall()[0]['count(id_uniq)']
-            print(upvotes_count)
             query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(upvote_table)
             cur.execute(query, (user['id_uniq'],))
             already_upvoted = bool(cur.fetchall())
-            print(already_upvoted)
-            time = post_data['creation_time']
+            time = relativedelta(datetime.now(),post_data['creation_time'])
+            if time.years:
+                time = "{} year{}".format(time.years, "" if time.years==1 else "s")
+            elif time.months:
+                time = "{} month{}".format(time.months,  "" if time.months==1 else "s")
+            elif time.days:
+                time = "{} day{}".format(time.days,  "" if time.days==1 else "s")
+            elif time.hours:
+                time = "{} hour{}".format(time.hours,  "" if time.hours==1 else "s")
+            elif time.minutes:
+                time = "{} minute{}".format(time.minutes,  "" if time.minutes==1 else "s")
+            else:
+                time = "{} second{}".format(time.seconds,  "" if time.seconds==1 else "s")
             author_id = post_data['author_uniq']
             query = "SELECT username from Account WHERE BINARY id_uniq = %s"
             cur.execute(query, (author_id,))
             author_username = cur.fetchall()[0]['username']
             title = post_data['title']
             content = post_data['content']
-            feed.append((post_id, upvotes_count, already_upvoted, time, author_username, title, content ))
+            feed.append((post_id, upvotes_count, already_upvoted, time, author_username, title, content, top, height, f"top: {top}px; height: {height}px" ))
+            top = top + height + 15
+    return feed
 
 def check_username(username):
     if username:

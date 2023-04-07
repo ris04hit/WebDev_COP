@@ -4,6 +4,7 @@ import MySQLdb.cursors
 import helper
 
 app = Flask(__name__)
+app.secret_key = "devang"
 
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
@@ -52,9 +53,9 @@ def create_institution_js():
 def header():
     return render_template('html/header.html')
 
-@app.route('/js/header/<string:user>')
-def header_js(user):
-    return render_template('js/header.js', user=user)
+@app.route('/js/header')
+def header_js():
+    return render_template('js/header.js', username = session['user']['username'])
 
 @app.route('/home/<string:username>')
 def home(username):
@@ -65,8 +66,9 @@ def home(username):
     query = "SELECT * from Account WHERE BINARY username = %s"
     cur.execute(query,(username,))
     user = cur.fetchall()[0]
+    session['user'] = user
     feed = helper.feed(cur, user)
-    return render_template('html/home.html', user = user, feed = feed)
+    return render_template('html/home.html', feed = feed)
 
 @app.route('/js/home')
 def home_js():
@@ -120,8 +122,8 @@ def post():
 def post_js():
     return render_template('js/post.js')
 
-@app.route('/profile')
-def profile():
+@app.route('/profile/username')
+def profile(username):
     return render_template('html/profile.html')
 
 @app.route('/js/profile')

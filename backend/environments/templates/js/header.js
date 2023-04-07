@@ -9,7 +9,7 @@ class Header extends HTMLElement {
                 <rect id="rect_header"></rect>
 
                 <div id = "not_show_signup">
-                    <a href="{{url_for('home', username=user['username'])}}">
+                    <a href="{{url_for('home', username=username)}}">
                         <rect id = "rect_home"></rect>
                         <div id = "home">Home</div><br>
                     </a>
@@ -25,9 +25,9 @@ class Header extends HTMLElement {
                     </a>
                 
                     <rect id = "profile_rect"></rect>
-                    <a href="{{url_for('profile')}}">
+                    <a href="{{url_for('profile', username = username)}}">
                         <rect id = "profile_photo"></rect>
-                        <div id = "profile_name">Excitedleopard</div><br>
+                        <div id = "profile_name">{{username}}</div><br>
                     </a>
                     
                     <form><input id = "rect_search" placeholder="Search People, Institutions"></input></form>
