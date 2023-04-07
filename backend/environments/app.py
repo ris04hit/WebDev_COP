@@ -52,9 +52,9 @@ def create_institution_js():
 def header():
     return render_template('html/header.html')
 
-@app.route('/js/header')
-def header_js():
-    return render_template('js/header.js')
+@app.route('/js/header/<string:user>')
+def header_js(user):
+    return render_template('js/header.js', user=user)
 
 @app.route('/home/<string:username>')
 def home(username):
