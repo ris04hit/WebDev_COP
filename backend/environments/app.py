@@ -14,6 +14,7 @@ mysql = MySQL(app)
 
 otp = {}
 otp_signup = {}
+feed = []
 
 
 @app.route('/')
@@ -67,12 +68,13 @@ def home(username):
     cur.execute(query,(username,))
     user = cur.fetchall()[0]
     session['user'] = user
+    global feed
     feed = helper.feed(cur, user)
     return render_template('html/home.html', feed = feed)
 
 @app.route('/js/home')
 def home_js():
-    return render_template('js/home.js')
+    return render_template('js/home.js.j2', feed = feed)
 
 @app.route('/institute')
 def institute():
@@ -122,7 +124,7 @@ def post():
 def post_js():
     return render_template('js/post.js')
 
-@app.route('/profile/username')
+@app.route('/profile/<string:username>')
 def profile(username):
     return render_template('html/profile.html')
 
@@ -316,6 +318,20 @@ def init_db():
         mysql.connection.commit()
         sql_file.close()
 
+def test_db():
+    with app.app_context():
+        try:
+            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        except:
+            print("Can not connect to database in test_db")
+            return
+        with app.open_resource('data_entry.sql', mode='r') as sql_file:
+            cur.execute(sql_file.read())
+        cur.close()
+        mysql.connection.commit()
+        sql_file.close()
+
 if __name__ == "__main__":
     init_db()
+    # test_db()
     app.run(debug=True)

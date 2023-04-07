@@ -73,7 +73,6 @@
 
 #mul_post_home1 {
     width: 903px;
-    height: 1855px;
     left: 60px;
     top: 206px;
     overflow-y: scroll;
@@ -137,14 +136,11 @@
 .out_post_home2 {
     position: absolute;
     width: 878px;
-    /* height: 857.98px; */
     left: 12px;
-    /* top: 107px; */
 }
 
-#inner_post_home {
+.inner_post_home {
     width: 857px;
-    height: 832.48px;
     left: 10px;
     top: 14px;
 }
@@ -231,7 +227,6 @@
 .text_home3 {
     position: absolute;
     width: 780px;
-    height: 35px;
     left: 35px;
     top: 82px;
 }

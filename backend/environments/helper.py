@@ -77,8 +77,6 @@ def feed(cur, user):
     post_list_specific = sorted(post_dic, key=post_dic.get)
     count = 0
     feed = []   # stores (post_id, upvotes_count, already_upvoted, time, author_username,title, content, top, height, style)
-    top = 107
-    height = 1000
     for post_id in post_list_specific:
         if count == num:
             break
@@ -113,8 +111,7 @@ def feed(cur, user):
             author_username = cur.fetchall()[0]['username']
             title = post_data['title']
             content = post_data['content']
-            feed.append((post_id, upvotes_count, already_upvoted, time, author_username, title, content, top, height, f"top: {top}px; height: {height}px" ))
-            top = top + height + 15
+            feed.append((post_id, upvotes_count, already_upvoted, time, author_username, title, content ))
     return feed
 
 def check_username(username):
