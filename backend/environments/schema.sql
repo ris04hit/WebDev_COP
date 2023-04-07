@@ -4,11 +4,6 @@
 -- abhi ke liye TEXT likh diye hai but usko as a tex file implement karna hai !
 -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
 
-DROP DATABASE If EXISTS Synergy_db;
-CREATE DATABASE Synergy_db;
-USE Synergy_db;
-
-
 DROP TABLE IF EXISTS Personal;
 DROP TABLE IF EXISTS Report;
 DROP TABLE IF EXISTS Comment;
@@ -23,7 +18,7 @@ CREATE TABLE Account (
     id_obj CHAR(1) DEFAULT 'A' NOT NULL,
     id_uniq VARCHAR(200) NOT NULL UNIQUE, 
     username VARCHAR(50) NOT NULL UNIQUE,
-    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     name VARCHAR(150) NOT NULL,
     email_id VARCHAR(150) NOT NULL UNIQUE,
     institutes VARCHAR(100) NOT NULL UNIQUE, 
@@ -55,12 +50,12 @@ CREATE TABLE Institution (
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     name VARCHAR(150) NOT NULL UNIQUE,
     members VARCHAR(100) NOT NULL UNIQUE,
-    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     posts VARCHAR(100) NOT NULL UNIQUE,
     description TEXT, -- needed to be tex file !
     -- domains VARCHAR(100) NOT NULL UNIQUE, -- what was this if anyone remembers ??
     admin_obj CHAR(1) DEFAULT 'A' NOT NULL, 
-    admin_uniq VARCHAR(200) NOT NULL UNIQUE,
+    admin_uniq VARCHAR(200) NOT NULL,
     email_id VARCHAR(150) NOT NULL UNIQUE,
     visibility BOOLEAN DEFAULT true,
     api_visibility BOOLEAN DEFAULT true,
@@ -179,7 +174,7 @@ insert into Comment (id_obj, id_uniq, author_obj, author_uniq, creation_time, co
 
 insert into Institution (id_obj, id_uniq, name, members, creation_time, posts, description, admin_obj, admin_uniq, email_id, visibility, api_visibility) values ('I', "njniuw98530", "IIT_Delhi", "njniuw98530_mem", "2023-04-05 23:59:36", "njniuw98530_pos", "baby shark doo dododo", 'A', "asdfgh12345", "iitdelhi@iitd.ac.in", 1, 1);
 
-insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "mksdnq82910", 'A', "asdfgh12345", "2023-04-05 23:59:36", "This is the best Post ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "mksdnq82910_upv", "mksdnq82910_com", "mksdnq82910_rep", 1, 1, "mksdnq82910_ins", "mksdnq82910_tag", 1);
+insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "mksdnq82910", 'A', "asdfgh12345", "2023-04-05 23:59:36", "This is the best Post ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "mksdnq82910_upv", "mksdnq82910_com", "mksdnq82910_rep", 1, 0, "mksdnq82910_ins", "mksdnq82910_tag", 1);
 insert into Post (id_obj, id_uniq, author_obj, author_uniq, creation_time, title, content, upvotes, comments, report_list, public_post, visibility, institutes, tag_list, api_visibility) values ('P', "niokwq85573", 'A', "asdfgh12987", "2023-04-05 23:59:36", "This is the worst shitpost ever", "blah blah asodfh dsfuaheuif nidsufbe ufbiau sdfbieuf gibbersih isfudhfe fidsu f", "niokwq85573_upv", "niokwq85573_com", "niokwq85573_rep", 1, 1, "niokwq85573_ins", "niokwq85573_tag", 1);
 
 insert into Report (id_obj, id_uniq, from_obj, from_uniq, to_obj, to_uniq, description, api_visibility) values ('R', "moqwid98530", 'A', "asdfgh12345", 'A', "asdfgh12987", "This is the worst tutorial I have ever seen, the content of this tutorial is very bad", 1);
@@ -188,9 +183,9 @@ insert into Tag (id_obj, id_uniq, name, posts, members, api_visibility) values (
 
 DROP TABLE IF EXISTS asdfgh12345_tag;
 CREATE TABLE asdfgh12345_tag (
-    id_obj CHAR(1) DEFAULT 'T' NOT NULL,
+    id_obj CHAR(1) NOT NULL,
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
-    INDEX (id_obj, id_uniq)
+    Primary key (id_obj, id_uniq)
 );
 
 insert into asdfgh12345_tag (id_obj, id_uniq) values ('T', "dfniew20935");
@@ -204,6 +199,7 @@ CREATE TABLE dfniew20935_pos (
 
 insert into dfniew20935_pos (id_obj, id_uniq) values ('P', "mksdnq82910");
 
+
 DROP TABLE IF EXISTS mksdnq82910_upv;
 CREATE TABLE mksdnq82910_upv (
     id_obj CHAR(1) NOT NULL,
@@ -212,146 +208,3 @@ CREATE TABLE mksdnq82910_upv (
 );
 
 insert into mksdnq82910_upv (id_obj, id_uniq) values ('A', "asdfgh12345");
-
-
-
--- select * from Account;
--- select * from Id;
--- select * from Tag;
--- select * from Institution;
--- select * from Post;
--- select * from Comment;
--- select * from Report;
--- select * from Personal;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- -- Create a new table called "Account"
-
--- -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
--- DROP TABLE IF EXISTS Account;
-
--- CREATE TABLE Account (
---     id_obj CHAR(1),
---     id_uniq VARCHAR(200), 
---     username VARCHAR(50),
---     creation_time DATETIME,
---     name VARCHAR(150),
---     email_id VARCHAR(150),
---     institutes VARCHAR(100),
---     posts INT,
---     last_visit DATETIME,
---     upvotes VARCHAR(100),
---     -- profile_photo BLOB,  -- not certain of it tough
---     bookmarks VARCHAR(100),
---     followers VARCHAR(100),
---     following VARCHAR(100),
---     comments VARCHAR(100),
---     visited_post VARCHAR(100),
---     activity VARCHAR(100),
---     tag_list VARCHAR(100),
---     country CHAR(150),
---     state CHAR(150),
---     city CHAR(150),
---     website_address VARCHAR(1000),
---     github_handle VARCHAR(150),
---     organisation CHAR(150),
---     visibility BOOLEAN,
---     report_list VARCHAR(100),
---     api_visibility BOOLEAN,
---     PRIMARY KEY (id_obj, id_uniq)
--- );
-
--- CREATE TABLE Institution (
---     id_obj CHAR(1),
---     id_uniq VARCHAR(200),
---     name VARCHAR(150),
---     members VARCHAR(100),
---     creation_time DATETIME,
---     posts VARCHAR(100),
---     description TEXT, -- needed to be tex file !
---     domains VARCHAR(100), -- what was this if anyone remembers ??
---     admins VARCHAR(100),
---     email_id VARCHAR(150),
---     visibility BOOLEAN,
---     api_visibility BOOLEAN,
---     PRIMARY KEY (id_obj, id_uniq)
--- );
-
--- CREATE TABLE Tag (
---     id_obj CHAR(1),
---     id_uniq VARCHAR(200),
---     name VARCHAR(150),
---     posts VARCHAR(100),
---     members VARCHAR(100),
---     api_visibility BOOLEAN,
---     PRIMARY KEY (id_obj, id_uniq)
--- );
-
--- CREATE TABLE Post (
---     id_obj CHAR(1),
---     id_uniq VARCHAR(200),
---     author_obj CHAR(1),
---     author_uniq VARCHAR(200),
---     FOREIGN KEY (author_obj, author_uniq) REFERENCES Account(id_obj, id_uniq),
---     creation_time DATETIME,
---     title TEXT,
---     content TEXT, -- kuch karna h iska !! 
---     upvotes VARCHAR(100),
---     comments VARCHAR(100),
---     report_list VARCHAR(100),
---     public_post BOOLEAN,
---     visibility BOOLEAN,
---     institutes VARCHAR(100),
---     tag_list VARCHAR(100),
---     api_visibility BOOLEAN,
---     PRIMARY KEY (id_obj, id_uniq)
--- );
-
-
--- CREATE TABLE Comment (
---     id_obj CHAR(1),
---     id_uniq VARCHAR(200),
---     author_obj CHAR(1),
---     author_uniq VARCHAR(200),
---     FOREIGN KEY (author_obj, author_uniq) REFERENCES Account(id_obj, id_uniq),
---     creation_time DATETIME,
---     content TEXT, --- isko change karna hai !
---     upvotes VARCHAR(100),
---     comments VARCHAR(100),
---     report_list VARCHAR(100),
---     visibility BOOLEAN,
---     post_obj CHAR(1),
---     post_uniq VARCHAR(200),
---     FOREIGN KEY (post_obj, post_uniq) REFERENCES Post(id_obj, id_uniq),
---     api_visibility BOOLEAN,
---     PRIMARY KEY (id_obj, id_uniq)
--- );
-
-
--- CREATE TABLE Report (
---     id_obj CHAR(1),
---     id_uniq VARCHAR(200),
---     author_obj CHAR(1),
---     author_uniq VARCHAR(200),
---     FOREIGN KEY (author_obj, author_uniq) REFERENCES Account(id_obj, id_uniq),
---     -- against_obj CHAR(1),
---     -- against_uniq VARCHAR(200),  -- how to handle ??
---     description TEXT,
---     api_visibility BOOLEAN,
---     PRIMARY KEY (id_obj, id_uniq)
--- ):
