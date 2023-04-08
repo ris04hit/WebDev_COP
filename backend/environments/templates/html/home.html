@@ -41,20 +41,20 @@
             </div>
     
             <div id="sort_pop_home" class="pop_up">
-                <rect id="rect_sort_home">
-                    <button id="button_sort_home1" class="button_inv">
-                        <rect id="rect_time_home"></rect>
-                        <div id="text_sort_home1" class="text7">
-                            By Time
-                        </div>
-                    </button>
-                    <button id="button_sort_home2" class="button_inv">
-                        <rect id="rect_up_home"></rect>
-                        <div id="text_sort_home2" class="text7">
-                            By upvotes
-                        </div>
-                    </button>
-                </rect>
+                    <rect id="rect_sort_home">
+                        <button id="button_sort_home1" class="button_inv" name="button_sort_home1" type="submit">
+                            <rect id="rect_time_home"></rect>
+                            <div id="text_sort_home1" class="text7">
+                                By Time
+                            </div>
+                        </button>
+                        <button id="button_sort_home2" class="button_inv" name="button_sort_home1" type="submit">
+                            <rect id="rect_up_home"></rect>
+                            <div id="text_sort_home2" class="text7">
+                                By upvotes
+                            </div>
+                        </button>
+                    </rect>
             </div>
 
             <div class="outer_post" id="out_post_home1">
@@ -72,10 +72,9 @@
                     </div>
                 </button>
             </div>
-            {% set ct = 0 %}
             {% for post_info in feed %}
-                {% set ct = ct + 1%}
-                <div class="outer_post out_post_home2"  id="out_post_home_id{{ct}}">
+                {% set ct = loop.index %}
+                <div class="outer_post out_post_home2"  id="out_post_home_id-{{ct-1}}">
                     <rect class="inner_post inner_post_home"></rect>
 
                     <rect class="profile_bar" id="pbar_home"></rect>
@@ -95,84 +94,19 @@
                             <rect id="rect_profile_home"></rect>
                         </a>
                     </div>
-                    <div id="text_home9">
-                        <div class="follow">
-                            Follow
-                        </div>
-                    </div>
+                    <div class="follow text_home9"></div>
 
                     <div class="triangle-up" id="del_home1"></div>
                     <div class="text1" id="text_home10">
                         <div class="upvote">{{post_info[1]}}</div>
                     </div>
                     <rect id="rect_home4"></rect>
-                    <div class="text3 text_home3">
-                    </div>
-                    <!-- css varies below -->
-                    <!-- <div class="text3" id="text_home3">
-                        Good resources to study Dynamic Programming ?
-                    </div>
-                    <img src="{{url_for('static',filename='/data/Dynamic_prog.jpg')}}" id="img_start1">
-                    <div class="text4" id="text_home4">
-                        I have prepared a video playlist on dynamic programming. The playlist contains 35 lectures in total whose content ranges from contains theory lectures, notes, question solving lectures, solutions of those questions and
-                        many more. 
-                    </div> -->
+                    <div class="text3 text_home3"></div>
+                    <rect class="cover_content_home">
+                        <div class="text4 text_home4"></div>
+                    </rect>
                 </div>
             {% endfor %}
-            <!-- <div class="outer_post" id="out_post_home3">
-                <rect class="inner_post" id="inner_post_home"></rect>
-
-                <rect class="profile_bar" id="pbar_home"></rect>
-                <div class="text1" id="text_home7">
-                    Posted 6hrs ago
-                </div>
-                <div class="post_author">
-                    <rect id="rect_home5"></rect>
-                        <div class="text1" id="text_home8">
-                            Mechan
-                        </div>
-                        <rect id="rect_profile_home"></rect>
-                    </a>
-                </div>
-                <div id="text_home9">
-                    <div class="follow">
-                        Follow
-                    </div>
-                </div>
-
-                <div class="triangle-up" id="del_home1"></div>
-                <div class="text1" id="text_home10">
-                    <div class="upvote">93</div>
-                </div>
-                <rect id="rect_home4"></rect>
-            </div> -->
-            <!-- <div class="outer_post" id="out_post_home40">
-                <rect class="inner_post" id="inner_post_home"></rect>
-
-                <rect class="profile_bar" id="pbar_home"></rect>
-                <div class="text1" id="text_home7">
-                    Posted 6hrs ago
-                </div>
-                <div class="post_author">
-                    <rect id="rect_home5"></rect>
-                        <div class="text1" id="text_home8">
-                            Mechan
-                        </div>
-                        <rect id="rect_profile_home"></rect>
-                    </a>
-                </div>
-                <div id="text_home9">
-                    <div class="follow">
-                        Follow
-                    </div>
-                </div>
-
-                <div class="triangle-up" id="del_home1"></div>
-                <div class="text1" id="text_home10">
-                    <div class="upvote">93</div>
-                </div>
-                <rect id="rect_home4"></rect>
-            </div> -->
         </div>
 
         <div class="multiple_post" id="mul_post_home2">

@@ -61,6 +61,10 @@ def feed(cur, user):
     query = 'SELECT * from {}'.format(tag_list)
     cur.execute(query)
     tag_list = cur.fetchall()
+    if not tag_list:
+        query = 'SELECT id_uniq from Tag'
+        cur.execute(query)
+        tag_list = cur.fetchall()
     tag_list = sql_to_list(tag_list,'id_uniq')
     post_dic = {}
     for tag_id in tag_list:
@@ -74,9 +78,9 @@ def feed(cur, user):
             else:
                 post_dic[post_id] = 1
     num = 50    # number of posts in feed
-    post_list_specific = sorted(post_dic, key=post_dic.get)
+    post_list_specific = sorted(post_dic, key=post_dic.get, reverse=True)
     count = 0
-    feed = []   # stores (post_id, upvotes_count, already_upvoted, time, author_username,title, content, top, height, style)
+    feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow)
     for post_id in post_list_specific:
         if count == num:
             break
@@ -94,24 +98,28 @@ def feed(cur, user):
             already_upvoted = bool(cur.fetchall())
             time = relativedelta(datetime.now(),post_data['creation_time'])
             if time.years:
-                time = "{} year{}".format(time.years, "" if time.years==1 else "s")
+                time_str = "{} year{}".format(time.years, "" if time.years==1 else "s")
             elif time.months:
-                time = "{} month{}".format(time.months,  "" if time.months==1 else "s")
+                time_str = "{} month{}".format(time.months,  "" if time.months==1 else "s")
             elif time.days:
-                time = "{} day{}".format(time.days,  "" if time.days==1 else "s")
+                time_str = "{} day{}".format(time.days,  "" if time.days==1 else "s")
             elif time.hours:
-                time = "{} hour{}".format(time.hours,  "" if time.hours==1 else "s")
+                time_str = "{} hour{}".format(time.hours,  "" if time.hours==1 else "s")
             elif time.minutes:
-                time = "{} minute{}".format(time.minutes,  "" if time.minutes==1 else "s")
+                time_str = "{} minute{}".format(time.minutes,  "" if time.minutes==1 else "s")
             else:
-                time = "{} second{}".format(time.seconds,  "" if time.seconds==1 else "s")
+                time_str = "{} second{}".format(time.seconds,  "" if time.seconds==1 else "s")
+            time = datetime.now() - post_data['creation_time']
             author_id = post_data['author_uniq']
             query = "SELECT username from Account WHERE BINARY id_uniq = %s"
             cur.execute(query, (author_id,))
             author_username = cur.fetchall()[0]['username']
             title = post_data['title']
             content = post_data['content']
-            feed.append((post_id, upvotes_count, already_upvoted, time, author_username, title, content ))
+            query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(post_data['author_uniq']+"_ers")
+            cur.execute(query, (user["id_uniq"],))
+            already_follow = bool(cur.fetchall())
+            feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow)))
     return feed
 
 def check_username(username):
@@ -151,3 +159,288 @@ def create_linked_table(cur, id_uniq, suffix, ins_obj):
             obj_list.append("'"+elem+"'")
         query = "CREATE TABLE {} (id_obj ENUM({}) NOT NULL, id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq))".format(id_uniq+suffix, ", ".join(obj_list))
         cur.execute(query)
+
+def follow(cur, sender_id, profile_id):
+    ''' inputs are the uniq values ! '''
+    profile_followers = profile_id + str('_ers')
+    sender_following = sender_id + str('_ing')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0 :
+        query = ("INSERT INTO {} (id_obj, id_uniq) VALUES ( '{}', '{}');".format(profile_followers, 'A', sender_id))
+        cur.execute(query)
+        # insert into the following list !
+        query = "SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id)
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) == 0 :
+            query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(sender_following, 'A', profile_id)
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        uniq = profile_id
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print('You have already followed {}'.format(account_name[0]['name']))
+
+def unfollow(cur, sender_id, profile_id):
+    ''' Inputs values are id_uniq type !'''
+    # following from mani's ac to mecan's ac
+    sender_following = sender_id + str('_ing')
+    profile_followers = profile_id + str('_ers')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
+    cur.execute(query)
+    value = cur.fetchall()
+    # print('val', value)
+    if len(value) > 0 :
+        query = "DELETE FROM {} WHERE id_uniq = '{}';".format(profile_followers, value[0]['id_uniq'])
+        cur.execute(query)
+        # deleting from the following list !
+        query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id))
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) > 0:
+            query = "DELETE FROM {} WHERE id_uniq = '{}';".format(sender_following, value[0]['id_uniq'])
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(profile_id)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Already unfollowed {}".format(account_name[0]['name']))
+
+def upvote_for_post(cur, sender_id, post_id):
+    ''' requirements post_upvote_table, post_publisher_upvotes_table (obj, uniq, count = 0)'''
+    post_upvote_table = post_id + str('_upv')
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    upvoted = False
+    if len(value) == 0:
+        query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(post_upvote_table, sender_id)
+        cur.execute(query)
+        print('upvoted')
+        upvoted = True
+    else :
+        print('already upvoted to post')
+        return 
+    
+    query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    post_publisher_id = value[0]['author_uniq']
+    post_publisher_upvotes_table = post_publisher_id + str('_upv')
+
+
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0 :
+        query = "INSERT INTO {} (id_obj, id_uniq, count) VALUES ('A', '{}', 1) ;".format(post_publisher_upvotes_table, sender_id)
+        cur.execute(query)
+    elif upvoted:
+        count = value[0]['count']
+        count += 1
+        query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
+        cur.execute(query)
+        print('checked !')
+    return 
+
+def upvote_for_comment(cur, sender_id, comment_id):
+    '''requirements comments_upvote table, comment_publisher_upvote table (obj, uniq, count = 0)'''
+    comment_upvote_table = comment_id + str('_upv')
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    upvoted = False
+    if len(value) == 0:
+        query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(comment_upvote_table, sender_id)
+        cur.execute(query)
+        print('upvoted to coomment')
+        upvoted = True
+    else :
+        print('already upvoted to comment')
+        return 
+    
+    query = "SELECT author_uniq FROM Comment WHERE id_uniq = '{}' ;".format(comment_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    comment_publisher_id = value[0]['author_uniq']
+    comment_publisher_upvotes_table = comment_publisher_id + str('_upv')
+
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0 :
+        query = "INSERT INTO {} (id_obj, id_uniq, count) VALUES ('A', '{}', 1) ;".format(comment_publisher_upvotes_table, sender_id)
+        cur.execute(query)
+    elif upvoted:
+        count = value[0]['count']
+        count += 1
+        query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
+        cur.execute(query)
+        print('checked !')
+    return 
+    
+def downvote_for_post(cur, sender_id, post_id):
+    ''' requirements post_upvote_table, post_publisher_upvote_table '''
+    post_upvote_table = post_id + str('_upv')
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    downvoted = False
+    if len(value) > 0:
+        query = "DELETE FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
+        cur.execute(query)
+        print('downvoted post')
+        downvoted = True
+    else:
+        print('already downvoted to post !')
+        return 
+    
+    # finding post_publisher_id 
+    query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
+
+    cur.execute(query)
+    value = cur.fetchall()
+    post_publisher_id = value[0]['author_uniq']
+    post_publisher_upvotes_table = post_publisher_id + str('_upv')
+
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) > 0 and downvoted:
+        count = value[0]['count']
+        count -= 1
+        query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
+        cur.execute(query)
+        print('checked !')
+    elif len(value) == 0 :
+        print('database error !')
+    return 
+
+def downvote_for_comment(cur, sender_id, comment_id):
+    ''' requirements comment_upvote_table, comment_publisher_upvote_table '''
+    comment_upvote_table = comment_id + str('_upv')
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    downvoted = False
+    if len(value) > 0:
+        query = "DELETE FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
+        cur.execute(query)
+        print('downvoted comment')
+        downvoted = True
+    else:
+        print('already downvoted to comment !')
+        return 
+    
+    # finding comment_publisher_id 
+    query = "SELECT author_uniq FROM Comment WHERE id_uniq = '{}' ;".format(comment_id)
+
+    cur.execute(query)
+    value = cur.fetchall()
+    comment_publisher_id = value[0]['author_uniq']
+    comment_publisher_upvotes_table = comment_publisher_id + str('_upv')
+
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) > 0 and downvoted:
+        count = value[0]['count']
+        count -= 1
+        query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
+        cur.execute(query)
+        print('checked !')
+    elif len(value) == 0 :
+        print('database error !')
+    return 
+
+def comment_to_post(cur, publisher_id, post_id, text):
+    ''' all the input ids are uniqs '''
+    
+    # generating comment id at time of creation !
+    code = id_gen(cur, post_id, publisher_id, 'Comment')
+    temp = ""
+    for char in code :
+        asc = ord(char)
+        if (97 <= asc and asc <= 122) or (65 <= asc and asc <= 90):
+            temp += char
+    comment_id = temp
+
+
+    query = "SELECT * FROM Id WHERE id_uniq = '{}' ;".format(comment_id)
+    cur.execute(query)
+    value = cur.fetchall();
+    if len(value) == 0:
+        # inserting this comment_id into Id table
+        query = "INSERT INTO Id (id_obj, id_uniq) VALUES ('C', '{}') ;".format(comment_id)
+        cur.execute(query)    
+
+        # create required tables !
+        query = "CREATE TABLE {}_{} (id_obj CHAR(1), id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq)) ;"
+        table_list = ['upv', 'com', 'rep']
+        for name in table_list:
+            query1 = query.format(comment_id, name)
+            print(query1, name)
+            cur.execute(query1)
+
+        # inserting this comment into Comment table as entry !
+        query = "INSERT INTO Comment (id_uniq, author_obj, author_uniq, content, upvotes, comments, report_list, post_obj, post_uniq) VALUES ('{}', 'A', '{}', '{}', '{}_upv', '{}_com', '{}_rep', 'P', '{}');".format(comment_id, publisher_id, text, comment_id, comment_id, comment_id, post_id) # all default values are not given 
+        cur.execute(query)
+
+        # inserting comment_id into post's comment list
+        query = "INSERT INTO {}_com (id_obj, id_uniq) VALUES ('C', '{}') ;".format(post_id, comment_id)
+        cur.execute(query)
+    else:
+        print('already done !')
+    print('commented to post !')
+    return 
+
+def comment_to_comment(cur, publisher_id, comment_id, text):
+    ''' all the input ids are uniqs '''
+    
+    # generating comment id at time of creation !
+    code = id_gen(cur, comment_id, publisher_id, 'Comment')
+    temp = ""
+    for char in code :
+        asc = ord(char)
+        if (97 <= asc and asc <= 122) or (65 <= asc and asc <= 90):
+            temp += char
+    comment_hash = temp
+
+    print(comment_hash, 'hash')
+    
+    query = "SELECT * FROM Id WHERE id_uniq = '{}' ;".format(comment_hash)
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0:
+        # inserting this comment_hash into Id table
+        query = "INSERT INTO Id (id_obj, id_uniq) VALUES ('C', '{}') ;".format(comment_hash)
+        cur.execute(query)    
+
+        # create required tables !
+        query = "CREATE TABLE {}_{} (id_obj CHAR(1), id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq)) ;"
+        table_list = ['upv', 'com', 'rep']
+        for name in table_list:
+            query1 = query.format(comment_hash, name)
+            print(query1, name)
+            cur.execute(query1)
+
+        # inserting this comment into Comment table as entry !
+        query = "INSERT INTO Comment (id_uniq, author_obj, author_uniq, content, upvotes, comments, report_list, post_obj, post_uniq) VALUES ('{}', 'A', '{}', '{}', '{}_upv', '{}_com', '{}_rep', 'P', '{}');".format(comment_hash, publisher_id, text, comment_hash, comment_hash, comment_hash, comment_id) # all default values are not given 
+        cur.execute(query)
+        
+        # inserting comment_hash into comment's comment list
+        query = "CREATE TABLE IF NOT EXISTS {}_com (id_obj CHAR(1), id_uniq VARCHAR(200), PRIMARY KEY (id_obj, id_uniq)) ;".format(comment_id)
+        cur.execute(query)
+
+        query = "INSERT INTO {}_com (id_obj, id_uniq) VALUES ('C', '{}') ;".format(comment_id, comment_hash)
+        cur.execute(query)
+    else:
+        print('already done !')
+    return

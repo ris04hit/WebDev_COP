@@ -87,6 +87,7 @@
     display: none;  /* Safari and Chrome */
 }
 
+
 #out_post_home1 {
     width: 878px;
     height: 79px;
@@ -182,9 +183,9 @@
     line-height: 25px;
 }
 
-#text_home9 {
+.text_home9 {
     position: absolute;
-    width: 56px;
+    width: 80px;
     height: 23px;
     left: 200px;
     top: 27px;
@@ -242,12 +243,10 @@
     border: 1px solid #B6EADA;
 }
 
-#text_home4 {
+.text_home4 {
     width: 778px;
-    height: 167px;
-    left: 35px;
-    top: 603px;
 }
+
 
 #rect_home4 {
     position: absolute;
@@ -431,23 +430,45 @@
     border-radius: 10px;
 }
 
+#button_sort_home1 {
+    position: absolute;
+    box-sizing: border-box;
+
+    width: 111px;
+    height: 30px;
+    left: 5px;
+    top: 12px;
+}
+
+#button_sort_home2 {
+    position: absolute;
+    box-sizing: border-box;
+
+    width: 111px;
+    height: 30px;
+    left: 5px;
+    top: 50px;
+}
+
 #rect_time_home {
     position: absolute;
     width: 8px;
     height: 8px;
-    left: 10px;
-    top: 23px;
+    left: 5px;
+    top: 11px;
     
     background: #FFFFFF;
     border-radius: 4px;
+
+    display: none;
 }
 
 #rect_up_home {
     position: absolute;
     width: 8px;
     height: 8px;
-    left: 10px;
-    top: 63px;
+    left: 5px;
+    top: 13px;
     
     background: #FFFFFF;
     border-radius: 4px;
@@ -458,17 +479,25 @@
 #text_sort_home1 {
     width: 60px;
     height: 25px;
-    left: 27px;
-    top: 15px;
+    left: 22px;
+    top: 3px;
 }
 
 #text_sort_home2 {
     width: 84px;
     height: 25px;
-    left: 27px;
-    top: 55px;
+    left: 22px;
+    top: 5px;
 }
 
 .follow{
     cursor: pointer;
+}
+
+.cover_content_home {
+    position: absolute;
+    width: 778px;
+    left: 35px;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }

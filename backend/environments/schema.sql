@@ -4,14 +4,19 @@
 -- abhi ke liye TEXT likh diye hai but usko as a tex file implement karna hai !
 -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
 
-DROP TABLE IF EXISTS Personal;
-DROP TABLE IF EXISTS Report;
-DROP TABLE IF EXISTS Comment;
-DROP TABLE IF EXISTS Post;
-DROP TABLE IF EXISTS Id;
-DROP TABLE IF EXISTS Tag;
-DROP TABLE IF EXISTS Institution;
-DROP TABLE IF EXISTS Account;
+-- DROP DATABASE IF EXISTS Synergy_db;
+-- CREATE DATABASE Synergy_db;
+-- USE Synergy_db;
+
+
+-- DROP TABLE IF EXISTS Personal;
+-- DROP TABLE IF EXISTS Report;
+-- DROP TABLE IF EXISTS Comment;
+-- DROP TABLE IF EXISTS Post;
+-- DROP TABLE IF EXISTS Id;
+-- DROP TABLE IF EXISTS Tag;
+-- DROP TABLE IF EXISTS Institution;
+-- DROP TABLE IF EXISTS Account;
 
 
 CREATE TABLE Account (
