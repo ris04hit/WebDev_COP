@@ -10,5 +10,5 @@ for i in range(100):
 ```
 ## [WebDev_main](https://www.youtube.com/watch?v=Nj87GEXxhjc&ab_channel=ShabbirGovernor)
 
-![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo.png)
+### ![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo.png)
 ---
