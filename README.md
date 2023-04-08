@@ -4,7 +4,7 @@
 # **Synergy is a collaborative open source platform for resource and file sharing**
 ---
 
-The structure of therepository and a breif description about various branches is as follows:
+The structure of therepository and a brief description about various branches is as follows:
 - [API Design](https://github.com/ris04hit/WebDev_COP/tree/main/API%20design)
     - [ERD_Final.pdf](https://github.com/ris04hit/WebDev_COP/blob/main/API%20design/ERD.png) contains ER Diagram of Database
     - [design.txt](https://github.com/ris04hit/WebDev_COP/blob/main/API%20design/design.txt) contains the classes and methods decided for restAPI's.
