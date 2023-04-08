@@ -2,15 +2,17 @@ from flask import Flask, render_template, request, url_for, redirect, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import helper
-
-
+import sqlite3
+# import unittest
+connection = sqlite3.connect('Synergy_db')
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '12345678'
 
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = "12345678"
-app.config["MYSQL_DB"] = "Synergy_db"
-mysql = MySQL(app)
+# app.config["MYSQL_HOST"] = "localhost"
+# app.config["MYSQL_USER"] = "root"
+# app.config["MYSQL_PASSWORD"] = "12345678"
+# app.config["MYSQL_DB"] = "Synergy_db"
+# mysql = MySQL(app)
 
 otp = {}
 otp_signup = {}
@@ -18,7 +20,7 @@ otp_signup = {}
 def follow(sender_id, profile_id):
     ''' inputs are the uniq values ! '''
     try:
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur = connection.cursor()
     except:
         print('some error happend in cursor !')
         return
@@ -45,14 +47,14 @@ def follow(sender_id, profile_id):
         cur.execute(query)
         account_name = cur.fetchall()
         print('You have already followed {}'.format(account_name[0]['name']))
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return
 
 def unfollow(sender_id, profile_id):
     ''' Inputs values are id_uniq type !'''
     try:
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur = connection.cursor()
     except:
         print('some error happended in cursor !')
         return
@@ -80,14 +82,14 @@ def unfollow(sender_id, profile_id):
         cur.execute(query)
         account_name = cur.fetchall()
         print("Already unfollowed {}".format(account_name[0]['name']))
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return 
 
 def upvote_for_post(sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvotes_table (obj, uniq, count = 0)'''
     try:
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur = connection.cursor()
     except:
         print('error happened !')
         return 
@@ -103,7 +105,7 @@ def upvote_for_post(sender_id, post_id):
         upvoted = True
     else :
         print('already upvoted to post')
-        mysql.connection.commit()
+        connection.commit()
         cur.close() 
         return 
     
@@ -126,14 +128,14 @@ def upvote_for_post(sender_id, post_id):
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
         print('checked !')
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return 
 
 def upvote_for_comment(sender_id, comment_id):
     '''requirements comments_upvote table, comment_publisher_upvote table (obj, uniq, count = 0)'''
     try:
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur = connection.cursor()
     except:
         print('error happened !')
         return 
@@ -149,7 +151,7 @@ def upvote_for_comment(sender_id, comment_id):
         upvoted = True
     else :
         print('already upvoted to comment')
-        mysql.connection.commit()
+        connection.commit()
         cur.close()
         return 
     
@@ -171,14 +173,14 @@ def upvote_for_comment(sender_id, comment_id):
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
         print('checked !')
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return 
     
 def downvote_for_post(sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvote_table '''
     try:
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur = connection.cursor()
     except:
         print('error happened !')
         return 
@@ -194,7 +196,7 @@ def downvote_for_post(sender_id, post_id):
         downvoted = True
     else:
         print('already downvoted to post !')
-        mysql.connection.commit()
+        connection.commit()
         cur.close()
         return 
     
@@ -217,14 +219,14 @@ def downvote_for_post(sender_id, post_id):
         print('checked !')
     elif len(value) == 0 :
         print('database error !')
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return 
 
 def downvote_for_comment(sender_id, comment_id):
     ''' requirements comment_upvote_table, comment_publisher_upvote_table '''
     try:
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur = connection.cursor()
     except:
         print('error happened !')
         return 
@@ -240,7 +242,7 @@ def downvote_for_comment(sender_id, comment_id):
         downvoted = True
     else:
         print('already downvoted to comment !')
-        mysql.connection.commit()
+        connection.commit()
         cur.close()
         return 
     
@@ -263,14 +265,14 @@ def downvote_for_comment(sender_id, comment_id):
         print('checked !')
     elif len(value) == 0 :
         print('database error !')
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return 
 
 def comment_to_post(publisher_id, post_id, text):
     ''' all the input ids are uniqs '''
     try:
-        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur=connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database while creating comment !")
         return
@@ -311,14 +313,14 @@ def comment_to_post(publisher_id, post_id, text):
     else:
         print('already done !')
     print('commented to post !')
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return 
 
 def comment_to_comment(publisher_id, comment_id, text):
     ''' all the input ids are uniqs '''
     try:
-        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur=connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database while creating comment on comment!")
         return
@@ -362,7 +364,7 @@ def comment_to_comment(publisher_id, comment_id, text):
         cur.execute(query)
     else:
         print('already done !')
-    mysql.connection.commit()
+    connection.commit()
     cur.close()
     return 
 
@@ -370,7 +372,7 @@ def comment_to_comment(publisher_id, comment_id, text):
 @app.route('/')
 def start():
     try:
-        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur=connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
         return
@@ -427,7 +429,7 @@ def header_js(user):
 @app.route('/home/<string:username>')
 def home(username):
     try:
-        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur=connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
     query = "SELECT * from Account WHERE BINARY username = %s"
@@ -515,7 +517,7 @@ def tag_js():
 @app.route('/login', methods = ['POST'])
 def login_form():
     try:
-        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur=connection.cursor(MySQLdb.cursors.DictCursor)
     except:
         print("Can not connect to database in start page")
     if request.method == "POST":
@@ -543,7 +545,7 @@ def login_form():
 @app.route('/login/otp', methods = ['POST'])
 def login_otp_form():
         try:
-            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cur=connection.cursor(MySQLdb.cursors.DictCursor)
         except:
             print("Can not connect to database in start page")
         if request.method == "POST":
@@ -590,7 +592,7 @@ def login_otp_form():
 @app.route('/signup', methods = ['POST'])
 def signup_form():
         try:
-            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cur=connection.cursor(MySQLdb.cursors.DictCursor)
         except:
             print("Can not connect to database in start page")
         if request.method == "POST":
@@ -655,7 +657,7 @@ def signup_form():
                         helper.create_linked_table(cur, id_uniq, "_rep", 'R')
                         del otp_signup[email]
                         cur.close()
-                        mysql.connection.commit()
+                        connection.commit()
                         return redirect("/")
                     else:
                         msg = "Invalid OTP"
@@ -672,15 +674,18 @@ def signup_form():
 def init_db():
     with app.app_context():
         try:
-            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cur=connection.cursor(MySQLdb.cursors.DictCursor)
         except:
             print("Can not connect to database in init_db")
             return
         with app.open_resource('schema.sql', mode='r') as sql_file:
             cur.execute(sql_file.read())
         cur.close()
-        mysql.connection.commit()
+        connection.commit()
         sql_file.close()
+
+
+
 
 if __name__ == "__main__":
     init_db()

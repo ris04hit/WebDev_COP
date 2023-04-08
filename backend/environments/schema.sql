@@ -30,7 +30,7 @@ CREATE TABLE Account (
     institutes VARCHAR(100) NOT NULL UNIQUE, 
     posts VARCHAR(100) NOT NULL UNIQUE,
     last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    upvotes VARCHAR(100) NOT NULL UNIQUE,
+    upvotes VARCHAR(100) NOT NULL UNIQUE,   --  YAHAN CHANGE HAI TAGRA WALA !!!!  
     -- profile_photo BLOB,  -- not certain of it tough
     bookmarks VARCHAR(100) NOT NULL UNIQUE,
     followers VARCHAR(100) NOT NULL UNIQUE,
@@ -122,7 +122,7 @@ CREATE TABLE Comment (
     author_obj CHAR(1),
     author_uniq VARCHAR(200),
     INDEX (author_obj, author_uniq),
-    FOREIGN KEY (author_obj, author_uniq) REFERENCES Id(id_obj, id_uniq), 
+    -- FOREIGN KEY (author_obj, author_uniq) REFERENCES Id(id_obj, id_uniq), 
     creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     content TEXT, -- isko change karna hai !
     upvotes VARCHAR(100) NOT NULL UNIQUE,
@@ -132,7 +132,7 @@ CREATE TABLE Comment (
     post_obj CHAR(1),
     post_uniq VARCHAR(200),
     INDEX (post_obj, post_uniq),
-    FOREIGN KEY (post_obj, post_uniq) REFERENCES Id(id_obj, id_uniq),
+    -- FOREIGN KEY (post_obj, post_uniq) REFERENCES Id(id_obj, id_uniq),
     api_visibility BOOLEAN DEFAULT true,
     -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
@@ -200,32 +200,32 @@ insert into Report (id_obj, id_uniq, from_obj, from_uniq, to_obj, to_uniq, descr
 
 insert into Tag (id_obj, id_uniq, name, posts, members, api_visibility) values ('T', "dfniew20935", "Chess", "dfniew20935_pos", "dfniew20935_mem", 0);
 
-DROP TABLE IF EXISTS asdfgh12345_tag;
-CREATE TABLE asdfgh12345_tag (
-    id_obj CHAR(1) DEFAULT 'T' NOT NULL,
-    id_uniq VARCHAR(200) NOT NULL UNIQUE,
-    INDEX (id_obj, id_uniq)
-);
+-- DROP TABLE IF EXISTS asdfgh12345_tag;
+-- CREATE TABLE asdfgh12345_tag (
+--     id_obj CHAR(1) DEFAULT 'T' NOT NULL,
+--     id_uniq VARCHAR(200) NOT NULL UNIQUE,
+--     INDEX (id_obj, id_uniq)
+-- );
 
-insert into asdfgh12345_tag (id_obj, id_uniq) values ('T', "dfniew20935");
+-- insert into asdfgh12345_tag (id_obj, id_uniq) values ('T', "dfniew20935");
 
-DROP TABLE IF EXISTS dfniew20935_pos;
-CREATE TABLE dfniew20935_pos (
-    id_obj CHAR(1) NOT NULL,
-    id_uniq VARCHAR(200) NOT NULL UNIQUE,
-    Primary key (id_obj, id_uniq)
-);
+-- DROP TABLE IF EXISTS dfniew20935_pos;
+-- CREATE TABLE dfniew20935_pos (
+--     id_obj CHAR(1) NOT NULL,
+--     id_uniq VARCHAR(200) NOT NULL UNIQUE,
+--     Primary key (id_obj, id_uniq)
+-- );
 
-insert into dfniew20935_pos (id_obj, id_uniq) values ('P', "mksdnq82910");
+-- insert into dfniew20935_pos (id_obj, id_uniq) values ('P', "mksdnq82910");
 
-DROP TABLE IF EXISTS mksdnq82910_upv;
-CREATE TABLE mksdnq82910_upv (
-    id_obj CHAR(1) NOT NULL,
-    id_uniq VARCHAR(200) NOT NULL UNIQUE,
-    Primary key (id_obj, id_uniq)
-);
+-- DROP TABLE IF EXISTS mksdnq82910_upv;
+-- CREATE TABLE mksdnq82910_upv (
+--     id_obj CHAR(1) NOT NULL,
+--     id_uniq VARCHAR(200) NOT NULL UNIQUE,
+--     Primary key (id_obj, id_uniq)
+-- );
 
-insert into mksdnq82910_upv (id_obj, id_uniq) values ('A', "asdfgh12345");
+-- insert into mksdnq82910_upv (id_obj, id_uniq) values ('A', "asdfgh12345");
 
 
 
@@ -236,12 +236,12 @@ create table asdfgh12345_ers (id_obj CHAR(1), id_uniq VARCHAR(200));
 create table asdfgh12345_ing (id_obj CHAR(1), id_uniq VARCHAR(200));
 create table asdfgh12987_ers (id_obj CHAR(1), id_uniq VARCHAR(200));
 create table asdfgh12987_ing (id_obj CHAR(1), id_uniq VARCHAR(200));
-create table asdfgh12987_pos (id_obj CHAR(1), id_uniq VARCHAR(200)); -- mani upvotes
+create table asdfgh12987_upv (id_obj CHAR(1), id_uniq VARCHAR(200), count INT); -- mani upvotes
 create table niokwq85573_upv (id_obj CHAR(1), id_uniq VARCHAR(200)); -- mani post
-create table mksdnq82910_upv (id_obj CHAR(1), id_uniq VARCHAR(200)); -- mechan post
-create table asdfgh12345_pos (id_obj CHAR(1), id_uniq VARCHAR(200)); -- mechan upvotes
-
-
+create table mksdnq82910_upv (id_obj CHAR(1), id_uniq VARCHAR(200)); -- mechan post upvotes
+create table asdfgh12345_upv (id_obj CHAR(1), id_uniq VARCHAR(200), count INT); -- mechan upvotes
+create table asfnjk78495_upv (id_obj CHAR(1), id_uniq VARCHAR(200)); -- mechan comment upvotes
+create table mksdnq82910_com (id_obj CHAR(1), id_uniq VARCHAR(200)); -- mechan post comments
 
 
 
