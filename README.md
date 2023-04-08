@@ -1,8 +1,7 @@
 
 ![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo.png)
----
+
 # **Synergy is a collaborative open source platform for resource and file sharing**
----
 
 The structure of therepository and a brief description about various branches is as follows:
 - [API Design](https://github.com/ris04hit/WebDev_COP/tree/main/API%20design)
@@ -20,14 +19,3 @@ The structure of therepository and a brief description about various branches is
             - [js](https://github.com/ris04hit/WebDev_COP/tree/main/backend/environments/templates/js) folder contains javascript files used in frontend.
         - [schema.sql](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/schema.sql), [DatabaseExtend.sql](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/DatabaseExtend.sql), [FeedExtradata.sql](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/FeedExtraData.sql) contans mysql commands to create tables and feed test data into database
         - [app.py](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/app.py) and [helper.py](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/helper.py) contains python flask code for our backend API's and other helper functions.
-
-## Table of Contents
-- Awesomeness is essential
-- Kick Buttowski was awesome, you should be too
-- unit testing is hard af
-
-```python
-for i in range(100):
-    print("You are awesome too")
-```
-
