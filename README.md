@@ -1,18 +1,14 @@
-A website development project as a part of COP assignments. Includes both front end and backend as well as database management.
+# **This is my assignment repository**
+## _This repository is awesome_
+- Awesomeness is essential
+- Kick Buttowski was awesome, you should be too
+- unit testing is hard af
 
-Collaborators:
-Rishit Singla
-Aman Dalawat
-Mani Sarthak
-Devang Garg
+```python
+for i in range(100):
+    print("You are awesome too")
+```
+## [WebDev_main](https://www.youtube.com/watch?v=Nj87GEXxhjc&ab_channel=ShabbirGovernor)
 
-Links :
-1. Google Docs(Actual): https://docs.google.com/document/d/17qJPZJVf5_4kaMLvSoGbkcqOHYlwlpJArfUAp8kUY_I/edit?usp=sharing
-2. Google Docs (Dummy / to be submitted on the excel sheet publically): https://docs.google.com/document/d/1A7xY-eQVEZhQBJzcvO8_SKRoKn7ePgZuTR-05LeoqFk/edit?usp=sharing
-3. Google Docs (Dummy version 2/ to be modified !/ conatins more info than needs to be submitted): https://docs.google.com/document/d/1A7xY-eQVEZhQBJzcvO8_SKRoKn7ePgZuTR-05LeoqFk/edit?usp=sharing
-
-
-
-15th March Submission link: [https://docs.google.com/document/d/1zxL2a2fgem3utpZ8qlchTHloZKFpOktWkbuY-VhwD5M/edit?usp=sharing](url)
-
-database link : [https://lucid.app/lucidchart/2de783ef-3282-4c98-af41-74a8a93ed814/edit?viewport_loc=-61%2C598%2C2776%2C1536%2CmlSFCQHzDY0A&invitationId=inv_a7d8f42e-4d99-4c22-974c-d2883d37962a](url)
+![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo.png)
+---
