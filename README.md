@@ -1,4 +1,4 @@
-![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo.png)
+![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo%20(1).png)
 # **This is my assignment repository**
 ## _This repository is awesome_
 - Awesomeness is essential
