@@ -1,5 +1,5 @@
 
-![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo.png)
+![Image link](https://github.com/ris04hit/WebDev_COP/blob/main/backend/environments/static/data/Logo%20(1).png)
 
 # **Synergy is a collaborative open source platform for resource and file sharing**
 
