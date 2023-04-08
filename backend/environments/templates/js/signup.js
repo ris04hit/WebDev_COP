@@ -84,7 +84,7 @@ $(document).ready(function(){
 
     $('#password_signup').focus(function(){
       // specificType(".pop_signup2","#pop_sign2");
-      specType("Password strength should be high. Use mixture of numbers, symbols and alphabets having different cases");
+      specType("Password should contain atleast 8 characters. Use mixture of numbers, symbols and alphabets of both cases");
     })
 
     $('#confirm_signup').focus(function(){
