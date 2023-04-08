@@ -120,7 +120,7 @@
                 <div id="text_home12" class="text5">
                     Top Contributers (Institution)
                 </div>
-                <ol class="text6" id="list_home1">
+                <ol class="text6 list_home1">
                     <li class="list1">
                         <a href="{{url_for('institute')}}">
                             <div class="text6">
@@ -163,18 +163,129 @@
                 <div id="text_home12" class="text5">
                     Top Contributers (Individual)
                 </div>
+                <ol class="text6 list_home1">
+                    <li class="list1">
+                        <a href="{{url_for('profile',username=session['user']['username'])}}">
+                            <div class="text6">
+                                dstone
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('profile',username=session['user']['username'])}}">
+                            <div class="text6">
+                                samuel49
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('profile',username=session['user']['username'])}}">
+                            <div class="text6">
+                                cmurphy
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('profile',username=session['user']['username'])}}">
+                            <div class="text6">
+                                kingsara
+                            </div>
+                        </a>
+                    </li>
+                                        <li class="list1">
+                        <a href="{{url_for('profile',username=session['user']['username'])}}">
+                            <div class="text6">
+                                kevin52
+                            </div>
+                        </a>
+                    </li>
+                </ol>
             </div>
 
             <div class="outer_post" id="out_post_home7">
                 <div id="text_home12" class="text5">
                     Most liked posts
                 </div>
+                <ol class="text6 list_home1">
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Playing Chess is a good habit
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Lets eat togethor
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Flat Earth is real!
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Scientists found new variant of Covid
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                World will be destroyed in 2012
+                            </div>
+                        </a>
+                    </li>
+                </ol>
             </div>
             
             <div class="outer_post" id="out_post_home8">
                 <div id="text_home12" class="text5">
                     Most viewed posts
                 </div>
+                <ol class="text6 list_home1">
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Suicide at IIT Delhi
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Increasing population is concern!
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Say no to PDA
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                Cheers for COP Assignment
+                            </div>
+                        </a>
+                    </li>
+                    <li class="list1">
+                        <a href="{{url_for('post')}}">
+                            <div class="text6">
+                                One Piece is real !!!!!!
+                            </div>
+                        </a>
+                    </li>
+                </ol>
             </div>
         </div>
     </body>

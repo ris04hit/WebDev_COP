@@ -9,8 +9,8 @@ function tag_click() {
     var top = 4;
     for (var count=0; count< tag_list.length; count++){
         top = top + 52;
-        var code = `<img src="../../data/comment.png" style="top: ${top+9}px" class="cross_tag_home" id="button_tag_home-${count}">`
-        var code = code.concat("<a href='tag.html'>\n\t<button class='buttons_tag_home' style='top:").concat(top);
+        var code = `<img src="{{url_for('static', filename = 'data/Cross.png')}}" style="top: ${top+9}px" class="cross_tag_home" id="button_tag_home-${count}">`
+        var code = code.concat("<a href='{{url_for('tag')}}'>\n\t<button class='buttons_tag_home' style='top:").concat(top);
         code = code.concat("px'>");
         code = code.concat(tag_list[count]);
         code = code.concat("</button>\n</a>\n");
