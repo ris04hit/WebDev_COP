@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import helper
 
 
 app = Flask(__name__)
+app.secret_key = "devang"
 
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
@@ -14,6 +15,7 @@ mysql = MySQL(app)
 
 otp = {}
 otp_signup = {}
+feed = []
 
 def follow(sender_id, profile_id):
     ''' inputs are the uniq values ! '''
@@ -420,9 +422,9 @@ def create_institution_js():
 def header():
     return render_template('html/header.html')
 
-@app.route('/js/header/<string:user>')
-def header_js(user):
-    return render_template('js/header.js', user=user)
+@app.route('/js/header')
+def header_js():
+    return render_template('js/header.js', username = session['user']['username'])
 
 @app.route('/home/<string:username>')
 def home(username):
@@ -433,12 +435,14 @@ def home(username):
     query = "SELECT * from Account WHERE BINARY username = %s"
     cur.execute(query,(username,))
     user = cur.fetchall()[0]
+    session['user'] = user
+    global feed
     feed = helper.feed(cur, user)
-    return render_template('html/home.html', user = user, feed = feed)
+    return render_template('html/home.html', feed = feed, follow = helper.follow)
 
 @app.route('/js/home')
 def home_js():
-    return render_template('js/home.js')
+    return render_template('js/home.js.j2', feed = feed)
 
 @app.route('/institute')
 def institute():
@@ -488,8 +492,8 @@ def post():
 def post_js():
     return render_template('js/post.js')
 
-@app.route('/profile')
-def profile():
+@app.route('/profile/<string:username>')
+def profile(username):
     return render_template('html/profile.html')
 
 @app.route('/js/profile')
@@ -517,7 +521,7 @@ def login_form():
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
-        print("Can not connect to database in start page")
+        print("Can not connect to database in login page")
     if request.method == "POST":
         username = request.form["inp_start1"]
         password = request.form["inp_start2"]
@@ -545,7 +549,7 @@ def login_otp_form():
         try:
             cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         except:
-            print("Can not connect to database in start page")
+            print("Can not connect to database in login_otp page")
         if request.method == "POST":
             if request.form["submit_button_start"] == "submit_start1":
                 email = request.form["email_start"]
@@ -592,7 +596,7 @@ def signup_form():
         try:
             cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         except:
-            print("Can not connect to database in start page")
+            print("Can not connect to database in signup page")
         if request.method == "POST":
             username = request.form['username_signup']
             email = request.form['email_signup']
@@ -669,6 +673,69 @@ def signup_form():
             cur.close()
             return render_template("html/signup.html", message1=msg)
 
+@app.route('/home/<string:username>/SORT=<string:sort>')
+def home_sort(username, sort):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    query = "SELECT * from Account WHERE BINARY username = %s"
+    cur.execute(query,(username,))
+    user = cur.fetchall()[0]
+    global feed
+    feed = helper.feed(cur, user)
+    if sort=="time":
+        feed = sorted(feed, key = lambda x : x[7])
+    elif sort=="upvotes":
+        feed = sorted(feed, key = lambda x : x[1], reverse=True)
+    for i in feed:
+        print(i[0], i[5])
+    return render_template('html/home.html', feed = feed, follow = helper.follow)    
+
+@app.route('/follow', methods = ['POST'])
+def follow():
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in follow page")
+    sender_id = session['user']['uniq_id']
+    reciever_id = request.form['post_id']
+    helper.follow(cur, sender_id, reciever_id)
+    return jsonify({})
+
+@app.route('/unfollow', methods = ['POST'])
+def unfollow():
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in unfollow page")
+    sender_id = session['user']['uniq_id']
+    reciever_id = request.form['post_id']
+    helper.unfollow(cur, sender_id, reciever_id)
+    return jsonify({})
+
+@app.route('/upvote/post', methods = ['POST'])
+def upvote_for_post():
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in unfollow page")
+    sender_id = session['user']['uniq_id']
+    post_id = request.form['post_id']
+    helper.upvote_for_post(cur, sender_id, post_id)
+    return jsonify({})
+
+@app.route('/downvote/post', methods = ['POST'])
+def downvote_for_post():
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in unfollow page")
+    sender_id = session['user']['uniq_id']
+    post_id = request.form['post_id']
+    helper.downvote_for_post(cur, sender_id, post_id)
+    return jsonify({})
+
 def init_db():
     with app.app_context():
         try:
@@ -682,6 +749,31 @@ def init_db():
         mysql.connection.commit()
         sql_file.close()
 
+def test_db():
+    with app.app_context():
+        try:
+            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        except:
+            print("Can not connect to database in test_db")
+            return
+        with app.open_resource('DatabaseExtend.sql', mode='r') as sql_file:
+            cur.execute(sql_file.read())
+        cur.close()
+        mysql.connection.commit()
+        sql_file.close()
+    with app.app_context():
+        try:
+            cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        except:
+            print("Can not connect to database in test_db")
+            return
+        with app.open_resource('FeedExtraData.sql', mode='r') as sql_file:
+            cur.execute(sql_file.read())
+        cur.close()
+        mysql.connection.commit()
+        sql_file.close()
+
 if __name__ == "__main__":
-    init_db()
+    # init_db()
+    # test_db()
     app.run(debug=True)
