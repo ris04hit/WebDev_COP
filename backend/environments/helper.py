@@ -1,6 +1,5 @@
 from re import search
 from bcrypt import hashpw
-from cryptography.fernet import Fernet
 from random import randint
 from smtplib import SMTP
 from email.mime.multipart import MIMEMultipart
@@ -137,7 +136,9 @@ def unique_username(cur, username):
     return not bool(cur.fetchall())
 
 def id_gen(cur, id_obj, username, table):
-    encoded_username = b64encode(username.encode()).decode().zfill(9)
+    encoded_username = username[:9]
+    if len(encoded_username)!=9:
+        encoded_username = "x"*(9-len(encoded_username))+encoded_username
     query = "SELECT id_uniq FROM {} WHERE BINARY id_uniq LIKE '{}{}%' ORDER BY creation_time DESC LIMIT 1".format(table, id_obj, encoded_username)
     cur.execute(query)
     data = cur.fetchall()

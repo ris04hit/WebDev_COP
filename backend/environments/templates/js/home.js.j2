@@ -75,14 +75,14 @@ function feed_display() {
 
 }
 
-$(window).on('load', function(){
+{# $(window).on('load', function(){
     feed_display();
 })
 
 $(window).on('pageshow', function(){
     feed_display();
     console.log("back");
-})
+}) #}
 
 $(document).ready(function(){
 
@@ -173,6 +173,16 @@ $(document).ready(function(){
         // var index = Number(par.slice(par.indexOf('-') + 1));
         // var spliced = tag_list.splice(index,1);
         // tag_click();
+    })
+
+    $(".follow").click(function(){
+        var cont = $(this).text();
+        if (cont == "Follow"){
+            $(this).html("Unfollow");
+        }    
+        else{
+            $(this).html("Follow");
+        }
     })
 
 })
