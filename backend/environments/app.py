@@ -774,6 +774,6 @@ def test_db():
         sql_file.close()
 
 if __name__ == "__main__":
-    # init_db()
+    init_db()
     # test_db()
     app.run(debug=True)

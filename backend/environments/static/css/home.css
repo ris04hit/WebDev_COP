@@ -311,7 +311,7 @@
     top: 11px;
 }
 
-.list_home1 {
+#list_home1 {
     position: absolute;
     width: 267px;
     left: 30px;
