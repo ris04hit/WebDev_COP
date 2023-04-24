@@ -5,6 +5,39 @@ body {
     background: #03001C;
 }
 
+:root {
+    /* fonts */
+    --font-abel: Abel;
+  
+    /* font sizes */
+    --font-size-xl-9: 20.9px;
+    --font-size-6xl-7: 25.7px;
+    --font-size-xl: 20px;
+    --font-size-4xl: 23px;
+    --font-size-6xl: 25px;
+    --font-size-8xl: 27px;
+    --font-size-mini: 15px;
+    --font-size-3xl: 22px;
+    --font-size-15xl: 34px;
+  
+    /* Colors */
+    --color-gray-100: #03001c;
+    --color-gray-200: rgba(3, 3, 3, 0.75);
+    --color-blueviolet-100: #8f00ff;
+    --color-blueviolet-200: rgba(143, 0, 255, 0);
+    --color-blueviolet-300: rgba(143, 0, 255, 0.75);
+    --color-white: #fff;
+    --color-paleturquoise: #b6eada;
+    --color-dodgerblue: #008dff;
+    --color-black: #000;
+  
+    /* border radiuses */
+    --br-mini-3: 14.3px;
+    --br-3xs: 10px;
+    --br-6xl: 25px;
+    --br-mini: 15px;
+  }
+
 input {
     outline: none;
 }
@@ -484,4 +517,23 @@ input[type="file"] {
     font-weight: 400;
     font-size: 30px;
     color: red;    
+}
+
+.search_rect {
+    position: absolute;
+    box-sizing: border-box;
+    
+    background: #03001C;
+    border: 1px solid #B6EADA;
+    border-radius: 10px;
+
+}
+
+.search_line {
+    position: absolute;
+    height: 0px;
+    left: 24px;
+    top: 57px;
+    
+    border: 1px solid #B6EADA;
 }

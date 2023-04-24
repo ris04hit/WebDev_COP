@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/api.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/apimethods.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="{{url_for('header_js',user=user)}}"></script>
+    <script src="{{url_for('main_js')}}" defer></script>
+  </head>
+  <body>
+    <div class="api-intro">
+      <div>
+        <header-component></header-component>
+    </div>
+      <div class="apis">API's</div>
+
+      <a href="apis.html">
+        <rect id = "rect_one"></rect>
+        <div id = "Intro">Introduction</div><br>
+    </a>
+
+    <a href="methods.html">
+        <rect id = "rect_two"></rect>
+        <div id = "Meth">Methods</div><br>
+    </a>
+
+    <a href="objects.html">
+        <rect id = "rect_three"></rect>
+        <div id = "Obj">Objects</div><br>
+    </a>
+      <div class="rectangle-div"></div>
+      
+    </div>
+
+    <script>
+      var logo3Image = document.getElementById("logo3Image");
+      if (logo3Image) {
+        logo3Image.addEventListener("click", function (e) {
+          // Please sync "Annimation-Desktop-5" to the project
+        });
+      }
+      </script>
+  </body>
+</html>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap"
+    />
+  </head>
+  <body>
+    <div class="api-methods">
+      <div>
+        <header-component></header-component>
+    </div>
+      <div class="apis">API’s </div>
+        <a href="apis.html">
+          <rect id = "rect_one"></rect>
+          <div id = "Intro">Introduction</div><br>
+      </a>
+  
+      <a href="methods.html">
+          <rect id = "rect_two"></rect>
+          <div id = "Meth">Methods</div><br>
+      </a>
+  
+      <a href="objects.html">
+          <rect id = "rect_three"></rect>
+          <div id = "Obj">Objects</div><br>
+      </a>
+        <div class="rectangle-div"></div>
+        <div class="about">About</div>
+        <div class="home">Home</div>
+        <div class="api">APIs</div>
+        <div class="postget-arguments-idpost-i-container">
+          <p class="postget">Post.get:</p>
+          <p class="arguments-idpost-id">
+            <span class="span"> </span><span>Arguments: Id.Post_id </span>
+          </p>
+          <p class="arguments-idpost-id">
+            <span> Returns: Post</span><span class="span"> </span>
+          </p>
+          <p class="postget">Account.get:</p>
+          <p class="arguments-idpost-id">
+            <span class="span"> </span><span>Arguments: Id.Account_id </span>
+          </p>
+          <p class="arguments-idpost-id">
+            <span> Returns: Account</span><span class="span"> </span>
+          </p>
+          <p class="postget">Institution.get:</p>
+          <p class="arguments-idpost-id">
+            <span class="span"> </span><span>Arguments: Id.Institution_id </span>
+          </p>
+          <p class="arguments-idpost-id">
+            <span> Returns: Institution </span><span class="span"> </span>
+          </p>
+          <p class="postget">Tag.get:</p>
+          <p class="arguments-idpost-id">
+            <span class="span"> </span><span>Arguments: Id.Tag_id </span>
+          </p>
+          <p class="arguments-idpost-id">
+            <span> Returns: Tag </span><span class="span"> </span>
+          </p>
+          <p class="arguments-idpost-id">
+            <span class="span"> Comment.get:</span><span> </span>
+          </p>
+          <p class="arguments-idpost-id">Arguments: Id.Comment_id</p>
+          <p class="arguments-idpost-id">Returns: Comment</p>
+          <p class="arguments-idpost-id">
+            <span> </span><span class="span">Account_Username.get: </span
+            ><span class="span8"> </span>
+          </p>
+          <p class="arguments-idpost-id">Arguments: Username</p>
+          <p class="arguments-idpost-id">Returns: Account</p>
+          <p class="postget">Institution_Name.get:</p>
+          <p class="arguments-idpost-id">Arguments: Name</p>
+          <p class="arguments-idpost-id">Returns: Institution</p>
+          <p class="postget">Tag_Name.get:</p>
+          <p class="arguments-idpost-id">
+            <span class="span"> </span><span>Arguments: Name </span>
+          </p>
+          <p class="arguments-idpost-id">
+            <span> Returns: Tag </span><span class="span"> </span>
+          </p>
+          <p class="postget">Post.post:</p>
+          <p class="arguments-idpost-id">
+            <span class="span"> </span><span>Argument: Post </span>
+          </p>
+          <p class="arguments-idpost-id">
+            <span> Returns: Id.Post_id </span><span class="span"> </span>
+          </p>
+        </div>
+        <div class="api-methods-item"></div>
+        <div class="post-get">
+          <ul class="post-get1">
+            Post-get
+          </ul>
+        </div>
+        <div class="account-get">2. Account-get</div>
+        <div class="institution-get">3. Institution-get</div>
+        <div class="tag-get">4. Tag-get</div>
+        <div class="comment-get">5. Comment-get</div>
+        <div class="account-username">6. Account username</div>
+        <div class="institution-name">7. Institution name</div>
+        <div class="tag-name">8. Tag name</div>
+        <div class="api-methods-inner"></div>
+        <div class="rectangle-div"></div>
+        <div class="api-methods-child1"></div>
+        <div class="introduction">Introduction</div>
+        <div class="methods">Methods</div>
+        <div class="objects">Objects</div>
+      </div>
+  
+  
+      
