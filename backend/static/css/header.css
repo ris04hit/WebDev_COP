@@ -209,3 +209,17 @@
     left: 35px;
     top: 19px;
 }
+
+#search_result_rect {
+    width: 269px;
+    left: 889px;
+    top: 82px;
+    height: 50px;
+    z-index: 10000;
+
+}
+
+#header_search_line {
+    position: absolute;
+    width: 220px;
+}
