@@ -185,57 +185,59 @@
                 </a>
             </div>
         </div>
-        <rect id="rect_main_set" class="pop_up">
-            <div class = "text1_set">
-                Settings
-            </div>
-            <!-- <button type="button", id = "create_ins">Create Institution</button> -->
-            <hr class = "line_set">
-
-            <div class = "Profile_name_set">
-                Excitedleopard
-            </div>
-            <button type="button", id = "change_pic_set">Change Profile Photo</button>
-
-            <form>
-                <img id = "rect_profile_set" src=""></img>
-                <label id = "text_profile_set">
-                    <input type="file" onchange="previewFile()" accept="image/png, image/jpeg, image/jpg" name="image_profile_set" value="{{image}}">
-                    Add Profile Photo
-                </label><br>
-                <input type="password" id="old_pass_set" name="old_pass_set" placeholder="Old Password" class="form1" value=""><br>
-                <input type="password" id="new_pass_set" name="new_pass_set" placeholder="New Password" class="form1" value="">
-                <input type="password" id="confirm_pass_set" name="confirm_pass_set" placeholder="Confirm Password" class="form1" value=""><br>
-
-                <input type="text" id="username_set" placeholder="Username" class="form1" name="username_set" value="{{Username}}"><br>
-
-                <input type="email" id="email_set" placeholder="Email Adress" class="form1" name="email_set" value="{{email}}"><br>
-
-                <div class = "some_text_set">
-                    Additional Information
+        <div id="div_main_set" class="pop_up">
+            <rect id="rect_main_set">
+                <div class = "text1_set">
+                    Settings
                 </div>
-                <input type="text" id="country_set" placeholder="Country" class="form1" name="country_set" value="{{country}}">
-                <input type="text" id="state_set" placeholder="State" class="form1" name="state_set" value="{{state}}">
-                <input type="text" id="city_set" placeholder="City" class="form1" name="city_set" value="{{city}}"><br>
-                <input type="text" id="web_set" placeholder="Website Address" class="form1" name="web_set" value="{{website}}">
-                <input type="text" id="git_set" placeholder="Github Handle" class="form1" name="git_set" value="{{git}}"><br>
-                <input type="text" id="org_set" placeholder="Organization" class="form1" name="org_set" value="{{org}}"><br>
+                <!-- <button type="button", id = "create_ins">Create Institution</button> -->
+                <hr class = "line_set">
 
-                <rect id = "save_discard">
-                    <button class="button1" id="save_set" type="submit" name="save_set">
-                        <div id="butt_set_1">
-                            Save
-                        </div>
-                    </button>
-                    <button class="button1" id="discard_set" type="button" name="discard_set">
-                        <div id="butt_set_2">
-                            Discard
-                        </div>
-                    </button>
-                    <div class = "vertical"></div>
-                </rect>
-            </form>
-        </rect>
-        <button type="button", id = "close_ins">Close</button>
+                <div class = "Profile_name_set">
+                    Excitedleopard
+                </div>
+                <button type="button", id = "change_pic_set">Change Profile Photo</button>
+
+                <form>
+                    <img id = "rect_profile_set" src=""></img>
+                    <label id = "text_profile_set">
+                        <input type="file" onchange="previewFile()" accept="image/png, image/jpeg, image/jpg" name="image_profile_set" value="{{image}}">
+                        Add Profile Photo
+                    </label><br>
+                    <input type="password" id="old_pass_set" name="old_pass_set" placeholder="Old Password" class="form1" value=""><br>
+                    <input type="password" id="new_pass_set" name="new_pass_set" placeholder="New Password" class="form1" value="">
+                    <input type="password" id="confirm_pass_set" name="confirm_pass_set" placeholder="Confirm Password" class="form1" value=""><br>
+
+                    <input type="text" id="username_set" placeholder="Username" class="form1" name="username_set" value="{{Username}}"><br>
+
+                    <input type="email" id="email_set" placeholder="Email Adress" class="form1" name="email_set" value="{{email}}"><br>
+
+                    <div class = "some_text_set">
+                        Additional Information
+                    </div>
+                    <input type="text" id="country_set" placeholder="Country" class="form1" name="country_set" value="{{country}}">
+                    <input type="text" id="state_set" placeholder="State" class="form1" name="state_set" value="{{state}}">
+                    <input type="text" id="city_set" placeholder="City" class="form1" name="city_set" value="{{city}}"><br>
+                    <input type="text" id="web_set" placeholder="Website Address" class="form1" name="web_set" value="{{website}}">
+                    <input type="text" id="git_set" placeholder="Github Handle" class="form1" name="git_set" value="{{git}}"><br>
+                    <input type="text" id="org_set" placeholder="Organization" class="form1" name="org_set" value="{{org}}"><br>
+
+                    <rect id = "save_discard">
+                        <button class="button1" id="save_set" type="submit" name="save_set">
+                            <div id="butt_set_1">
+                                Save
+                            </div>
+                        </button>
+                        <button class="button1" id="discard_set" type="button" name="discard_set">
+                            <div id="butt_set_2">
+                                Discard
+                            </div>
+                        </button>
+                        <div class = "vertical"></div>
+                    </rect>
+                </form>
+            </rect>
+            <button type="button", id = "close_setting">Close</button>
+        </div>
     </body>
 </html>

@@ -63,6 +63,9 @@ $(document).ready(function(){
     })
 
     $("#rect_option_profile2").click(function(){
-        $("#rect_main_set").show(300);
+        $("#div_main_set").show(300);
+    })
+    $("#close_setting").click(function(){
+        $("#div_main_set").hide(200);
     })
 })
