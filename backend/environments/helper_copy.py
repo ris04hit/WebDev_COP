@@ -1,19 +1,31 @@
 from re import search
 from bcrypt import hashpw
+from cryptography.fernet import Fernet
 from random import randint
 from smtplib import SMTP
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from base64 import b64encode
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
+from flask import Flask, render_template, request, url_for, redirect, session
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
+import helper
+import sqlite3
+app = Flask(__name__)
+connection = sqlite3.connect('Synergy_db')
+app = Flask(__name__)
+app.config['SECRET_KEY'] = '12345678'
+# app.config["MYSQL_HOST"] = "localhost"
+# app.config["MYSQL_USER"] = "root"
+# app.config["MYSQL_PASSWORD"] = "12345678"
+# app.config["MYSQL_DB"] = "Synergy_db"
+# mysql = MySQL(app)
 
 def password_strength(password):
     length = len(password)
-    if length < 8:
+    if length < 4:
         return -1
-    elif length < 12:
+    elif length < 8:
         if search('[a-z]', password) and search('[A-Z]', password) \
         and search('[0-9]', password):
             return 0
@@ -60,10 +72,6 @@ def feed(cur, user):
     query = 'SELECT * from {}'.format(tag_list)
     cur.execute(query)
     tag_list = cur.fetchall()
-    if not tag_list:
-        query = 'SELECT id_uniq from Tag'
-        cur.execute(query)
-        tag_list = cur.fetchall()
     tag_list = sql_to_list(tag_list,'id_uniq')
     post_dic = {}
     for tag_id in tag_list:
@@ -77,9 +85,9 @@ def feed(cur, user):
             else:
                 post_dic[post_id] = 1
     num = 50    # number of posts in feed
-    post_list_specific = sorted(post_dic, key=post_dic.get, reverse=True)
+    post_list_specific = sorted(post_dic, key=post_dic.get)
     count = 0
-    feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow)
+    feed = []   # stores (post_id, upvotes_count, already_upvoted, time, author_username,title, content)
     for post_id in post_list_specific:
         if count == num:
             break
@@ -92,34 +100,19 @@ def feed(cur, user):
             query = "SELECT count(id_uniq) from {}".format(upvote_table)
             cur.execute(query)
             upvotes_count = cur.fetchall()[0]['count(id_uniq)']
+            print(upvotes_count)
             query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(upvote_table)
             cur.execute(query, (user['id_uniq'],))
             already_upvoted = bool(cur.fetchall())
-            time = relativedelta(datetime.now(),post_data['creation_time'])
-            if time.years:
-                time_str = "{} year{}".format(time.years, "" if time.years==1 else "s")
-            elif time.months:
-                time_str = "{} month{}".format(time.months,  "" if time.months==1 else "s")
-            elif time.days:
-                time_str = "{} day{}".format(time.days,  "" if time.days==1 else "s")
-            elif time.hours:
-                time_str = "{} hour{}".format(time.hours,  "" if time.hours==1 else "s")
-            elif time.minutes:
-                time_str = "{} minute{}".format(time.minutes,  "" if time.minutes==1 else "s")
-            else:
-                time_str = "{} second{}".format(time.seconds,  "" if time.seconds==1 else "s")
-            time = datetime.now() - post_data['creation_time']
+            print(already_upvoted)
+            time = post_data['creation_time']
             author_id = post_data['author_uniq']
             query = "SELECT username from Account WHERE BINARY id_uniq = %s"
             cur.execute(query, (author_id,))
             author_username = cur.fetchall()[0]['username']
             title = post_data['title']
             content = post_data['content']
-            query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(post_data['author_uniq']+"_ers")
-            cur.execute(query, (user["id_uniq"],))
-            already_follow = bool(cur.fetchall())
-            feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow)))
-    return feed
+            feed.append((post_id, upvotes_count, already_upvoted, time, author_username, title, content ))
 
 def check_username(username):
     if username:
@@ -136,9 +129,7 @@ def unique_username(cur, username):
     return not bool(cur.fetchall())
 
 def id_gen(cur, id_obj, username, table):
-    encoded_username = username[:9]
-    if len(encoded_username)!=9:
-        encoded_username = "x"*(9-len(encoded_username))+encoded_username
+    encoded_username = b64encode(username.encode()).decode().zfill(9)
     query = "SELECT id_uniq FROM {} WHERE BINARY id_uniq LIKE '{}{}%' ORDER BY creation_time DESC LIMIT 1".format(table, id_obj, encoded_username)
     cur.execute(query)
     data = cur.fetchall()
@@ -161,8 +152,13 @@ def create_linked_table(cur, id_uniq, suffix, ins_obj):
         query = "CREATE TABLE {} (id_obj ENUM({}) NOT NULL, id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq))".format(id_uniq+suffix, ", ".join(obj_list))
         cur.execute(query)
 
-def follow(cur, sender_id, profile_id):
+def follow(sender_id, profile_id):
     ''' inputs are the uniq values ! '''
+    try:
+        cur = connection.cursor()
+    except:
+        print('some error happend in cursor !')
+        return
     profile_followers = profile_id + str('_ers')
     sender_following = sender_id + str('_ing')
     query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
@@ -186,9 +182,17 @@ def follow(cur, sender_id, profile_id):
         cur.execute(query)
         account_name = cur.fetchall()
         print('You have already followed {}'.format(account_name[0]['name']))
+    connection.commit()
+    cur.close()
+    return
 
-def unfollow(cur, sender_id, profile_id):
+def unfollow(sender_id, profile_id):
     ''' Inputs values are id_uniq type !'''
+    try:
+        cur = connection.cursor()
+    except:
+        print('some error happended in cursor !')
+        return
     # following from mani's ac to mecan's ac
     sender_following = sender_id + str('_ing')
     profile_followers = profile_id + str('_ers')
@@ -213,9 +217,17 @@ def unfollow(cur, sender_id, profile_id):
         cur.execute(query)
         account_name = cur.fetchall()
         print("Already unfollowed {}".format(account_name[0]['name']))
+    connection.commit()
+    cur.close()
+    return 
 
-def upvote_for_post(cur, sender_id, post_id):
+def upvote_for_post(sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvotes_table (obj, uniq, count = 0)'''
+    try:
+        cur = connection.cursor()
+    except:
+        print('error happened !')
+        return 
     post_upvote_table = post_id + str('_upv')
     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
     cur.execute(query)
@@ -228,6 +240,8 @@ def upvote_for_post(cur, sender_id, post_id):
         upvoted = True
     else :
         print('already upvoted to post')
+        connection.commit()
+        cur.close() 
         return 
     
     query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
@@ -249,10 +263,17 @@ def upvote_for_post(cur, sender_id, post_id):
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
         print('checked !')
+    connection.commit()
+    cur.close()
     return 
 
-def upvote_for_comment(cur, sender_id, comment_id):
+def upvote_for_comment(sender_id, comment_id):
     '''requirements comments_upvote table, comment_publisher_upvote table (obj, uniq, count = 0)'''
+    try:
+        cur = connection.cursor()
+    except:
+        print('error happened !')
+        return 
     comment_upvote_table = comment_id + str('_upv')
     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
     cur.execute(query)
@@ -265,6 +286,8 @@ def upvote_for_comment(cur, sender_id, comment_id):
         upvoted = True
     else :
         print('already upvoted to comment')
+        connection.commit()
+        cur.close()
         return 
     
     query = "SELECT author_uniq FROM Comment WHERE id_uniq = '{}' ;".format(comment_id)
@@ -285,10 +308,17 @@ def upvote_for_comment(cur, sender_id, comment_id):
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
         print('checked !')
+    connection.commit()
+    cur.close()
     return 
     
-def downvote_for_post(cur, sender_id, post_id):
+def downvote_for_post(sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvote_table '''
+    try:
+        cur = connection.cursor()
+    except:
+        print('error happened !')
+        return 
     post_upvote_table = post_id + str('_upv')
     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
     cur.execute(query)
@@ -301,6 +331,8 @@ def downvote_for_post(cur, sender_id, post_id):
         downvoted = True
     else:
         print('already downvoted to post !')
+        connection.commit()
+        cur.close()
         return 
     
     # finding post_publisher_id 
@@ -322,10 +354,17 @@ def downvote_for_post(cur, sender_id, post_id):
         print('checked !')
     elif len(value) == 0 :
         print('database error !')
+    connection.commit()
+    cur.close()
     return 
 
-def downvote_for_comment(cur, sender_id, comment_id):
+def downvote_for_comment(sender_id, comment_id):
     ''' requirements comment_upvote_table, comment_publisher_upvote_table '''
+    try:
+        cur = connection.cursor()
+    except:
+        print('error happened !')
+        return 
     comment_upvote_table = comment_id + str('_upv')
     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
     cur.execute(query)
@@ -338,6 +377,8 @@ def downvote_for_comment(cur, sender_id, comment_id):
         downvoted = True
     else:
         print('already downvoted to comment !')
+        connection.commit()
+        cur.close()
         return 
     
     # finding comment_publisher_id 
@@ -359,13 +400,20 @@ def downvote_for_comment(cur, sender_id, comment_id):
         print('checked !')
     elif len(value) == 0 :
         print('database error !')
+    connection.commit()
+    cur.close()
     return 
 
-def comment_to_post(cur, publisher_id, post_id, text):
+def comment_to_post(publisher_id, post_id, text):
     ''' all the input ids are uniqs '''
+    try:
+        cur=connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database while creating comment !")
+        return
     
     # generating comment id at time of creation !
-    code = id_gen(cur, post_id, publisher_id, 'Comment')
+    code = helper.id_gen(cur, post_id, publisher_id, 'Comment')
     temp = ""
     for char in code :
         asc = ord(char)
@@ -400,13 +448,20 @@ def comment_to_post(cur, publisher_id, post_id, text):
     else:
         print('already done !')
     print('commented to post !')
+    connection.commit()
+    cur.close()
     return 
 
-def comment_to_comment(cur, publisher_id, comment_id, text):
+def comment_to_comment(publisher_id, comment_id, text):
     ''' all the input ids are uniqs '''
+    try:
+        cur=connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database while creating comment on comment!")
+        return
     
     # generating comment id at time of creation !
-    code = id_gen(cur, comment_id, publisher_id, 'Comment')
+    code = helper.id_gen(cur, comment_id, publisher_id, 'Comment')
     temp = ""
     for char in code :
         asc = ord(char)
@@ -418,7 +473,7 @@ def comment_to_comment(cur, publisher_id, comment_id, text):
     
     query = "SELECT * FROM Id WHERE id_uniq = '{}' ;".format(comment_hash)
     cur.execute(query)
-    value = cur.fetchall()
+    value = cur.fetchall();
     if len(value) == 0:
         # inserting this comment_hash into Id table
         query = "INSERT INTO Id (id_obj, id_uniq) VALUES ('C', '{}') ;".format(comment_hash)
@@ -444,4 +499,21 @@ def comment_to_comment(cur, publisher_id, comment_id, text):
         cur.execute(query)
     else:
         print('already done !')
-    return
+    connection.commit()
+    cur.close()
+    return 
+
+
+
+def init_db():
+    with app.app_context():
+        try:
+            cur=connection.cursor(MySQLdb.cursors.DictCursor)
+        except:
+            print("Can not connect to database in init_db")
+            return
+        with app.open_resource('schema.sql', mode='r') as sql_file:
+            cur.execute(sql_file.read())
+        cur.close()
+        connection.commit()
+        sql_file.close()

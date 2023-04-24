@@ -2,25 +2,29 @@
 -- check condition for the length of string where fixed length is needed !
 -- last visit me on update wali cheej me mereko clarity nhi h !
 -- abhi ke liye TEXT likh diye hai but usko as a tex file implement karna hai !
+-- saare id_obj me NOT NULL bhi add karna hai kya ??
+
+
+
 -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
 
--- DROP DATABASE IF EXISTS Synergy_db;
--- CREATE DATABASE Synergy_db;
--- USE Synergy_db;
+DROP DATABASE IF EXISTS Synergy_db;
+CREATE DATABASE Synergy_db;
+USE Synergy_db;
 
 
--- DROP TABLE IF EXISTS Personal;
--- DROP TABLE IF EXISTS Report;
--- DROP TABLE IF EXISTS Comment;
--- DROP TABLE IF EXISTS Post;
--- DROP TABLE IF EXISTS Id;
--- DROP TABLE IF EXISTS Tag;
--- DROP TABLE IF EXISTS Institution;
--- DROP TABLE IF EXISTS Account;
+DROP TABLE IF EXISTS Personal;
+DROP TABLE IF EXISTS Report;
+DROP TABLE IF EXISTS Comment;
+DROP TABLE IF EXISTS Post;
+DROP TABLE IF EXISTS Id;
+DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Institution;
+DROP TABLE IF EXISTS Account;
 
 
 CREATE TABLE Account (
-    id_obj CHAR(1) DEFAULT 'A' NOT NULL,
+    id_obj CHAR(1) DEFAULT 'A',
     id_uniq VARCHAR(200) NOT NULL UNIQUE, 
     username VARCHAR(50) NOT NULL UNIQUE,
     creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -29,7 +33,7 @@ CREATE TABLE Account (
     institutes VARCHAR(100) NOT NULL UNIQUE, 
     posts VARCHAR(100) NOT NULL UNIQUE,
     last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    upvotes VARCHAR(100) NOT NULL UNIQUE,
+    upvotes VARCHAR(100) NOT NULL UNIQUE,   --  YAHAN CHANGE HAI TAGRA WALA !!!!  
     -- profile_photo BLOB,  -- not certain of it tough
     bookmarks VARCHAR(100) NOT NULL UNIQUE,
     followers VARCHAR(100) NOT NULL UNIQUE,
@@ -47,11 +51,13 @@ CREATE TABLE Account (
     visibility BOOLEAN DEFAULT true,
     report_list VARCHAR(100) NOT NULL UNIQUE,
     api_visibility BOOLEAN default true,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+DROP TABLE IF EXISTS Institution;
 CREATE TABLE Institution (
-    id_obj CHAR(1) DEFAULT 'I' NOT NULL,
+    id_obj CHAR(1) DEFAULT 'I',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     name VARCHAR(150) NOT NULL UNIQUE,
     members VARCHAR(100) NOT NULL UNIQUE,
@@ -64,31 +70,37 @@ CREATE TABLE Institution (
     email_id VARCHAR(150) NOT NULL UNIQUE,
     visibility BOOLEAN DEFAULT true,
     api_visibility BOOLEAN DEFAULT true,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
 
+DROP TABLE IF EXISTS Tag;
 CREATE TABLE Tag (
-    id_obj CHAR(1) DEFAULT 'T' NOT NULL,
+    id_obj CHAR(1) DEFAULT 'T',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     name VARCHAR(150) NOT NULL,
     posts VARCHAR(100) NOT NULL UNIQUE,
     members VARCHAR(100) NOT NULL UNIQUE,
     api_visibility BOOLEAN DEFAULT true,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+DROP TABLE IF EXISTS Id;
 CREATE TABLE Id (
-    id_obj CHAR(1) NOT NULL NOT NULL,
+    id_obj CHAR(1) NOT NULL,
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
 
+DROP TABLE IF EXISTS Post;
 CREATE TABLE Post (
-    id_obj CHAR(1) DEFAULT 'P' NOT NULL,
+    id_obj CHAR(1) DEFAULT 'P',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
-    author_obj CHAR(1) NOT NULL,
+    author_obj CHAR(1),
     author_uniq VARCHAR(200),
     INDEX (author_obj, author_uniq),
     FOREIGN KEY (author_obj, author_uniq) REFERENCES Id(id_obj, id_uniq),
@@ -103,56 +115,62 @@ CREATE TABLE Post (
     institutes VARCHAR(100)  NOT NULL UNIQUE,
     tag_list VARCHAR(100) NOT NULL UNIQUE,
     api_visibility BOOLEAN DEFAULT true,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+DROP TABLE IF EXISTS Comment;
 CREATE TABLE Comment (
-    id_obj CHAR(1) DEFAULT 'C' NOT NULL,
+    id_obj CHAR(1) DEFAULT 'C',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
-    author_obj CHAR(1) NOT NULL,
+    author_obj CHAR(1),
     author_uniq VARCHAR(200),
     INDEX (author_obj, author_uniq),
-    FOREIGN KEY (author_obj, author_uniq) REFERENCES Id(id_obj, id_uniq), 
+    -- FOREIGN KEY (author_obj, author_uniq) REFERENCES Id(id_obj, id_uniq), 
     creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     content TEXT, -- isko change karna hai !
     upvotes VARCHAR(100) NOT NULL UNIQUE,
     comments VARCHAR(100) NOT NULL UNIQUE,
     report_list VARCHAR(100) NOT NULL UNIQUE,
     visibility BOOLEAN DEFAULT true,
-    post_obj CHAR(1) NOT NULL,
+    post_obj CHAR(1),
     post_uniq VARCHAR(200),
     INDEX (post_obj, post_uniq),
-    FOREIGN KEY (post_obj, post_uniq) REFERENCES Id(id_obj, id_uniq),
+    -- FOREIGN KEY (post_obj, post_uniq) REFERENCES Id(id_obj, id_uniq),
     api_visibility BOOLEAN DEFAULT true,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+DROP TABLE IF EXISTS Report;
 CREATE TABLE Report (
-    id_obj CHAR(1) DEFAULT 'R' NOT NULL,
+    id_obj CHAR(1) DEFAULT 'R',
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
-    from_obj CHAR(1) NOT NULL,
+    from_obj CHAR(1),
     from_uniq VARCHAR(200),
     INDEX (from_obj, from_uniq),
     FOREIGN KEY (from_obj, from_uniq) REFERENCES Id(id_obj, id_uniq),
-    to_obj CHAR(1) NOT NULL,
+    to_obj CHAR(1),
     to_uniq VARCHAR(200),
     INDEX (to_obj, to_uniq),
     FOREIGN KEY (to_obj, to_uniq) REFERENCES Id(id_obj, id_uniq),
     description TEXT,
     api_visibility BOOLEAN DEFAULT true,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
+
+DROP TABLE IF EXISTS Personal;
 CREATE TABLE Personal (
-    id_obj CHAR(1) NOT NULL NOT NULL,
+    id_obj CHAR(1) NOT NULL,
     id_uniq VARCHAR(200) NOT NULL UNIQUE,
     pass VARCHAR(300) NOT NULL,
+    -- INDEX (id_obj, id_uniq),
     PRIMARY KEY (id_obj, id_uniq)
 );
 
 
-use Synergy_db;
-show tables;
 
 -- insert into Id (id_obj, id_uniq) values ('A', "asdfgh12345");
 -- insert into Id (id_obj, id_uniq) values ('A', "asdfgh12987");
