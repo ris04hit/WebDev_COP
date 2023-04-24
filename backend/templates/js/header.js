@@ -34,6 +34,9 @@ class Header extends HTMLElement {
                     <rect id = "circle_out_search"></rect>
                     <rect id = "circle_in_search"></rect>
                     <rect id = "line_search"></rect>
+                    <div id = "search_result_rect" class="search_rect pop_up">
+                    <div id="search_result_entry"></div>
+                    </div>
                 </div>
                 
                 <a href="{{url_for('loader3')}}">

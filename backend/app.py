@@ -406,9 +406,13 @@ def main_js():
 def about():
     return render_template('html/about_us.html')
 
-@app.route('/api')
+@app.route('/api/introduction')
 def apis():
-    return render_template('html/apis.html')
+    return render_template('html/apis.html', username = session['user']['username'])
+
+@app.route('/api/methods')
+def api_method():
+    return render_template('html/apimethods.html', username =session['user']['username'])
 
 @app.route('/institution/create')
 def create_institution():
@@ -498,7 +502,7 @@ def profile(username):
 
 @app.route('/js/profile')
 def profile_js():
-    return render_template('js/profile_js.html')
+    return render_template('js/profile.js')
 
 @app.route('/signup')
 def signup():

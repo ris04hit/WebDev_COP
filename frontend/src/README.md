@@ -1,1 +1,0 @@
-Contains code of html, css, javascript frontend

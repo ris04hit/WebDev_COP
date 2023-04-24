@@ -1,0 +1,122 @@
+#rect_main_ins{
+    position: absolute;
+width: 450px;
+height: 400px;
+left: 540px;
+top: 140px;
+
+background: #03001C;
+border-radius: 10px;
+border: 8px solid;
+
+border-image-source: linear-gradient(219.1deg, rgba(143, 0, 255, 0.75) 0%, rgba(250, 0, 255, 0.809443) 31.71%, rgba(130, 0, 255, 0.869973) 64%, #4C11FF 92.13%);
+border-image-slice: 1;
+}
+
+#create_ins{
+    box-sizing: border-box;
+
+position: absolute;
+width: 172px;
+height: 35px;
+left: 270px;
+top: 7px;
+
+background: #03001C;
+border: 1px solid #B6EADA;
+border-radius: 5px;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 25px;
+
+color: #FFFFFF;
+}
+
+.line_ins{
+    position: absolute;
+width: 448px;
+height: 0px;
+left: 0px;
+top: 40px;
+
+border: 1px solid #B6EADA;
+}
+
+.text1_ins{
+    position: absolute;
+width: 150px;
+height: 32px;
+left: 17px;
+top: 10px;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 25px;
+line-height: 32px;
+color: #FFFFFF;
+}
+
+#profile_name_ins{
+    position: absolute;
+width: 150px;
+height: 25px;
+left: 80px;
+top: 77px;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 25px;
+
+color: #B6EADA;
+
+}
+
+#profile_photo_ins{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    left: 20px;
+    top: 70px;
+    border-radius: 20px;
+    
+    background: #FFFFFF;
+}
+
+#remove_ins{
+    position: absolute;
+width: 60px;
+height: 25px;
+left: 350px;
+top: 77px;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 25px;
+
+color: #008DFF;
+}
+
+#close_ins{
+    position: absolute;
+width: 43px;
+height: 25px;
+left: 540px;
+top: 110px;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 25px;
+background: #03001C; 
+border: 0px solid;
+color: #8e8e8e;
+}

@@ -40,4 +40,29 @@ $(document).ready(function(){
     }, function(){
         $("#rect_option_profile6").css("background","#03001C");
     })  
+
+    $("#rect_option_profile5").click(function(){
+        $("#following_pop").show(300);
+    })
+    $("#close_following").click(function(){
+        $("#following_pop").hide(200);
+    })
+
+    $("#rect_option_profile6").click(function(){
+        $("#followers_pop").show(300);
+    })
+    $("#close_followers").click(function(){
+        $("#followers_pop").hide(200);
+    })
+
+    $("#rect_option_profile4").click(function(){
+        $("#Insti_popup").show(300);
+    })
+    $("#close_ins").click(function(){
+        $("#Insti_popup").hide(200);
+    })
+
+    $("#rect_option_profile2").click(function(){
+        $("#rect_main_set").show(300);
+    })
 })

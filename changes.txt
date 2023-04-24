@@ -20,4 +20,8 @@ admin created institutes list should be everywhere in frontend, backend.
 login email address check also apart from username (in backend).
 username and password can consist during login space should be implemented.
 username should be checked valid or not while typing in signup page.
+<<<<<<< HEAD:backend/changes.txt
 may have to remove foreign key constarints in the sql file !
+=======
+put constraints on password in signup
+>>>>>>> bfba2c9d23e386678e23dd05f82decc8bb5d624e:changes.txt

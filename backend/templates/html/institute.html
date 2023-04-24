@@ -10,6 +10,53 @@
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_insti">
+        <div id="profile">
+            <rect id="pfp_profile_insti"></rect>
+            <div id="name_profile">
+                Mechan
+            </div>
+            <div id="follow_profile">
+                Follow
+            </div>
+        </div>
+
+        <div id="info_profile">
+            <div class="text7" id="member_profile_insti">
+                members since - <div class="text_profile">2/23</div>
+            </div>
+            <div class="text7" id="last_profile_insti">
+                Last visited - <div class="text_profile">2 hr ago</div>
+            </div>
+            <div class="text7" id="upvote_profile_insti">
+                Upvotes - <div class="text_profile">2k+</div>
+            </div>
+            <div class="text7" id="email_profile_insti">
+                email address - 
+                <a href="mailt:xyz@gmail.com">
+                    <div class="text_profile">
+                        xyz@gmail.com
+                    </div>
+                </a>
+            </div>
+            <div class="text7" id="org_profile_insti">
+                Organisation - 
+                <a href="{{url_for('institute')}}">
+                    <div class="text_profile">
+                        IIT-Delhi
+                    </div>
+                </a>
+            </div>
+            <div class="text7" id="web_profile_insti">
+                website - 
+                <a href="https://www.meechan.com">
+                    <div class="text_profile">
+                        www.meechan.com
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
         <div id="top-contribute">
             <div class="multiple_post" id="top_rect_insti">
                 <div class="text4" id="top_text_insti">
@@ -18,7 +65,7 @@
 
                 <ol class="text7" id="top_ol_insti">
                     <li class="list2">
-                        <a href="{{url_for('profile')}}">
+                        <a href="{{url_for('profile', username = '')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -28,7 +75,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="{{url_for('profile')}}">
+                        <a href="{{url_for('profile', username = '')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -38,7 +85,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="{{url_for('profile')}}">
+                        <a href="{{url_for('profile', username = '')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -48,7 +95,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="{{url_for('profile')}}">
+                        <a href="{{url_for('profile', username = '')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -58,7 +105,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="{{url_for('profile')}}">
+                        <a href="{{url_for('profile', username = '')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -68,7 +115,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="{{url_for('profile')}}">
+                        <a href="{{url_for('profile', username = '')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
@@ -78,7 +125,7 @@
                         </a>
                     </li>
                     <li class="list2">
-                        <a href="{{url_for('profile')}}">
+                        <a href="{{url_for('profile', username = '')}}">
                             <rect class="pfp_insti"></rect>
                             <div class="name_text_insti">
                                 <div class="text7">
