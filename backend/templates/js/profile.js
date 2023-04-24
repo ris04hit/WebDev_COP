@@ -54,4 +54,11 @@ $(document).ready(function(){
     $("#close_followers").click(function(){
         $("#followers_pop").hide(200);
     })
+
+    $("#rect_option_profile4").click(function(){
+        $("#Insti_popup").show(300);
+    })
+    $("#close_ins").click(function(){
+        $("#Insti_popup").hide(200);
+    })
 })

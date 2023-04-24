@@ -134,7 +134,7 @@ def profile(username):
 
 @app.route('/js/profile')
 def profile_js():
-    return render_template('js/profile_js.html')
+    return render_template('js/profile.js')
 
 @app.route('/signup')
 def signup():
