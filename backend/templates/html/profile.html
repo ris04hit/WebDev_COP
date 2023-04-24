@@ -4,6 +4,9 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/profile.css')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/followers.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/following.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/insti_popup.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="{{url_for('header_js',user=user)}}"></script>
@@ -60,30 +63,95 @@
 
         <div id="option_profile">
             <rect id="rect_profile1"></rect>
-            <rect class="rect_option_profile" id="rect_option_profile1"></rect>
+            <button class="rect_option_profile" id="rect_option_profile1">
             <div class="text8" id="history_profile">
                 History
             </div>
-            <rect class="rect_option_profile" id="rect_option_profile2"></rect>
+            </button>
+            <button class="rect_option_profile" id="rect_option_profile2">
             <div class="text8" id="setting_profile">
                 Settings
             </div>
-            <rect class="rect_option_profile" id="rect_option_profile3"></rect>
+            </button>
+            <button class="rect_option_profile" id="rect_option_profile3">
             <div class="text8" id="bookmark_profile">
                 Bookmarks
             </div>
-            <rect class="rect_option_profile" id="rect_option_profile4"></rect>
+            </button>
+            <button class="rect_option_profile" id="rect_option_profile4">
             <div class="text8" id="insti_profile">
                 Institutions
             </div>
-            <rect class="rect_option_profile" id="rect_option_profile5"></rect>
+            </button>
+            <button class="rect_option_profile" id="rect_option_profile5">
             <div class="text8" id="following_profile">
                 Following
             </div>
-            <rect class="rect_option_profile" id="rect_option_profile6"></rect>
+            </button>
+            <button class="rect_option_profile" id="rect_option_profile6">
             <div class="text8" id="follower_profile">
                 Followers
             </div>
+            </button>
+        </div>
+
+        <div class = "pop_up_insti" id="Insti_popup">
+            <rect id="rect_main_ins">
+                <div class = "text1_ins">
+                    Institutions
+                </div>
+                <button type="button", id = "create_ins">Create Institution</button>
+                <hr class = "line_ins">
+                <a href="profile.html">
+                    <rect id = "profile_rect_ins">
+                        <rect id = "profile_photo_ins"></rect>
+                        <rect id = "profile_name_ins">
+                            IIT Delhi
+                        </rect>
+                    </rect>
+                </a>
+                <rect type = "button" id = "remove_ins"> Remove </rect>
+            </rect>
+            <button type="button", id = "close_ins">Close</button>
+        </body>
+        </div>
+
+        <div class="pop_up_followers" id="followers_pop">
+        <rect id="rect_main_followers">
+            <div class = "text1_ers">
+                Followers
+            </div>
+            <hr class = "line_ers">
+            <a href="profile.html">
+                <rect id = "profile_rect_ers">
+                    <rect id = "profile_photo_ers"></rect>
+                    <rect id = "profile_name_ers">
+                        Excitedleopard
+                    </rect>
+                </rect>
+            </a>
+            <rect type = "button" id = "remove_follower"> Remove </rect>
+        </rect>
+        <button type="button", id = "close_followers">Close</button>
+        </div>
+
+        <div class="pop_up_following" id="following_pop">
+        <rect id="rect_main_following">
+            <div class = "text1_ing">
+                Following
+            </div>
+            <hr class = "line_ing">
+            <a href="profile.html">
+                <rect id = "profile_rect_ing">
+                    <rect id = "profile_photo_ing"></rect>
+                    <rect id = "profile_name_ing">
+                        Excitedleopard
+                    </rect>
+                </rect>
+            </a>
+            <rect type = "button" id = "remove_following"> Remove </rect>
+        </rect>
+        <button type="button", id = "close_following">Close</button>
         </div>
 
         <div id="interests">

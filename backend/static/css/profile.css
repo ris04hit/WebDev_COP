@@ -101,43 +101,37 @@
 #history_profile {
     width: 60px;
     height: 28px;
-    left: 152px;
-    top: 436px;
+    top: 0px;
 }
 
 #setting_profile {
     width: 72px;
     height: 28px;
-    left: 151px;
-    top: 476px;
+    top: 0px;
 }
 
 #bookmark_profile {
     width: 94px;
     height: 28px;
-    left: 150px;
-    top: 516px;
+    top: 0px;
 }
 
 #insti_profile {
     width: 98px;
     height: 28px;
-    left: 150px;
-    top: 556px;
+    top: 0px;
 }
 
 #following_profile {
     width: 80px;
     height: 28px;
-    left: 150px;
-    top: 596px;
+    top: 0px;
 }
 
 #follower_profile {
     width: 82px;
     height: 28px;
-    left: 149px;
-    top: 636px;
+    top: 0px;
 }
 
 #interest_rect_profile {
@@ -220,24 +214,30 @@
 
 #rect_option_profile1 {
     top: 436px;
+    border: 0px;
 }
 
 #rect_option_profile2 {
     top: 476px;
+    border: 0px;
 }
 
 #rect_option_profile3 {
     top: 516px;
+    border: 0px;
 }
 
 #rect_option_profile4 {
     top: 556px;
+    border: 0px;
 }
 
 #rect_option_profile5 {
     top: 596px;
+    border: 0px;
 }
 
 #rect_option_profile6 {
     top: 636px;
+    border: 0px;
 }

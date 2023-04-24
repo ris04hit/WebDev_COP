@@ -40,4 +40,18 @@ $(document).ready(function(){
     }, function(){
         $("#rect_option_profile6").css("background","#03001C");
     })  
+
+    $("#rect_option_profile5").click(function(){
+        $("#following_pop").show(300);
+    })
+    $("#close_following").click(function(){
+        $("#following_pop").hide(200);
+    })
+
+    $("#rect_option_profile6").click(function(){
+        $("#followers_pop").show(300);
+    })
+    $("#close_followers").click(function(){
+        $("#followers_pop").hide(200);
+    })
 })
