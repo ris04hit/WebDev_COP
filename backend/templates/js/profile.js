@@ -61,4 +61,8 @@ $(document).ready(function(){
     $("#close_ins").click(function(){
         $("#Insti_popup").hide(200);
     })
+
+    $("#rect_option_profile2").click(function(){
+        $("#rect_main_set").show(300);
+    })
 })
