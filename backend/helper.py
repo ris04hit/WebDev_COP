@@ -552,7 +552,7 @@ def comment_get (cur, comment_id):
         query = "SELECT * FROM Account WHERE id_uniq = '{}' ;".format(author)
         cur.execute(query)
         author = cur.fetchall()[0]
-        comment['author_name'] = author
+        comment['author_name'] = author['username']
         creation_time = comment['creation_time']
         time = relativedelta(datetime.now(),creation_time)
         if time.years:
@@ -575,8 +575,7 @@ def comment_get (cur, comment_id):
         comment['comment_list'] = []
         for commentnest in comment_list:
             comment['comment_list'].append(comment_get(cur, commentnest))
-        return_list.append(comment)
-    print(return_list)
+    print("\nHelloriz\n",comment)
     return return_list
 
 

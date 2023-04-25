@@ -93,21 +93,21 @@
                 <div class="text9" id="text_post6">
                     {{upvct}}
                 </div>
-                <img src="{{url_for('static',filename='data/comment.png')}}" id="image_post">
-                <div class="text9" id="text_post7">
+                <img src="{{url_for('static',filename='data/comment.png')}}" id="image_post" class="curs">
+                <div class="text9 curs" id="text_post7">
                     Comment
                 </div> 
                 <button class="button5" id="button_book_post" style="display :none;">
                     Bookmark
                 </button>
                 <rect id="rect_post2"></rect>
-                <div class="text9" id="text_post8">
+                <div class="text9 curs" id="text_post8">
                     Report
                 </div>
             </div>
         </div>
 
-        <div id="comment_section_post">
+        <div id="comment_section_post" class="pop_up">
             <div class="inner_post" id="rect_comment_post"></div>
             <rect id="line_comment_post"></rect>
             <form>
@@ -118,39 +118,13 @@
             </form>
 
             <div id="mul_comment_post">
-                <div class="comment" id="comment_post1">
-                    <a href="{{url_for('profile', username='')}}" class="text1">
-                        <rect class="pfp_comment"></rect> 
-                        <div class="name_comment">
-                            Excitedleopard
-                        </div>
-                    </a>
-                    <div class="text10" id="comment_time_post1">
-                        6hrs ago
-                    </div>
-                    <div class="name_comment" id="comment_content_post1">
-                        Blah Blah Blah Blah
-                    </div>
-                    <button class="button6" id="button_comment_post1">
-                        <div class="triangle-up2" id="triangle_post"></div>
-                        <div class="upvote_comment">
-                            34
-                        </div>
-                    </button>
-                    <button class="button6" id="button_comment_post2">
-                        Reply
-                    </button>
-                    <button class="button6" id="button_comment_post3">
-                        Report
-                    </button>
-
-                    <rect id="nest_comment_post1"></rect>
-
-                    <div class="comment" id="comment_post2">
+                {% for comment in comments %}
+                    {% set ct = loop.index %}
+                    <div class="comment" id="comment_post{ct}">
                         <a href="{{url_for('profile', username='')}}" class="text1">
                             <rect class="pfp_comment"></rect> 
                             <div class="name_comment">
-                                Excitedleopard
+                                {{comment['author_name']}}
                             </div>
                         </a>
                         <div class="text10" id="comment_time_post1">
@@ -168,11 +142,40 @@
                         <button class="button6" id="button_comment_post2">
                             Reply
                         </button>
-                        <button class="button6" id="button_comment_post3">
+                        <button class="button6 curs" id="button_comment_post3">
                             Report
                         </button>
+
+                        <rect id="nest_comment_post1"></rect>
+
+                        <div class="comment" id="comment_post2">
+                            <a href="{{url_for('profile', username='')}}" class="text1">
+                                <rect class="pfp_comment"></rect> 
+                                <div class="name_comment">
+                                    Excitedleopard
+                                </div>
+                            </a>
+                            <div class="text10" id="comment_time_post1">
+                                6hrs ago
+                            </div>
+                            <div class="name_comment" id="comment_content_post1">
+                                Blah Blah Blah Blah
+                            </div>
+                            <button class="button6" id="button_comment_post1">
+                                <div class="triangle-up2" id="triangle_post"></div>
+                                <div class="upvote_comment">
+                                    34
+                                </div>
+                            </button>
+                            <button class="button6" id="button_comment_post2">
+                                Reply
+                            </button>
+                            <button class="button6" id="button_comment_post3">
+                                Report
+                            </button>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </body>

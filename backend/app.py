@@ -22,6 +22,7 @@ mysql = MySQL(app)
 otp = {}
 otp_signup = {}
 feed = []
+comment_list = []
 
 db = MySQLdb.connect(host=app.config['MYSQL_HOST'], user=app.config['MYSQL_USER'], password=app.config['MYSQL_PASSWORD'], db=app.config['MYSQL_DB'])
 
@@ -449,16 +450,18 @@ def post(post_id): # id_uniq
     print("\n",query,"\n")
     cur.execute(query)
     comments = cur.fetchall()
+    global comment_list
+    comment_list = []
     for comment_id in comments:
-        helper.comment_get(cur, comment_id)
+        comment_list.append(helper.comment_get(cur, comment_id))
 
     mysql.connection.commit()
     cur.close()
-    return render_template('html/post.html', post = post, tag_list = tags, aname = name, upv = upvote_done, follow = follow_done, user=session['user'], upvct = upv_ct)
+    return render_template('html/post.html', post = post, tag_list = tags, aname = name, upv = upvote_done, follow = follow_done, user=session['user'], upvct = upv_ct, comments = comment_list)
 
 @app.route('/js/post')
 def post_js():
-    return render_template('js/post.js')
+    return render_template('js/post.js.j2', comments = comment_list)
 
 @app.route('/profile/<string:username>')
 def profile(username):

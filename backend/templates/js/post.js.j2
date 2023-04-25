@@ -1,3 +1,5 @@
+
+
 // display post
 function post_display(){
     var photo_exist = true;
@@ -22,6 +24,14 @@ function post_display(){
     $('#button_post_0').css('top', top+13);
 }
 
+
 $(document).ready(function(){
     post_display();
+
+    $("#text_post7").click(function(){
+        $("#comment_section_post").toggle();
+    })
+    $("#image_post").click(function(){
+        $("#comment_section_post").toggle();
+    })
 })
