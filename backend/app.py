@@ -15,7 +15,7 @@ app.secret_key = "devang"
 
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = "12345678"
+app.config["MYSQL_PASSWORD"] = "password"
 app.config["MYSQL_DB"] = "Synergy_db"
 mysql = MySQL(app)
 
@@ -250,6 +250,11 @@ def post_input():
             cur.execute(query)
             query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(tag_id[1:]+'_pos', 'P', post_id[1:])
             cur.execute(query)
+            query = "SELECT * FROM {}_tag WHERE id_uniq = %s".format(session['user']['id_uniq'])
+            cur.execute(query, (tag_id[1:],))
+            if not cur.fetchall():
+                query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(session['user']['id_uniq']+"_tag", "T", tag_id[1:])
+                cur.execute(query)
         
         for x in postInst:
             query = "SELECT * FROM Institution WHERE name = '{}';".format(x)
@@ -610,7 +615,6 @@ def signup_form():
                         cur.execute(query, ('A', id_uniq))
                         helper.create_linked_table(cur, id_uniq, "_ins", 'I')
                         helper.create_linked_table(cur, id_uniq, "_pos", 'P')
-                        helper.create_linked_table(cur, id_uniq, "_upv", 'A')
                         helper.create_linked_table(cur, id_uniq, "_boo", 'P')
                         helper.create_linked_table(cur, id_uniq, "_ers", 'A')
                         helper.create_linked_table(cur, id_uniq, "_ing", 'A')
@@ -619,6 +623,8 @@ def signup_form():
                         helper.create_linked_table(cur, id_uniq, "_act", 'IP')
                         helper.create_linked_table(cur, id_uniq, "_tag", 'T')
                         helper.create_linked_table(cur, id_uniq, "_rep", 'R')
+                        query = "CREATE TABLE {}_upv ( id_obj ENUM(%s) DEFAULT %s NOT NULL, id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq), count INT NOT NULL)".format(id_uniq)
+                        cur.execute(query,('A','A'))
                         query = f"CREATE TABLE {id_uniq}_img ( id INT AUTO_INCREMENT PRIMARY KEY, filename VARCHAR(255) NOT NULL, contents LONGBLOB NOT NULL);" 
                         print(query)
                         cur.execute(query)
@@ -714,7 +720,7 @@ def home_sort(username, sort):
         feed = sorted(feed, key = lambda x : x[1], reverse=True)
     for i in feed:
         print(i[0], i[5])
-    return render_template('html/home.html', feed = feed, follow = helper.follow)    
+    return render_template('html/home.html', feed = feed, follow = helper.follow_help)    
 
 # @app.route('/follow', methods = ['POST'])
 # def follow():

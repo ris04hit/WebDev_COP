@@ -11,6 +11,7 @@
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_post">
+        <header-component></header-component>
         <div id="mul_tag_post">
             <div class="inner_post" id="rect_tag_post" style="height: {{80+74*(tag_list | length)}}px;">
                 <div class="text3" id="text_tag_post">
@@ -79,12 +80,13 @@
             <div id="text_post4" class="text4">
                 {{post['content']}}
             </div>
-            <!-- <img src="{{url_for('static',filename='data/ch.gif')}}" id="gif_post"> -->
+            <img src="{{url_for('static',filename='data/ch.gif')}}" id="image_inside_post">
             <!-- <div id="text_post5" class="text4">
                 There are many openings for white in chess, namely the London System, French system,
                 Sicilian Najdorf, etc. For beginners, the most popular opening is the London system
                 because it is easy to remember and the variations are fairly simple. 
             </div> -->
+            <div id="zip_name_post"></div>
             <div id="footer_post_div">
                 <rect id="footer_post"></rect>
                 <div class="triangle-up" id="del_post"></div>
@@ -95,7 +97,7 @@
                 <div class="text9" id="text_post7">
                     Comment
                 </div> 
-                <button class="button5" id="button_book_post">
+                <button class="button5" id="button_book_post" style="display :none;">
                     Bookmark
                 </button>
                 <rect id="rect_post2"></rect>

@@ -142,14 +142,13 @@
     top: 373px;
 }
 
-#gif_post {
+#image_inside_post {
     box-sizing: border-box;
 
     position: absolute;
-    width: 562px;
-    height: 562px;
-    left: 154px;
-    top: 1127px;
+    width: 600px;
+    height: 600px;
+    left: 300px;
     
     border: 1px solid #B6EADA;
 }
@@ -363,4 +362,17 @@
 
 #footer_post_div{
     position: absolute;
+}
+
+#zip_name_post{
+    position: absolute;
+    left: 200px;
+    width: 500px;
+    height: 30px;
+    color:rgba(143, 0, 255, 0.75);
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 25px;
 }

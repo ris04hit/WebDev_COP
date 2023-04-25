@@ -1,6 +1,17 @@
 // display post
 function post_display(){
-    var size = parseInt($('#text_post4').height()) + 403;
+    var photo_exist = true;
+    var zip_filename = "filename";
+    if (photo_exist) {
+        var size = parseInt($('#text_post4').height()) + 1000;
+        $("#image_inside_post").show();
+        $("#image_inside_post").css('top', size - 600);
+    }
+    else{
+        var size = parseInt($('#text_post4').height()) + 503;
+    }
+    $("#zip_name_post").html(zip_filename);
+    $("#zip_name_post").css('top', size+20);
     $('#inner_post_post').css('height', size);
     var top = 117 + size;
     $('#footer_post_div').css('top', top);

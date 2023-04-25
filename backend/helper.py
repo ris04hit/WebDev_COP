@@ -60,7 +60,9 @@ def feed(cur, user):
     tag_list = user['tag_list']
     query = 'SELECT * from {}'.format(tag_list)
     cur.execute(query)
+    print(tag_list)
     tag_list = list(cur.fetchall())
+    print(tag_list)
     if len(tag_list)<50:
         query = 'SELECT id_uniq from Tag'
         cur.execute(query)
