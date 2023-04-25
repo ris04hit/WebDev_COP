@@ -125,7 +125,7 @@ color: #FFFFFF;
 
 #attach_images{
   position: absolute;
-width: 117.05px;
+width: 500px;
 height: 25.69px;
 left: 560.9px;
 top: 320.77px;
@@ -225,4 +225,36 @@ color: #FFFFFF;
 background: rgba(143, 0, 255, 0.75);
 border: 1.92742px solid #B6EADA;
 border-radius: 19.0323px;
+}
+
+#selected-file {
+  position: absolute;
+  width: 117.05px;
+  height: 25.69px;
+  left: 700px;
+  top: 268.44px;
+  color: rgba(143, 0, 255, 0.75);
+  position: absolute;
+  
+  font-family: 'Abel';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 33px;
+}
+
+#selected-file2{
+  position: absolute;
+width: 500px;
+height: 25.69px;
+left: 700px;
+top: 320.77px;
+color: rgba(143, 0, 255, 0.75);
+position: absolute;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 21px;
+line-height: 33px;
 }

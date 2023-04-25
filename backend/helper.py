@@ -60,12 +60,13 @@ def feed(cur, user):
     tag_list = user['tag_list']
     query = 'SELECT * from {}'.format(tag_list)
     cur.execute(query)
-    tag_list = cur.fetchall()
-    if not tag_list:
+    tag_list = list(cur.fetchall())
+    if len(tag_list)<50:
         query = 'SELECT id_uniq from Tag'
         cur.execute(query)
-        tag_list = cur.fetchall()
+        tag_list.extend(list((cur.fetchall())[:50-len(tag_list)]))
     tag_list = sql_to_list(tag_list,'id_uniq')
+    print(tag_list)
     post_dic = {}
     for tag_id in tag_list:
         query = "SELECT * from {}".format(tag_id+"_pos")
@@ -168,60 +169,60 @@ def create_linked_table(cur, id_uniq, suffix, ins_obj):
         query = "CREATE TABLE {} (id_obj ENUM({}) NOT NULL, id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq))".format(id_uniq+suffix, ", ".join(obj_list))
         cur.execute(query)
 
-def follow(cur, sender_id, profile_id):
-    ''' inputs are the uniq values ! '''
-    profile_followers = profile_id + str('_ers')
-    sender_following = sender_id + str('_ing')
-    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
-    cur.execute(query)
-    value = cur.fetchall()
-    if len(value) == 0 :
-        query = ("INSERT INTO {} (id_obj, id_uniq) VALUES ( '{}', '{}');".format(profile_followers, 'A', sender_id))
-        cur.execute(query)
-        # insert into the following list !
-        query = "SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id)
-        cur.execute(query)
-        value = cur.fetchall()
-        if len(value) == 0 :
-            query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(sender_following, 'A', profile_id)
-            cur.execute(query)
-        else:
-            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
-    else:
-        uniq = profile_id
-        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
-        cur.execute(query)
-        account_name = cur.fetchall()
-        print('You have already followed {}'.format(account_name[0]['name']))
+# def follow(cur, sender_id, profile_id):
+#     ''' inputs are the uniq values ! '''
+#     profile_followers = profile_id + str('_ers')
+#     sender_following = sender_id + str('_ing')
+#     query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     if len(value) == 0 :
+#         query = ("INSERT INTO {} (id_obj, id_uniq) VALUES ( '{}', '{}');".format(profile_followers, 'A', sender_id))
+#         cur.execute(query)
+#         # insert into the following list !
+#         query = "SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id)
+#         cur.execute(query)
+#         value = cur.fetchall()
+#         if len(value) == 0 :
+#             query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(sender_following, 'A', profile_id)
+#             cur.execute(query)
+#         else:
+#             print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+#     else:
+#         uniq = profile_id
+#         query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
+#         cur.execute(query)
+#         account_name = cur.fetchall()
+#         print('You have already followed {}'.format(account_name[0]['name']))
 
-def unfollow(cur, sender_id, profile_id):
-    ''' Inputs values are id_uniq type !'''
-    # following from mani's ac to mecan's ac
-    sender_following = sender_id + str('_ing')
-    profile_followers = profile_id + str('_ers')
-    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
-    cur.execute(query)
-    value = cur.fetchall()
-    # print('val', value)
-    if len(value) > 0 :
-        query = "DELETE FROM {} WHERE id_uniq = '{}';".format(profile_followers, value[0]['id_uniq'])
-        cur.execute(query)
-        # deleting from the following list !
-        query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id))
-        cur.execute(query)
-        value = cur.fetchall()
-        if len(value) > 0:
-            query = "DELETE FROM {} WHERE id_uniq = '{}';".format(sender_following, value[0]['id_uniq'])
-            cur.execute(query)
-        else:
-            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
-    else:
-        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(profile_id)
-        cur.execute(query)
-        account_name = cur.fetchall()
-        print("Already unfollowed {}".format(account_name[0]['name']))
+# def unfollow(cur, sender_id, profile_id):
+#     ''' Inputs values are id_uniq type !'''
+#     # following from mani's ac to mecan's ac
+#     sender_following = sender_id + str('_ing')
+#     profile_followers = profile_id + str('_ers')
+#     query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     # print('val', value)
+#     if len(value) > 0 :
+#         query = "DELETE FROM {} WHERE id_uniq = '{}';".format(profile_followers, value[0]['id_uniq'])
+#         cur.execute(query)
+#         # deleting from the following list !
+#         query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id))
+#         cur.execute(query)
+#         value = cur.fetchall()
+#         if len(value) > 0:
+#             query = "DELETE FROM {} WHERE id_uniq = '{}';".format(sender_following, value[0]['id_uniq'])
+#             cur.execute(query)
+#         else:
+#             print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+#     else:
+#         query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(profile_id)
+#         cur.execute(query)
+#         account_name = cur.fetchall()
+#         print("Already unfollowed {}".format(account_name[0]['name']))
 
-def upvote_for_post(cur, sender_id, post_id):
+def upvote_for_post_help(cur, sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvotes_table (obj, uniq, count = 0)'''
     post_upvote_table = post_id + str('_upv')
     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
@@ -258,43 +259,125 @@ def upvote_for_post(cur, sender_id, post_id):
         print('checked !')
     return 
 
-def upvote_for_comment(cur, sender_id, comment_id):
-    '''requirements comments_upvote table, comment_publisher_upvote table (obj, uniq, count = 0)'''
-    comment_upvote_table = comment_id + str('_upv')
-    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
+# def upvote_for_comment(cur, sender_id, comment_id):
+#     '''requirements comments_upvote table, comment_publisher_upvote table (obj, uniq, count = 0)'''
+#     comment_upvote_table = comment_id + str('_upv')
+#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     upvoted = False
+#     if len(value) == 0:
+#         query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(comment_upvote_table, sender_id)
+#         cur.execute(query)
+#         print('upvoted to coomment')
+#         upvoted = True
+#     else :
+#         print('already upvoted to comment')
+#         return 
+    
+#     query = "SELECT author_uniq FROM Comment WHERE id_uniq = '{}' ;".format(comment_id)
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     comment_publisher_id = value[0]['author_uniq']
+#     comment_publisher_upvotes_table = comment_publisher_id + str('_upv')
+
+#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table, sender_id)
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     if len(value) == 0 :
+#         query = "INSERT INTO {} (id_obj, id_uniq, count) VALUES ('A', '{}', 1) ;".format(comment_publisher_upvotes_table, sender_id)
+#         cur.execute(query)
+#     elif upvoted:
+#         count = value[0]['count']
+#         count += 1
+#         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
+#         cur.execute(query)
+#         print('checked !')
+#     return 
+
+
+def upvote_for_post_help(cur, sender_id, post_id):
+    ''' requirements post_upvote_table, post_publisher_upvotes_table (obj, uniq, count = 0)'''
+    post_upvote_table = post_id + str('_upv')
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
     cur.execute(query)
     value = cur.fetchall()
     upvoted = False
     if len(value) == 0:
-        query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(comment_upvote_table, sender_id)
+        query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(post_upvote_table, sender_id)
         cur.execute(query)
-        print('upvoted to coomment')
+        # mysql.connection.commit()
+        print('upvoted to post from function')
         upvoted = True
     else :
-        print('already upvoted to comment')
+        print('already upvoted to post')
         return 
     
-    query = "SELECT author_uniq FROM Comment WHERE id_uniq = '{}' ;".format(comment_id)
+    query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
     cur.execute(query)
     value = cur.fetchall()
-    comment_publisher_id = value[0]['author_uniq']
-    comment_publisher_upvotes_table = comment_publisher_id + str('_upv')
+    post_publisher_id = value[0]['author_uniq']
+    post_publisher_upvotes_table = post_publisher_id + str('_upv')
 
-    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table, sender_id)
+
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table, sender_id)
     cur.execute(query)
     value = cur.fetchall()
     if len(value) == 0 :
-        query = "INSERT INTO {} (id_obj, id_uniq, count) VALUES ('A', '{}', 1) ;".format(comment_publisher_upvotes_table, sender_id)
+        query = "INSERT INTO {} (id_obj, id_uniq, count) VALUES ('A', '{}', 1) ;".format(post_publisher_upvotes_table, sender_id)
         cur.execute(query)
+        # mysql.connection.commit()
     elif upvoted:
         count = value[0]['count']
         count += 1
-        query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
+        query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
         print('checked !')
+    # mysql.connection.commit()
     return 
+
     
-def downvote_for_post(cur, sender_id, post_id):
+# def downvote_for_post_help(cur, sender_id, post_id):
+#     ''' requirements post_upvote_table, post_publisher_upvote_table '''
+#     post_upvote_table = post_id + str('_upv')
+#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     downvoted = False
+#     if len(value) > 0:
+#         query = "DELETE FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
+#         cur.execute(query)
+#         print('downvoted post')
+#         downvoted = True
+#     else:
+#         print('already downvoted to post !')
+#         return 
+    
+#     # finding post_publisher_id 
+#     query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
+
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     post_publisher_id = value[0]['author_uniq']
+#     post_publisher_upvotes_table = post_publisher_id + str('_upv')
+
+#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table, sender_id)
+#     cur.execute(query)
+#     value = cur.fetchall()
+#     if len(value) > 0 and downvoted:
+#         count = value[0]['count']
+#         count -= 1
+#         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
+#         cur.execute(query)
+#         print('checked !')
+#     elif len(value) == 0 :
+#         print('database error !')
+#     return 
+
+
+
+
+def downvote_for_post_help(cur, sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvote_table '''
     post_upvote_table = post_id + str('_upv')
     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
@@ -330,6 +413,7 @@ def downvote_for_post(cur, sender_id, post_id):
     elif len(value) == 0 :
         print('database error !')
     return 
+
 
 def downvote_for_comment(cur, sender_id, comment_id):
     ''' requirements comment_upvote_table, comment_publisher_upvote_table '''
@@ -492,3 +576,57 @@ def comment_get (cur, comment_id):
         return_list.append(comment)
     print(return_list)
     return return_list
+
+
+def follow_help(cur, sender_id, profile_id):
+    ''' inputs are the uniq values ! '''
+    profile_followers = profile_id + str('_ers')
+    sender_following = sender_id + str('_ing')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0 :
+        query = ("INSERT INTO {} (id_obj, id_uniq) VALUES ( '{}', '{}');".format(profile_followers, 'A', sender_id))
+        cur.execute(query)
+        # insert into the following list !
+        query = "SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id)
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) == 0 :
+            query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(sender_following, 'A', profile_id)
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        uniq = profile_id
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print('You have already followed {}'.format(account_name[0]['name']))
+
+def unfollow_help(cur, sender_id, profile_id):
+    ''' Inputs values are id_uniq type !'''
+    # following from mani's ac to mecan's ac
+    sender_following = sender_id + str('_ing')
+    profile_followers = profile_id + str('_ers')
+    query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
+    cur.execute(query)
+    value = cur.fetchall()
+    # print('val', value)
+    if len(value) > 0 :
+        query = "DELETE FROM {} WHERE id_uniq = '{}';".format(profile_followers, value[0]['id_uniq'])
+        cur.execute(query)
+        # deleting from the following list !
+        query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id))
+        cur.execute(query)
+        value = cur.fetchall()
+        if len(value) > 0:
+            query = "DELETE FROM {} WHERE id_uniq = '{}';".format(sender_following, value[0]['id_uniq'])
+            cur.execute(query)
+        else:
+            print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
+    else:
+        query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(profile_id)
+        cur.execute(query)
+        account_name = cur.fetchall()
+        print("Already unfollowed {}".format(account_name[0]['name']))

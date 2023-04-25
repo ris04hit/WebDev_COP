@@ -103,9 +103,23 @@
                             <rect id="rect_profile_home"></rect>
                         </a>
                     </div>
-                    <div class="follow text_home9"></div>
+                    <!-- <div class="follow text_home9"></div> -->
 
-                    <div class="triangle-up" id="del_home1"></div>
+                    <form action="{{url_for('follow_account')}}" method="post">
+                        <button class="button button_inv" type="submit" id="follow_button-{{ct-1}}" name="follow_button-{{ct-1}}">
+                            <div class="follow text_home9"></div>
+                        </button>
+                    </form>
+
+                    <!-- <form method="POST" action="{{url_for('upvote_for_post')}}"
+                        <button class="triangle-up button_inv" id="del_home1" type="submit"></button>
+                    </form> -->
+                    <form action="{{url_for('upvote_for_post')}}" method="post">
+                        <button class="button_inv" type="submit" id="triangle_upvote_button-{{ct-1}}" name="triangle_upvote_button-{{ct-1}}">
+                            <div class="triangle-up" id="del_home1"></div>
+                        </button>
+                    </form>
+
                     <div class="text1" id="text_home10">
                         <div class="upvote">{{post_info[1]}}</div>
                     </div>
@@ -298,7 +312,7 @@
             </div>
         </div>
 
-        <div class="pop_up" id="post_own_home">
+        <!-- <div class="pop_up" id="post_own_home">
             <rect id="rect_main">
             </rect>
             <form action="{{url_for('post_input')}}" method="post">
@@ -319,7 +333,37 @@
                 <button type="submit" id="create_post">Post</button><br>
                 <rect type = "button" id = "close_post_home", style="color: rgb(188, 188, 188);"> Close </rect>
                 </form>
+        </div> -->
+
+        <div class="pop_up" id="post_own_home">
+            <rect id="rect_main">
+            </rect>
+            <form action="{{url_for('post_input')}}" method="post" enctype="multipart/form-data">
+                <input type="text" id="post_title" name="posttit" placeholder="Title" class="form2"><br>
+                <input type="text" id="post_tags" name="posttags" placeholder="Tags" class="form2"><br>
+                <rect id ="rect_files"></rect>
+                <!-- <label id="attach_files"> + Attach Zip:
+                    <input type="file" id="file-upload1" name="file-upload1" accept=".zip">
+                </label><br> -->
+                <label for="zip-upload_Devang" id = "attach_files">+ Attach Zip:</label>
+                <input type="file" id="zip-upload_Devang" name="zipfile" accept=".zip" onchange="updateFileName()">
+                <span id="selected-file"></span>
+                <label for="Image-upload_Devang" id = "attach_images">+ Attach Image:</label>
+                <input type="file" id="Image-upload_Devang" name="imagefile" accept="image/jpeg" onchange="updateFileName2()">
+                <span id="selected-file2"></span>
+                <!-- <label id="attach_images"> + Add Images:
+                    <input type="file" id="file-upload2" name="file-upload2" accept="image/jpeg">
+                </label><br> -->
+                <!-- <label id="attach_videos"> + Add Videos:
+                    <input type="file" id="file-upload3" name="file-upload3" >
+                </label><br> -->
+                <input type="text" id="post_inst" name="postinst" placeholder="Institutes" class="form2" value=""><br>
+                <textarea name="post_description" placeholder ="Description" class="longInput" id = "post_description" cols="30" rows="10"></textarea>
+                <button type="submit" id="create_post">Post</button><br>
+                <rect type = "button" id = "close_post_home", style="color: rgb(188, 188, 188);"> Close </rect>
+                </form>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>

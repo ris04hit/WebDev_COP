@@ -32,10 +32,10 @@
         
         <div id="message_signup1" class="error_message">{{message1}}</div>
         
-        <form action="{{url_for('signup_form')}}" method="post">
+        <form action="{{url_for('signup_form')}}" method="post" enctype="multipart/form-data">
             <img id = "rect_profile_signup" src=""></img>
             <label id = "text_profile_signup">
-                <input type="file" onchange="previewFile()" accept="image/png, image/jpeg, image/jpg" name="image_profile_signup" value="{{image}}">
+                <input type="file" onchange="previewFile()" accept="image/jpeg, image/png, image/jpg" name="image_profile_signup">
                 Add Profile Photo
             </label><br>
             <input type="text" id="username_signup" name="username_signup" placeholder="Username" class="form1" value="{{username}}"><br>

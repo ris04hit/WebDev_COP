@@ -26,7 +26,7 @@ class Header extends HTMLElement {
                 
                     <rect id = "profile_rect"></rect>
                     <a href="{{url_for('profile', username = username)}}">
-                        <rect id = "profile_photo"></rect>
+                        <img id = "profile_photo" src="{{ url_for('profile_photo') }}">
                         <div id = "profile_name">{{username}}</div><br>
                     </a>
                     
