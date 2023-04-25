@@ -82,7 +82,9 @@
             {% for post_info in feed %}
                 {% set ct = loop.index %}
                 <div class="outer_post out_post_home2"  id="out_post_home_id-{{ct-1}}">
-                    <rect class="inner_post inner_post_home"></rect>
+                    <a href="{{url_for('post', post_id = post_info[0])}}">
+                        <rect class="inner_post inner_post_home"></rect>
+                    </a>
 
                     <rect class="profile_bar" id="pbar_home"></rect>
                     <div class="text1">

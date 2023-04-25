@@ -6,23 +6,23 @@ $(function(){
   });
 
 
-  // tag pop up
-  function search_click() {
-      if (search_list.length){
-        $("#search_result_rect").show();
-      }
-      var rect_ht = 50 + 41*search_list.length;
-      $("#search_result_rect").css("height",rect_ht.toString().concat("px"));
-      var html = "";
-      var top = -13;
-      for (var count=0; count< search_list.length; count++){
-          top = top + 41;
-          var code = `<div id = "search_text-${count}" class="text4" style = "top : ${top}px; left : 29px">${search_list[count]}</div><rect class="search_line header_search_line" style = "top : ${top+30}px; width : 220px"></rect>`
-          html = html.concat(code);
-        }
-      console.log(html);
-      $("#search_result_rect").html(html);
-    }
+  // // tag pop up
+  // function search_click() {
+  //     if (search_list.length){
+  //       $("#search_result_rect").show();
+  //     }
+  //     var rect_ht = 50 + 41*search_list.length;
+  //     $("#search_result_rect").css("height",rect_ht.toString().concat("px"));
+  //     var html = "";
+  //     var top = -13;
+  //     for (var count=0; count< search_list.length; count++){
+  //         top = top + 41;
+  //         var code = `<div id = "search_text-${count}" class="text4" style = "top : ${top}px; left : 29px">${search_list[count]}</div><rect class="search_line header_search_line" style = "top : ${top+30}px; width : 220px"></rect>`
+  //         html = html.concat(code);
+  //       }
+  //     console.log(html);
+  //     $("#search_result_rect").html(html);
+  //   }
 
 $(document).ready(function(){
     var href = document.location.href;
@@ -30,7 +30,41 @@ $(document).ready(function(){
     if (lastPathSegment === "{{url_for('signup')}}"){
         $("#not_show_signup").hide();
     }
-
+    $('#rect_search').on('input', function() {
+      var query = $('#rect_search').val();
+      // window.print("tollksplks")
+      $.ajax({
+          url: '/search',
+          method: 'POST',
+          data: {'query': query},
+          success: function(response) {
+              var search_list = response.results;
+              // var html = '';
+              if (search_list.length){
+                $("#search_result_rect").show();
+              }
+              // var rect_ht = 50 + 41*search_list.length;
+              // if (rect_ht > 10){
+              rect_ht = 460;
+              // }
+              $("#search_result_rect").css("height",rect_ht.toString().concat("px"));
+              var html = "";
+              var top = -13;
+              for (var count=0; count< search_list.length && count < 10; count++){
+                  top = top + 41;
+                  var code = `<div id = "search_text-${count}" class="text4" style = "top : ${top}px; left : 29px; overflow-x: hidden; overflow-y : hidden">${search_list[count]}</div><rect class="search_line header_search_line" style = "top : ${top+30}px; width : 220px; overflow-x: hidden; overflow-y : hidden"></rect>`
+                  html = html.concat(code);
+                }
+              console.log(html);
+              $("#search_result_rect").html(html);
+              // for (var i = 0; i < results.length && i < 10; i++) {
+              //     var row = results[i];
+              //     html += '<p>' + row + '</p>';
+              // }
+              // $('#results').html(html);
+          }
+      });
+  });
     $("#rect_home, #home").hover(function(){
         $("#rect_home").css("background-color", "#B6EADA");
         $("#home").css("color", "#03001C");

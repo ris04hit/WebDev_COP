@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from base64 import b64encode
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from random import randint
 
 
 def password_strength(password):
@@ -16,7 +17,7 @@ def password_strength(password):
     elif length < 12:
         if search('[a-z]', password) and search('[A-Z]', password) \
         and search('[0-9]', password):
-            return 0
+            return 1
     else:
         if search('[a-z]', password) and search('[A-Z]', password) \
         and search('[0-9]', password) and search('[^a-zA-Z0-9]', password):
@@ -136,18 +137,24 @@ def unique_username(cur, username):
     return not bool(cur.fetchall())
 
 def id_gen(cur, id_obj, username, table):
-    encoded_username = username[:9]
+    encoded_username = username[1:9]
     if len(encoded_username)!=9:
-        encoded_username = "x"*(9-len(encoded_username))+encoded_username
-    query = "SELECT id_uniq FROM {} WHERE BINARY id_uniq LIKE '{}{}%' ORDER BY creation_time DESC LIMIT 1".format(table, id_obj, encoded_username)
-    cur.execute(query)
-    data = cur.fetchall()
-    if data:
-        id_uniq = data[0]['id_uniq']
-        num = str(int(id_uniq[10:])+1).zfill(10)
+        encoded_username = id_obj+"x"*(9-len(encoded_username))+encoded_username
+    if table != 'Tag':
+        query = "SELECT id_uniq FROM {} WHERE BINARY id_uniq LIKE '{}{}%' ORDER BY creation_time DESC LIMIT 1;".format(table, id_obj, encoded_username)
+        cur.execute(query)
+        data = cur.fetchall()
     else:
-        num = "0000000000"
-    return id_obj+encoded_username+num
+        query = "Select id_uniq from {} ORDER BY id_uniq ;".format(table)
+        cur.execute(query)
+        data = cur.fetchall()
+    num = randint(0,9999999999)
+    # if data:
+    #     id_uniq = data[-1]['id_uniq']
+    #     num = str(int(id_uniq[10:])+1).zfill(10)
+    # else:
+    #     num = "0000000000"
+    return id_obj+encoded_username+str(num)
 
 def create_linked_table(cur, id_uniq, suffix, ins_obj):
     if len(ins_obj)==1:

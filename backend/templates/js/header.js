@@ -30,7 +30,7 @@ class Header extends HTMLElement {
                         <div id = "profile_name">{{username}}</div><br>
                     </a>
                     
-                    <form><input id = "rect_search" placeholder="Search People, Institutions"></input></form>
+                    <form><input id = "rect_search" placeholder="Search People, Institutions" name="query" type = "text"></input></form>
                     <rect id = "circle_out_search"></rect>
                     <rect id = "circle_in_search"></rect>
                     <rect id = "line_search"></rect>
