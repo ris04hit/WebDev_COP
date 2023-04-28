@@ -48,7 +48,7 @@ function feed_display() {
         index = index + 1;
         var element = child[index];
         var div = $(element).find('.text_home4')[0];
-        $(div).html('{{feed[ct][6]}}');
+        $(div).html(`{{feed[ct][6]}}`);
         var div_cov = $(div).parent();
         var div2 = $(element).find('.text_home3')[0];
         $(div2).html('{{feed[ct][5]}}');

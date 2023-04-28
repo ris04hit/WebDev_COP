@@ -86,7 +86,9 @@
                 Sicilian Najdorf, etc. For beginners, the most popular opening is the London system
                 because it is easy to remember and the variations are fairly simple. 
             </div> -->
-            <div id="zip_name_post"></div>
+            <a href = "{{url_for('download', post_id = post['id_uniq'])}}" id="zip_url">
+                <div id="zip_name_post"></div>
+            </a>
             <div id="footer_post_div">
                 <rect id="footer_post"></rect>
                 <div class="triangle-up" id="del_post"></div>
@@ -97,9 +99,11 @@
                 <div class="text9 curs" id="text_post7">
                     Comment
                 </div> 
-                <button class="button5" id="button_book_post" style="display :none;">
-                    Bookmark
-                </button>
+                <form type="POST" action="{{url_for('translate', content = post['content'])}}">
+                    <button class="button5" id="button_book_post">
+                        translate
+                    </button>
+                </form>
                 <rect id="rect_post2"></rect>
                 <div class="text9 curs" id="text_post8">
                     Report

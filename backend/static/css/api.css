@@ -1,132 +1,56 @@
-.apis {
-  position: absolute;
-  top: 124px;
-  left: 43px;
-  font-size: 60px;
-}
-#rect_one {
-  position: absolute;
-  width: 156px;
-  height: 45px;
-  left: 43px;
-  top: 234px;
-  
-  background: #03001C;
-  border-radius: 15px;
+#body_api{
+  width: 100%;
+  height: 100%;
 }
 
-#Intro {
-  position: absolute;
-  width: 139px;
-  height: 38px;
-  left: 51px;
-  top: 236px;
-  
-  font-family: 'Abel';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 38px;
-  
-  color: #ffffff;
-  
+#api_intro{
+
+position: absolute;
+width: 500px;
+height: 76px;
+left: 43px;
+top: 124px;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 60px;
+line-height: 76px;
+
+color: #FFFFFF;
 }
 
-#rect_two {
-  position: absolute;
-  width: 156px;
-  height: 45px;
-  left: 260px;
-  top: 234px;
-  
-  background: #03001C;
-  border-radius: 15px;
-}
-
-#Meth {
-  position: absolute;
-  width: 99px;
-  height: 38px;
-  left: 288px;
-  top: 236px;
-  
-  font-family: 'Abel';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 38px;
-  
-  color: #FFFFFF;
-}
-
-#rect_three {
-  position: absolute;
-  width: 156px;
-  height: 45px;
-  left: 486px;
-  top: 236px;
-  
-  background: #03001C;
-  border-radius: 15px;
-}
-
-#Obj {
-  position: absolute;
-  width: 88px;
-  height: 38px;
-  left: 520px;
-  top: 236px;
-  
-  font-family: 'Abel';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 38px;
-  
-  color: #FFFFFF;
-}
-.rectangle-div {
-  position: absolute;
-  top: 236px;
-  left: 288px;
-}
-.objects,
-.rectangle-div {
-  left: 520px;
-}
-.rectangle-div {
-  top: 341px;
-  left: 43px;
-  border-radius: var(--br-xl);
-  background-color: var(--color-gray-100);
-  border-radius: 20px;
-  border: 2px solid var(--color-paleturquoise);
+#dabba{
   box-sizing: border-box;
-  width: 1355px;
-  height: 1419px;
+
+position: absolute;
+width: 1355px;
+height: 1419px;
+left: 43px;
+top: 341px;
+
+background: #03001C;
+border: 2px solid #B6EADA;
+border-radius: 20px;
 }
-.with-synergy-api {
-  margin: 0;
-}
-.if-status-is-failed-then-com {
-  margin-bottom: 0;
-}
-.status-is-either-ok-or-fail {
-  margin: 0;
-  padding-left: var(--padding-21xl);
-}
-.httpssynergycomsettingsa1 {
-  text-decoration: underline;
-}
-.httpssynergycomsettingsa {
-  color: inherit;
-}
-.with-synergy-api-container {
+
+#rect_intro_api{
   position: absolute;
-width: 1294px;
-height: 1179px;
-left: 77px;
-top: 361px;
+width: 156px;
+height: 45px;
+left: 43px;
+top: 245px;
+
+background: #03001C;
+border-radius: 15px;
+}
+
+#intro{
+  position: absolute;
+width: 139px;
+height: 38px;
+left: 51px;
+top: 250px;
 
 font-family: 'Abel';
 font-style: normal;
@@ -136,15 +60,74 @@ line-height: 38px;
 
 color: #FFFFFF;
 }
-.api-intro {
-  position: relative;
-  background-color: var(--color-gray-100);
-  width: 100%;
-  height: 2048px;
-  overflow: hidden;
-  text-align: left;
-  font-size: var(--font-size-11xl);
-  color: var(--color-white);
-  font-family: var(--font-abel);
+
+#rect_methods_api{
+  position: absolute;
+width: 156px;
+height: 45px;
+left: 260px;
+top: 245px;
+
+background: #03001C;
+border-radius: 15px;
 }
 
+#meth{
+  position: absolute;
+width: 99px;
+height: 38px;
+left: 288px;
+top: 250px;
+
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 38px;
+
+color: #FFFFFF;
+}
+
+#rect_objects_api{
+  position: absolute;
+width: 156px;
+height: 45px;
+left: 486px;
+top: 245px;
+
+background: #03001C;
+border-radius: 15px;
+}
+
+#obj{
+  position: absolute;
+  width: 88px;
+  height: 38px;
+  left: 520px;
+  top: 250px;
+  
+  font-family: 'Abel';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 38px;
+  
+  color: #FFFFFF;
+}
+
+#text_intro{
+  position: relative;
+width: 1294px;
+height: 1179px;
+/* top: 60px; */
+margin: 40px;
+margin-right: 60px;
+text-align: justify;
+font-family: 'Abel';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 38px;
+
+color: #FFFFFF;
+}

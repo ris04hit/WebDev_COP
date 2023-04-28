@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify, send_file
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -7,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 import io
 from io import BytesIO
 import zipfile
-
+import requests
 
 
 app = Flask(__name__)
@@ -23,6 +24,7 @@ otp = {}
 otp_signup = {}
 feed = []
 comment_list = []
+post_ = []
 
 db = MySQLdb.connect(host=app.config['MYSQL_HOST'], user=app.config['MYSQL_USER'], password=app.config['MYSQL_PASSWORD'], db=app.config['MYSQL_DB'])
 
@@ -34,8 +36,8 @@ def start():
     except:
         print("Can not connect to database in start page")
         return
-    print('start ')
-    print('end ')
+    # print('start ')
+    # print('end ')
     return render_template('html/start.html', message1="", message2="", show_forget=False)
 
 @app.route('/post/upvote', methods = ['POST'])
@@ -47,14 +49,14 @@ def upvote_for_post():
         temp_ind = post_id.index("-")
         post_num = int(post_id[temp_ind+1:])
         if feed[post_num][2]:
-            print("Now downvoting !")
+            # print("Now downvoting !")
             helper.downvote_for_post_help(cur, session['user']['id_uniq'], feed[post_num][0])
-            print('downvoted to post !')
+            # print('downvoted to post !')
         else:
-            print("Not upvoted till now !")
-            print(feed[post_num][0])
+            # print("Not upvoted till now !")
+            # print(feed[post_num][0])
             helper.upvote_for_post_help(cur, session['user']['id_uniq'], feed[post_num][0])
-            print('done')
+            # print('done')
         mysql.connection.commit()
         cur.close()
     
@@ -69,21 +71,21 @@ def follow_account():
         key_id = list(key_id)[0]
         temp_ind = key_id.index("-")
         post_num = int(key_id[temp_ind+1:])
-        print(post_num)
+        # print(post_num)
         sender_id = session['user']['id_uniq']
         profile_username = feed[post_num][4]
         query = "SELECT id_uniq from Account WHERE username = '{}'".format(profile_username)
         cur.execute(query)
         receiver_id = cur.fetchall()[0]['id_uniq']
         if feed[post_num][-1]:
-            print('already following !')
+            # print('already following !')
             helper.unfollow_help(cur, sender_id, receiver_id)
-            print('unfollowed !')
+            # print('unfollowed !')
         else:
 
-            print('not following !')
+            # print('not following !')
             helper.follow_help(cur, sender_id, receiver_id)
-            print('followed !')
+            # print('followed !')
         mysql.connection.commit()
         cur.close()
         return redirect("/home/"+session['user']['username'])
@@ -183,7 +185,7 @@ def post_input():
         postTags = postTags.split(";")
         postTags = [x.strip() for x in postTags]
         postDescription = request.form['post_description']
-
+        postDescription = postDescription.replace("\n","<br>")
         Tags = []
         for x in postTags:
             if x != "":
@@ -199,26 +201,29 @@ def post_input():
         postInst = institute
         author_id = session['user']['id_uniq']
         post_id = helper.id_gen(cur, 'P', session['user']['username'], 'Post')
-        print('data fetched !')
-        print(postTitle, postTags, postDescription, postInst, author_id, post_id)
+        # print('data fetched !')
+        # print(postTitle, postTags, postDescription, postInst, author_id, post_id)
         query = "INSERT INTO Post (id_obj, id_uniq, author_obj, author_uniq, title, content, upvotes, comments, report_list, public_post, visibility,  institutes, tag_list, api_visibility) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, {}, '{}', '{}', {});".format('P', post_id[1:], 'A', author_id, postTitle, postDescription, post_id[1:]+'_upv', post_id[1:]+'_com', post_id[1:]+'_rep', True, True, post_id[1:]+'_ins', post_id[1:]+'_tag', True)
         cur.execute(query)
-        query = f"CREATE TABLE {post_id}_data ( id INT AUTO_INCREMENT PRIMARY KEY, filename VARCHAR(255) NOT NULL, contents LONGBLOB NOT NULL);" 
-        print(query)
+        query = f"CREATE TABLE {post_id[1:]}_zip ( id INT AUTO_INCREMENT PRIMARY KEY, filename VARCHAR(255) NOT NULL, contents LONGBLOB NOT NULL);" 
+        # print(query)
+        cur.execute(query)
+        query = f"CREATE TABLE {post_id[1:]}_img ( id INT AUTO_INCREMENT PRIMARY KEY, filename VARCHAR(255) NOT NULL, contents LONGBLOB NOT NULL);" 
+        # print(query)
         cur.execute(query)
         file = request.files['zipfile']
         file_contents = file.read()
         if zipfile.is_zipfile(BytesIO(file_contents)):
             # Store the file contents in the database
             cursor = db.cursor()
-            cursor.execute(f'INSERT INTO {post_id}_data (filename, contents) VALUES (%s, %s)', (file.filename, file_contents))
+            cursor.execute(f'INSERT INTO {post_id[1:]}_zip (filename, contents) VALUES (%s, %s)', (file.filename, file_contents))
             db.commit()
         file = request.files['imagefile']
         file_contents = file.read()
         if file:
             # Store the file contents in the database
             cursor = db.cursor()
-            cursor.execute(f'INSERT INTO {post_id}_data (filename, contents) VALUES (%s, %s)', (file.filename, file_contents))
+            cursor.execute(f'INSERT INTO {post_id[1:]}_img (filename, contents) VALUES (%s, %s)', (file.filename, file_contents))
             db.commit()
         helper.create_linked_table(cur, post_id[1:], '_upv', 'A') # upvote list
         helper.create_linked_table(cur, post_id[1:], '_com', 'C') # comment list
@@ -231,8 +236,8 @@ def post_input():
             query = "SELECT * FROM Tag WHERE name = '{}';".format(x)
             cur.execute(query)
             existing = cur.fetchall()
-            print('-'*100)
-            print(existing)
+            # print('-'*100)
+            # print(existing)
 
             if len(existing) == 0:
                 # tag does not exist
@@ -261,8 +266,8 @@ def post_input():
             query = "SELECT * FROM Institution WHERE name = '{}';".format(x)
             cur.execute(query)
             existing = cur.fetchall()
-            print('-'*100)
-            print(existing)
+            # print('-'*100)
+            # print(existing)
 
             if len(existing) == 0:
                 # institute does not exist
@@ -292,13 +297,17 @@ def main_js():
 def about():
     return render_template('html/about_us.html')
 
-@app.route('/api/introduction')
+@app.route('/api')
 def apis():
-    return render_template('html/apis.html', username = session['user']['username'])
+    return render_template('html/apis.html')
 
-@app.route('/api/methods')
-def api_method():
-    return render_template('html/apimethods.html', username =session['user']['username'])
+@app.route('/apimethods')
+def api_meth():
+    return render_template('html/apimethods.html')
+
+@app.route('/apiobjects')
+def api_obj():
+    return render_template('html/apiobj.html')
 
 @app.route('/institution/create')
 def create_institution():
@@ -378,18 +387,19 @@ def loader4_js():
 def post(post_id): # id_uniq
     # changr code here
     cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    print(post_id , '\n\n\n\n')
+    # print(post_id , '\n\n\n\n')
     query = "SELECT * FROM Post WHERE id_uniq = '{}';".format(post_id)
     cur.execute(query)
+    global post_
     post = cur.fetchall()[0]
 
     tag_list = post['tag_list']
 
-    print(tag_list)
+    # print(tag_list)
     query = "SELECT * FROM {} ;".format(tag_list)
     cur.execute(query)
     tag_ids = cur.fetchall()
-    print(tag_ids)
+    # print(tag_ids)
 
     tags = []
     for x in tag_ids:
@@ -422,18 +432,17 @@ def post(post_id): # id_uniq
     cur.execute(query)
     extracted = cur.fetchall()[0]
 
-    print('\n\n\n\n\n',extracted, '\n\n\n\n\n')
+    # print('\n\n\n\n\n',extracted, '\n\n\n\n\n')
 
     name = extracted['username']
     follow_table = extracted['followers']
     query = "SELECT * FROM {} WHERE id_uniq = '{}';".format(follow_table, current_user)
-    print(query)
+    # print(query)
     cur.execute(query)
     if cur.fetchall():
         follow_done = True
     else:
         follow_done = False
-
 
     query = "SELECT * FROM {} WHERE id_uniq = '{}';".format(post['upvotes'], current_user)
     cur.execute(query)
@@ -447,7 +456,7 @@ def post(post_id): # id_uniq
     upv_ct = len(cur.fetchall())
 
     query = "SELECT * from {};".format(post['comments'])
-    print("\n",query,"\n")
+    # print("\n",query,"\n")
     cur.execute(query)
     comments = cur.fetchall()
     global comment_list
@@ -457,11 +466,108 @@ def post(post_id): # id_uniq
 
     mysql.connection.commit()
     cur.close()
+    post['t'] = tags
+    post['n'] = name
+    post['u'] = upvote_done
+    post['fd'] = follow_done
+    post['uc'] = upv_ct
+    post['c'] = comment_list
+    post_ = post
     return render_template('html/post.html', post = post, tag_list = tags, aname = name, upv = upvote_done, follow = follow_done, user=session['user'], upvct = upv_ct, comments = comment_list)
+
+@app.route('/DisplayImage/<string:post_id>')
+def post_photo(post_id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    cur.execute(f"SELECT 1 FROM {post_id}_img LIMIT 1")
+    if cur.fetchone():
+        cur.execute("SELECT contents FROM {}_img LIMIT 1".format(post_id))
+        result = cur.fetchone()
+        if result:
+            # # print(result)
+            # # print("Hello ")
+            contents = result['contents']
+            return send_file(io.BytesIO(contents), mimetype='image/jpeg')
+        else:
+            return None
+    else:
+        return None
+
+
+@app.route('/download/<string:post_id>')
+def download(post_id):
+    # Retrieve the contents of the file from the database
+    # print("Hi")
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    # cursor = db.cursor()
+    cur.execute(f"SELECT 1 FROM {post_id}_zip LIMIT 1")
+    if cur.fetchone():
+    # # print(filename)
+        cur.execute("SELECT contents FROM {}_zip LIMIT 1".format(post_id))
+        row = cur.fetchone()
+        # if row is None:
+        #     return 'File not found'
+        if row is not None:
+            contents = row['contents']
+
+            # Check if the contents are a ZIP archive
+            if zipfile.is_zipfile(io.BytesIO(contents)):
+                cur.execute("SELECT filename FROM {}_zip LIMIT 1".format(post_id))
+                row = cur.fetchone()
+                filename = row['filename']
+                # If the contents are a ZIP archive, send them as a file download
+                return send_file(io.BytesIO(contents),download_name=filename, as_attachment=True)
+            # If the contents are a regular file, display them in the browser
+            return contents
+        else:
+            return None
+    else:
+        return None
+
+
+@app.route('/zipname/<string:post_id>', methods=['GET'])
+def zipname(post_id):
+    # Retrieve the contents of the file from the database
+    # # print("Hi")
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    # print("kkk sdfkj dsf")
+    # cursor = db.cursor()
+    cur.execute(f"SELECT 1 FROM {post_id}_zip LIMIT 1")
+    if cur.fetchone():
+    # # print(filename)
+        cur.execute("SELECT contents FROM {}_zip LIMIT 1".format(post_id))
+        row = cur.fetchone()
+        # if row is None:
+        #     return 'File not found'
+        if row is not None:
+            contents = row['contents']
+
+            # Check if the contents are a ZIP archive
+            if zipfile.is_zipfile(io.BytesIO(contents)):
+                cur.execute("SELECT filename FROM {}_zip LIMIT 1".format(post_id))
+                row = cur.fetchone()
+                # print(row, "hellow ndf fdsjn\n \n \n \n ")
+                filename = row['filename']
+                # If the contents are a ZIP archive, send them as a file download
+                return filename
+            # If the contents are a regular file, display them in the browser
+            return ""
+        else:
+            return ""
+    else:
+        return ""
 
 @app.route('/js/post')
 def post_js():
-    return render_template('js/post.js.j2', comments = comment_list)
+    return render_template('js/post.js.j2', comments = comment_list, post = post_)
 
 @app.route('/profile/<string:username>')
 def profile(username):
@@ -629,7 +735,7 @@ def signup_form():
                         query = "CREATE TABLE {}_upv ( id_obj ENUM(%s) DEFAULT %s NOT NULL, id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq), count INT NOT NULL)".format(id_uniq)
                         cur.execute(query,('A','A'))
                         query = f"CREATE TABLE {id_uniq}_img ( id INT AUTO_INCREMENT PRIMARY KEY, filename VARCHAR(255) NOT NULL, contents LONGBLOB NOT NULL);" 
-                        print(query)
+                        # print(query)
                         cur.execute(query)
                         file_var = request.files['image_profile_signup']
                         filename = file_var.filename
@@ -663,7 +769,7 @@ def profile_photo():
     result = cur.fetchone()
     if result:
         # print(result)
-        print("Hello ")
+        # print("Hello ")
         contents = result['contents']
     return send_file(io.BytesIO(contents), mimetype='image/jpeg')
 
@@ -677,7 +783,7 @@ def search_results():
      id_uniq = []
      sql = "SELECT * FROM Account WHERE username LIKE %s"
      val = ('%' + query + '%',)
-    #  print(val)
+    #  # print(val)
      cursor.execute(sql, val)
      # fetch the results of the query
      results = cursor.fetchall()
@@ -686,7 +792,7 @@ def search_results():
          id_uniq.append(results[i]['id_uniq'])
      sql = "SELECT * FROM Account WHERE name LIKE %s"
      val = ('%' + query + '%',)
-     # print(val)
+     # # print(val)
      cursor.execute(sql, val)
      # fetch the results of the query
      results = cursor.fetchall()
@@ -695,14 +801,14 @@ def search_results():
          id_uniq.append(results[i]['id_uniq'])
      sql = "SELECT * FROM Institution WHERE name LIKE %s"
      val = ('%' + query + '%',)
-     # print(val)
+     # # print(val)
      cursor.execute(sql, val)
      # fetch the results of the query
      results = cursor.fetchall()
      for i in range(len(results)):
          to_show.append(results[i]['name'])
          id_uniq.append(results[i]['id_uniq'])
-     # print(results)
+     # # print(results)
 
      return jsonify({'results': to_show})
 
@@ -730,7 +836,7 @@ def home_sort(username, sort):
 #     try:
 #         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 #     except:
-#         print("Can not connect to database in follow page")
+#         # print("Can not connect to database in follow page")
 #     sender_id = session['user']['uniq_id']
 #     reciever_id = request.form['post_id']
 #     helper.follow(cur, sender_id, reciever_id)
@@ -741,7 +847,7 @@ def home_sort(username, sort):
 #     try:
 #         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 #     except:
-#         print("Can not connect to database in unfollow page")
+#         # print("Can not connect to database in unfollow page")
 #     sender_id = session['user']['uniq_id']
 #     reciever_id = request.form['post_id']
 #     helper.unfollow(cur, sender_id, reciever_id)
@@ -752,7 +858,7 @@ def home_sort(username, sort):
 #     try:
 #         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 #     except:
-#         print("Can not connect to database in unfollow page")
+#         # print("Can not connect to database in unfollow page")
 #     sender_id = session['user']['uniq_id']
 #     post_id = request.form['post_id']
 #     helper.upvote_for_post(cur, sender_id, post_id)
@@ -763,11 +869,33 @@ def home_sort(username, sort):
 #     try:
 #         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 #     except:
-#         print("Can not connect to database in unfollow page")
+#         # print("Can not connect to database in unfollow page")
 #     sender_id = session['user']['uniq_id']
 #     post_id = request.form['post_id']
 #     helper.downvote_for_post(cur, sender_id, post_id)
 #     return jsonify({})
+
+@app.route('/translate/post/<string:content>')
+def translate(content):
+    url = "https://microsoft-translator-text.p.rapidapi.com/translate"
+    querystring = {"to[0]": "hi", "api-version": "3.0", "from": "en", "profanityAction": "NoAction", "textType": "plain"}
+    print(content)
+    payload = [{"Text": content}]
+    headers = {
+        "content-type": "application/json",
+        "X-RapidAPI-Key": "1db8e49b5amsh647a1bc64905b0bp18c86ejsn40decaddaceb",
+        "X-RapidAPI-Host": "microsoft-translator-text.p.rapidapi.com"
+    }
+    response = requests.post(url, json=payload, headers=headers, params=querystring)
+    global post_
+    print(post_['content'], "To the o")
+    # print(response)
+    print(response.text[27:-15])
+    post_['content'] = response.text[27:-15]
+    print(post_['t'])
+    return render_template('html/post.html', post = post_, tag_list = post_['t'], aname = post_['n'], upv = post_['u'], follow = post_['fd'], user=session['user'], upvct = post_['uc'], comments = post_['c'])
+    # return redirect("/post/"+post_['id_uniq'])
+    # return {"translated_text": response.json()}
 
 def init_db():
     with app.app_context():
@@ -807,6 +935,6 @@ def test_db():
         sql_file.close()
 
 if __name__ == "__main__":
-    # init_db()
-    # test_db()
+    init_db()
+    test_db()
     app.run(debug=True)

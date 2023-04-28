@@ -1,4 +1,5 @@
 #body_about{
+    width: 100%;
     height: 1492px;
 }
 
@@ -7,7 +8,7 @@
     width: 204px;
     height: 76px;
     left: 35px;
-    top: 120px;
+    top: 140px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -23,7 +24,7 @@
     width: 1296px;
     height: 618px;
     left: 35px;
-    top: 222px;
+    top: 270px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -36,7 +37,7 @@
 
 #footer_about {
     position: absolute;
-    width: 1440px;
+    width: 100%;
     height: 547px;
     left: 0px;
     top: 945px;
@@ -48,9 +49,8 @@
     position: absolute;
     width: 213px;
     height: 64px;
-    left: 613px;
-    top: 954px;
-    
+    left: 540px;
+    top: 15px;
     font-family: 'Abel';
     font-style: normal;
     font-weight: 400;
@@ -68,7 +68,7 @@
     width: 0px;
     height: 378px;
     left: 427px;
-    top: 1114px;
+    top: 90px;
     
     border: 1px solid #000000;
 }
@@ -78,7 +78,7 @@
     width: 0px;
     height: 378px;
     left: 901px;
-    top: 1114px;
+    top: 90px;
     
     border: 1px solid #000000;
 }
@@ -88,7 +88,7 @@
     width: 128px;
     height: 54px;
     left: 54px;
-    top: 1053px;
+    top: 100px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -106,7 +106,7 @@
     width: 331px;
     height: 190px;
     left: 54px;
-    top: 1120px;
+    top: 230px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -122,7 +122,7 @@
     width: 220px;
     height: 54px;
     left: 502px;
-    top: 1053px;
+    top: 100px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -140,7 +140,7 @@
     width: 182px;
     height: 38px;
     left: 502px;
-    top: 1120px;
+    top: 180px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -156,7 +156,7 @@
     width: 224px;
     height: 54px;
     left: 502px;
-    top: 1225px;
+    top: 250px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -174,7 +174,7 @@
     width: 265px;
     height: 38px;
     left: 502px;
-    top: 1292px;
+    top: 320px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -190,7 +190,7 @@
     width: 201px;
     height: 54px;
     left: 958px;
-    top: 1053px;
+    top: 100px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -208,7 +208,7 @@
     width: 95px;
     height: 45px;
     left: 1033px;
-    top: 1134px;
+    top: 170px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -226,7 +226,7 @@
     width: 135px;
     height: 45px;
     left: 1033px;
-    top: 1198px;
+    top: 230px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -244,7 +244,7 @@
     width: 86px;
     height: 45px;
     left: 1033px;
-    top: 1262px;
+    top: 295px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -262,7 +262,7 @@
     width: 86px;
     height: 45px;
     left: 1033px;
-    top: 1334px;
+    top: 360px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -280,7 +280,7 @@
     width: 60px;
     height: 60px;
     left: 958px;
-    top: 1127px;    
+    top: 160px;    
 }
 
 #insta_about {
@@ -288,7 +288,7 @@
     width: 65px;
     height: 65px;
     left: 956px;
-    top: 1190px;
+    top: 220px;
 }
 
 #reddit_about {
@@ -296,13 +296,13 @@
     width: 60px;
     height: 60px;
     left: 958px;
-    top: 1258px;
+    top: 285px;
 }
 
 #git_about {
     position: absolute;
-    width: 83.79px;
-    height: 70px;
-    left: 947px;
-    top: 1323px;
+    width: 60px;
+    height: 60px;
+    left: 960px;
+    top: 350px;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
-  <title>APIs_methods</title>
-  <link rel="stylesheet" href="{{url_for('static', filename='css/apimethods.css')}}">
+  <title>APIs_objects</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/apiobj.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
@@ -10,10 +10,10 @@
   <script src="{{url_for('main_js')}}" defer></script>
 </head>
 
-<body id="body_api_meth">
+<body id="body_api_obj">
   <header-component></header-component>
-  <div id="api_meth">
-    APIs-Methods
+  <div id="api_obj">
+    APIs-Objects
   </div>
   <a href="{{url_for('apis')}}">
     <rect id="rect_intro_api"></rect>
@@ -29,112 +29,72 @@
     <rect id="rect_objects_api"></rect>
     <div id="obj">Objects</div><br>
   </a>
-  <rect id = "dabba_list">
+  <rect id = "dabba_list_obj">
     <div id = "l1">
-      1.Post-get
+      1.Post
     </div>
     <div id = "l2">
-      2.Account-get
+      2.Account
     </div>
     <div id = "l3">
-      3.Institution-get
+      3.Institution
     </div>
     <div id = "l4">
-      4.Tag-get
+      4 Comment
     </div>
     <div id = "l5">
-      5.Comment-get
-    </div>
-    <div id = "l6">
-      6.Account_Username
-    </div>
-    <div id = "l7">
-      7.Institution_Name
-    </div>
-    <div id = "l8">
-      8.Tag_Name
+      5. Tag
     </div>
   </rect>
-  <rect id="dabba">
+  <rect id="dabba_obj">
       <div id = "m1">
-        Post.get:
+        1. Post:
       </div>
       <div id = "arg1">
-        Arguments: Id.Post_id
+        Returns object of the type Post
       </div>
       <div id = "ret1">
-        Returns: Post
+        which contains all desired information regarding Post
       </div>
       <div id = "m2">
-        Account.get:
+        2. Account:
       </div>
       <div id = "arg2">
-        Arguments: Id.Post_id
+        Returns object of the type Account
       </div>
       <div id = "ret2">
-        Returns: Post
+        which contains all desired information regarding Account
       </div>
 
       <div id = "m3">
-        Institution.get:
+        3. Institution:
       </div>
       <div id = "arg3">
-        Arguments: Id.Post_id
+        Returns object of the type Institution
       </div>
       <div id = "ret3">
-        Returns: Post
+        which contains all desired information regarding Institution
       </div>
 
       <div id = "m4">
-        Tag.get:
+        4. Comment:
       </div>
       <div id = "arg4">
-        Arguments: Id.Post_id
+        Returns object of the type Comment
       </div>
       <div id = "ret4">
-        Returns: Post
+        which contains all desired information regarding Comment
       </div>
 
       <div id = "m5">
-        Comment.get:
+        5. Tag:
       </div>
       <div id = "arg5">
-        Arguments: Id.Post_id
+        Returns object of the type Tag
       </div>
       <div id = "ret5">
-        Returns: Post
+        which contains all desired information regarding Tag
       </div>
-
-      <div id = "m6">
-        Account_Username.get:
-      </div>
-      <div id = "arg6">
-        Arguments: Id.Post_id
-      </div>
-      <div id = "ret6">
-        Returns: Post
-      </div>
-
-      <div id = "m7">
-        Institution_Name.get:
-      </div>
-      <div id = "arg7">
-        Arguments: Id.Post_id
-      </div>
-      <div id = "ret7">
-        Returns: Post
-      </div>
-
-      <div id = "m8">
-        Tag_Name.get:
-      </div>
-      <div id = "arg8">
-        Arguments: Id.Post_id
-      </div>
-      <div id = "ret8">
-        Returns: Post
-      </div>
-
   </rect>
   </body>
 </html>
