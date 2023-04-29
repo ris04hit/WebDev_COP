@@ -56,18 +56,22 @@
                 Posted {{post['creation_time']}} ago
             </div>
             <rect id="rect_post1"></rect>
-            <a href="{{url_for('profile', username='')}}"> 
+            <a href="{{url_for('profile', username=aname)}}"> 
                 <div class="text4" id="text_post2">
                     {{aname}}
                 </div>
             </a>
-            <div id="text_post3">
-                {% if follow %}
-                Unfollow
-                {% else %}
-                Follow
-                {% endif %}
-            </div>
+            <form type="POST" action="{{url_for('follow_from_post_page',id = post['author_uniq'], post_id = post['id_uniq'])}}">
+                <button class="button_inv" type="submit">
+                    <div id="text_post3">
+                            {% if follow %}
+                            Unfollow
+                            {% else %}
+                            Follow
+                            {% endif %}
+                        </div>
+                    </button>
+                </form>
             <rect id="rect_profile_post"></rect>
 
             <div id="title_post" class="text1">
@@ -80,7 +84,7 @@
             <div id="text_post4" class="text4">
                 {{post['content']}}
             </div>
-            <img src="{{url_for('static',filename='data/ch.gif')}}" id="image_inside_post">
+            <img src="" id="image_inside_post">
             <!-- <div id="text_post5" class="text4">
                 There are many openings for white in chess, namely the London System, French system,
                 Sicilian Najdorf, etc. For beginners, the most popular opening is the London system
@@ -91,7 +95,9 @@
             </a>
             <div id="footer_post_div">
                 <rect id="footer_post"></rect>
-                <div class="triangle-up" id="del_post"></div>
+                <form action="{{url_for('upvote_from_post_page', post_id = post['id_uniq'])}}" type="POST">
+                    <button class="triangle-up2 button_inv" id="del_post" type="submit"></button>
+                </form>
                 <div class="text9" id="text_post6">
                     {{upvct}}
                 </div>

@@ -1,0 +1,207 @@
+function set_follow(){
+    $("#follow_profile").css('left',380 + parseInt($("#name_profile").width()))
+}
+
+// display feed
+function feed_display() {
+    var child = $("#mul_post_home1").children();
+    var top = 107;
+    var total_height = 5;
+    var index = 2;
+    //for (let index = 3; index < child.length; index++) {
+    {% for post_info in feed %}
+        {% set ct = loop.index-1 %}
+        index = index + 1;
+        var element = child[index];
+        var div = $(element).find('.text_home4')[0];
+        $(div).html(`{{feed[ct][6]}}`);
+        var div_cov = $(div).parent();
+        var div2 = $(element).find('.text_home3')[0];
+        $(div2).html('{{feed[ct][5]}}');
+        $(div_cov).css('top',"".concat(parseInt($(div2).height())+101).concat("px"));
+        height = Math.min(parseInt($(div).height()) + parseInt($(div2).height()) + 189, 800);
+        height_content = height - parseInt($(div2).height()) - 189;
+        $(element).css('height', "".concat(height).concat("px"));
+        $(element).css('top', "".concat(top).concat("px"));
+        $(div_cov).css('height', "".concat(height_content).concat("px"));
+        var inner_rect = $(element).find('.inner_post_home')[0];
+        $(inner_rect).css('height',"".concat(height-28).concat("px"));
+        var follow_div = $(element).find('.follow')[0];
+        if ({{feed[ct][8]}}){
+            $(follow_div).html("Unfollow");
+        }
+        else{
+            $(follow_div).html("Follow");
+        }
+        top += height;        
+    {% endfor %}
+    //}
+    total_height = Math.min(1800, total_height + top + 14);
+    $("#mul_post_home1").css('height',"".concat(total_height).concat("px"));
+
+}
+
+$(document).ready(function(){
+
+    set_follow()
+    feed_display()
+
+    $(".rect_option_profile").hover(function(){
+        $(this).css("background","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $(this).css("background","#03001C");
+    })
+    
+    $("#history_profile").hover(function(){
+        $("#rect_option_profile1").css("background","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#rect_option_profile1").css("background","#03001C");
+    })  
+    
+    $("#setting_profile").hover(function(){
+        $("#rect_option_profile2").css("background","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#rect_option_profile2").css("background","#03001C");
+    })  
+    
+    $("#bookmark_profile").hover(function(){
+        $("#rect_option_profile3").css("background","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#rect_option_profile3").css("background","#03001C");
+    })  
+    
+    $("#insti_profile").hover(function(){
+        $("#rect_option_profile4").css("background","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#rect_option_profile4").css("background","#03001C");
+    })  
+    
+    $("#following_profile").hover(function(){
+        $("#rect_option_profile5").css("background","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#rect_option_profile5").css("background","#03001C");
+    })  
+    
+    $("#follower_profile").hover(function(){
+        $("#rect_option_profile6").css("background","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#rect_option_profile6").css("background","#03001C");
+    })  
+
+    $("#rect_option_profile5").click(function(){
+        $("#following_pop").show(300);
+    })
+    $("#close_following").click(function(){
+        $("#following_pop").hide(200);
+    })
+
+    $("#rect_option_profile6").click(function(){
+        $("#followers_pop").show(300);
+    })
+    $("#close_followers").click(function(){
+        $("#followers_pop").hide(200);
+    })
+
+    $("#rect_option_profile4").click(function(){
+        $("#Insti_popup").show(300);
+    })
+    $("#close_ins").click(function(){
+        $("#Insti_popup").hide(200);
+    })
+
+    $("#rect_option_profile2").click(function(){
+        $("#div_main_set").show(300);
+    })
+    $("#close_setting").click(function(){
+        $("#div_main_set").hide(200);
+    })
+
+   // hover sort
+    $("#button_home3").hover(function(){
+        $("#text_home6").css("color","rgba(250, 0, 255, 0.809443)");
+    }, function(){
+        $("#text_home6").css("color","#FFFFFF");
+    })
+
+    // sort click
+    $("#button_home3").click(function(){
+        $("#sort_pop_home").toggle();
+    })
+    
+    // hover by time
+    $("#button_sort_home1").hover(function(){
+        $("#text_sort_home1").css("color","#6DD6CF");
+    }, function(){
+        $("#text_sort_home1").css("color","#FFFFFF");
+    })
+
+    //hover by upvote
+    $("#button_sort_home2").hover(function(){
+        $("#text_sort_home2").css("color","#6DD6CF");
+    }, function(){
+        $("#text_sort_home2").css("color","#FFFFFF");
+    })
+
+    //click by time
+    $("#button_sort_home1").click(function(){
+        $("#rect_time_home").show();
+        $("#rect_up_home").hide();
+        $("#sort_pop_home").hide();
+        window.location.href = "{{url_for('profile_sort',username=session['user']['username'],sort='time')}}"
+    })
+
+    //click by upvote
+    $("#button_sort_home2").click(function(){
+        $("#rect_up_home").show();
+        $("#rect_time_home").hide();
+        $("#sort_pop_home").hide();
+        window.location.href = "{{url_for('profile_sort',username=session['user']['username'],sort='upvotes')}}"
+    })
+
+    //hover profile
+    $(".post_author").hover(function(){
+        $(".post_author .text1").css("color","#03001C");
+    }, function(){
+        $(".post_author .text1").css("color","#FFFFFF");
+    })
+    
+    //hover follow
+    $(".follow").hover(function(){
+        $(".follow").css("color","#00FFFF");
+    }, function(){
+        $(".follow").css("color","#008DFF");
+    })
+    
+    //click upvote triangle
+    $(".triangle-up").click(function(){
+        var par = $(this).parent().attr('id');
+        upvote(par);
+    })
+    
+    // remove tag on clicking cross
+    $("#button_tag_home-0").click(function(){
+        $("#button_tag_home-0").hide();
+        // console.log("A");
+        // var par = $(this).parent().attr('id');
+        // var index = Number(par.slice(par.indexOf('-') + 1));
+        // var spliced = tag_list.splice(index,1);
+        // tag_click();
+    })
+
+    $(".follow").click(function(){
+        var cont = $(this).text();
+        if (cont == "Follow"){
+            $(this).html("Unfollow");
+        }    
+        else{
+            $(this).html("Follow");
+        }
+    })
+
+    $("#button_home1").click(function(){
+        $("#post_own_home").show(300);
+    })
+    $("#close_post_home").click(function(){
+        $("#post_own_home").hide(200);
+    })
+})

@@ -9,10 +9,21 @@ import io
 from io import BytesIO
 import zipfile
 import requests
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user, login_manager
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
 
 
 app = Flask(__name__)
 app.secret_key = "devang"
+
+# lm = LoginManager()
+# lm.init_app(app)
+# lm.login_view = 'login'
+
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.get(user_id)
 
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
@@ -25,6 +36,9 @@ otp_signup = {}
 feed = []
 comment_list = []
 post_ = []
+profile_data = []
+stats = []
+my_post = []
 
 db = MySQLdb.connect(host=app.config['MYSQL_HOST'], user=app.config['MYSQL_USER'], password=app.config['MYSQL_PASSWORD'], db=app.config['MYSQL_DB'])
 
@@ -91,91 +105,6 @@ def follow_account():
         return redirect("/home/"+session['user']['username'])
 
 
-# @app.route('/home/post', methods = ['POST'])
-# def post_input():
-#     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#     if request.method == "POST":
-#         postTitle = request.form['posttit']
-#         postTags = request.form['posttags']
-#         postTags = postTags.split(";")
-#         postTags = [x.strip() for x in postTags]
-#         postDescription = request.form['post_description']
-
-
-#         Tags = []
-#         for x in postTags:
-#             if x != "":
-#                 Tags.append(x)
-#         postTags = Tags
-#         postInst = request.form['postinst']
-#         postInst = postInst.split(";")
-#         postInst = [x.strip() for x in postInst]
-#         institute = []
-#         for x in postInst:
-#             if x != "":
-#                 institute.append(x)
-#         postInst = institute
-#         author_id = session['user']['id_uniq']
-#         post_id = helper.id_gen(cur, 'P', session['user']['username'], 'Post')
-#         print('data fetched !')
-#         print(postTitle, postTags, postDescription, postInst, author_id, post_id)
-#         query = "INSERT INTO Post (id_obj, id_uniq, author_obj, author_uniq, title, content, upvotes, comments, report_list, public_post, visibility,  institutes, tag_list, api_visibility) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, {}, '{}', '{}', {});".format('P', post_id[1:], 'A', author_id, postTitle, postDescription, post_id[1:]+'_upv', post_id[1:]+'_com', post_id[1:]+'_rep', True, True, post_id[1:]+'_ins', post_id[1:]+'_tag', True)
-#         print(query)
-#         cur.execute(query)
-#         helper.create_linked_table(cur, post_id[1:], '_upv', 'A') # upvote list
-#         helper.create_linked_table(cur, post_id[1:], '_com', 'C') # comment list
-#         helper.create_linked_table(cur, post_id[1:], '_rep', 'A') # report list
-#         helper.create_linked_table(cur, post_id[1:], '_ins', 'I') # institute list
-#         helper.create_linked_table(cur, post_id[1:], '_tag', 'T') # tag list
-
-
-#         for x in postTags:
-#             query = "SELECT * FROM Tag WHERE name = '{}';".format(x)
-#             cur.execute(query)
-#             existing = cur.fetchall()
-#             print('-'*100)
-#             print(existing)
-
-#             if len(existing) == 0:
-#                 # tag does not exist
-#                 tag_id = helper.id_gen(cur, 'T', session['user']['username'], 'Tag')
-#                 query = "INSERT INTO Tag (id_obj, id_uniq, name, posts, members, api_visibility) VALUES ('{}', '{}', '{}', '{}', '{}', {});".format('T', tag_id[1:], x, tag_id[1:]+'_pos', tag_id[1:]+'_mem', True)
-#                 print(query, '\n\n\n\n tag does not exist')
-#                 cur.execute(query)
-#                 helper.create_linked_table(cur, tag_id[1:], '_pos', 'P')
-#                 helper.create_linked_table(cur, tag_id[1:], '_mem', 'A')
-#             else:
-#                 # tag exists
-#                 tag_obj = 'T'
-#                 tag_uniq = existing[0]['id_uniq']
-#                 tag_id = tag_obj + tag_uniq
-#             query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(post_id[1:]+'_tag', 'T', tag_id[1:])
-#             cur.execute(query)
-#             query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(tag_id[1:]+'_pos', 'P', post_id[1:])
-#             cur.execute(query)
-        
-#         for x in postInst:
-#             query = "SELECT * FROM Institution WHERE name = '{}';".format(x)
-#             cur.execute(query)
-#             existing = cur.fetchall()
-#             print('-'*100)
-#             print(existing)
-
-#             if len(existing) == 0:
-#                 # institute does not exist
-#                 print('\n\n\n\n\n\n\n\n institute does not exist \n\n\n\n\n\n\n\n\n\n\n\n\n')
-#             else:
-#                 # institute exists
-#                 inst_obj = 'I'
-#                 inst_uniq = existing[0]['id_uniq']
-#                 inst_id = inst_obj + inst_uniq
-#             query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(post_id[1:]+'_ins', 'I', inst_id[1:])
-#             cur.execute(query)
-
-#     mysql.connection.commit()
-#     cur.close()
-#     return redirect("/home/"+session['user']['username'])
-
 @app.route('/home/post', methods = ['POST'])
 def post_input():
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -232,6 +161,9 @@ def post_input():
         helper.create_linked_table(cur, post_id[1:], '_tag', 'T') # tag list
 
 
+        query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(session['user']['id_uniq']+"_pos", 'P', post_id[1:])
+        print(query)
+        cur.execute(query)
         for x in postTags:
             query = "SELECT * FROM Tag WHERE name = '{}';".format(x)
             cur.execute(query)
@@ -337,14 +269,23 @@ def home(username):
     session['user'] = user
     global feed
     feed = helper.feed(cur, user)
-    return render_template('html/home.html', feed = feed, follow = helper.follow_help)
+    global stats
+    stats = []
+    stats.append(helper.contribution_inst(cur))
+    stats.append(helper.contribution_user(cur))
+    stats.append(helper.likes_inst(cur))
+    stats.append(helper.likes_user(cur))
+    print(stats)
+    cur.close()
+    mysql.connection.commit()
+    return render_template('html/home.html', feed = feed, follow = helper.follow_help, stats = stats)
 
 @app.route('/js/home')
 def home_js():
     return render_template('js/home.js.j2', feed = feed)
 
-@app.route('/institute')
-def institute():
+@app.route('/institute/<string:insti_id>')
+def institute(insti_id):
     return render_template('html/institute.html')
 
 @app.route('/js/institute')
@@ -571,11 +512,21 @@ def post_js():
 
 @app.route('/profile/<string:username>')
 def profile(username):
-    return render_template('html/profile.html')
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in profile page")
+    global profile_data
+    global my_post
+    profile_data, my_post = helper.profile_data(cur, username, session['user'])
+    print(profile_data)
+    print(my_post)
+    cur.close()
+    return render_template('html/profile.html', profile = profile_data, user = session['user'], feed = my_post)
 
 @app.route('/js/profile')
 def profile_js():
-    return render_template('js/profile.js')
+    return render_template('js/profile.js.j2', feed = my_post)
 
 @app.route('/signup')
 def signup():
@@ -614,6 +565,7 @@ def login_form():
             ids = cur.fetchall()
             cur.close()
             if helper.hash_pwd(password)==ids[0]['pass']:
+                # login_user(user[0]['username'])
                 return redirect("/home/"+user[0]['username'])
             msg = "Invalid Password"
             return render_template('html/start.html', message1=msg, message2 = "", show_forget=False)
@@ -829,51 +781,25 @@ def home_sort(username, sort):
         feed = sorted(feed, key = lambda x : x[1], reverse=True)
     for i in feed:
         print(i[0], i[5])
-    return render_template('html/home.html', feed = feed, follow = helper.follow_help)    
+    return render_template('html/home.html', feed = feed, follow = helper.follow_help, stats = stats)    
 
-# @app.route('/follow', methods = ['POST'])
-# def follow():
-#     try:
-#         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#     except:
-#         # print("Can not connect to database in follow page")
-#     sender_id = session['user']['uniq_id']
-#     reciever_id = request.form['post_id']
-#     helper.follow(cur, sender_id, reciever_id)
-#     return jsonify({})
-
-# @app.route('/unfollow', methods = ['POST'])
-# def unfollow():
-#     try:
-#         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#     except:
-#         # print("Can not connect to database in unfollow page")
-#     sender_id = session['user']['uniq_id']
-#     reciever_id = request.form['post_id']
-#     helper.unfollow(cur, sender_id, reciever_id)
-#     return jsonify({})
-
-# @app.route('/upvote/post', methods = ['POST'])
-# def upvote_for_post():
-#     try:
-#         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#     except:
-#         # print("Can not connect to database in unfollow page")
-#     sender_id = session['user']['uniq_id']
-#     post_id = request.form['post_id']
-#     helper.upvote_for_post(cur, sender_id, post_id)
-#     return jsonify({})
-
-# @app.route('/downvote/post', methods = ['POST'])
-# def downvote_for_post():
-#     try:
-#         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#     except:
-#         # print("Can not connect to database in unfollow page")
-#     sender_id = session['user']['uniq_id']
-#     post_id = request.form['post_id']
-#     helper.downvote_for_post(cur, sender_id, post_id)
-#     return jsonify({})
+@app.route('/profile/<string:username>/SORT=<string:sort>')
+def profile_sort(username, sort):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    query = "SELECT * from Account WHERE BINARY username = %s"
+    cur.execute(query,(username,))
+    user = cur.fetchall()[0]
+    global my_post
+    if sort=="time":
+        my_post = sorted(my_post, key = lambda x : x[7])
+    elif sort=="upvotes":
+        my_post = sorted(my_post, key = lambda x : x[1], reverse=True)
+    for i in my_post:
+        print(i[0], i[5])
+    return render_template('html/profile.html', feed = my_post, user = session['user'], profile = profile_data)   
 
 @app.route('/translate/post/<string:content>')
 def translate(content):
@@ -896,6 +822,106 @@ def translate(content):
     return render_template('html/post.html', post = post_, tag_list = post_['t'], aname = post_['n'], upv = post_['u'], follow = post_['fd'], user=session['user'], upvct = post_['uc'], comments = post_['c'])
     # return redirect("/post/"+post_['id_uniq'])
     # return {"translated_text": response.json()}
+
+@app.route('/profile/delete_insti/<string:insti_id>')
+def remove_insti(insti_id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in remove_insti page")
+    query = "DELETE FROM {} WHERE id_uniq = %s".format(session['user']['institutes'])
+    cur.execute(query, (insti_id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/profile/'+session['user']['username'])
+
+@app.route('/profile/delete_follower/<string:id>')
+def remove_follower(id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in remove_follower page")
+    query = "DELETE FROM {} WHERE id_uniq = %s".format(session['user']['followers'])
+    print("\n\n",query,"\n\n")
+    cur.execute(query, (id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/profile/'+session['user']['username'])
+
+@app.route('/profile/delete_following/<string:id>')
+def remove_following(id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in remove_follower page")
+    query = "DELETE FROM {} WHERE id_uniq = %s".format(session['user']['following'])
+    print("\n\n",query,"\n\n")
+    cur.execute(query, (id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/profile/'+session['user']['username'])
+
+@app.route('/post/upvote_post/<string:post_id>')
+def upvote_from_post_page(post_id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in upvote_post page")
+    if post_['u']:
+        helper.downvote_for_post_help(cur, session['user']['id_uniq'], post_id)
+    else:
+        helper.upvote_for_post_help(cur, session['user']['id_uniq'], post_id)
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/post/'+post_id)
+
+@app.route('/post/follow_user/<string:id>/<string:post_id>')
+def follow_from_post_page(id, post_id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in follow_post page")
+    print(post_)
+    if post_['fd']:
+        helper.unfollow_help(cur, session['user']['id_uniq'], id)
+    else:
+        helper.follow_help(cur, session['user']['id_uniq'], id)
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/post/'+post_id)
+
+@app.route('/profile/follow/<string:id>')
+def follow_from_profile(id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in follow_profile page")
+    if profile_data['isfollow']:
+        helper.unfollow_help(cur, session['user']['id_uniq'], id)
+    else:
+        helper.follow_help(cur, session['user']['id_uniq'], id)
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/profile/'+profile_data['username'])
+
+@app.route('/profile/upvote_post2/<int:count>')
+def upvote_for_post_from_profile(count):
+    print("\n\n0\n\n")
+    cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    post_num = count
+    if my_post[post_num][2]:
+        # print("Now downvoting !")
+        helper.downvote_for_post_help(cur, session['user']['id_uniq'], my_post[post_num][0])
+        # print('downvoted to post !')
+    else:
+        # print("Not upvoted till now !")
+        # print(my_post[post_num][0])
+        helper.upvote_for_post_help(cur, session['user']['id_uniq'], my_post[post_num][0])
+        # print('done')
+    mysql.connection.commit()
+    cur.close()
+    
+    return redirect("/profile/"+profile_data['username'])
 
 def init_db():
     with app.app_context():
@@ -935,6 +961,6 @@ def test_db():
         sql_file.close()
 
 if __name__ == "__main__":
-    init_db()
-    test_db()
+    # init_db()
+    # test_db()
     app.run(debug=True)

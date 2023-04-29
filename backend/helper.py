@@ -631,3 +631,224 @@ def unfollow_help(cur, sender_id, profile_id):
         cur.execute(query)
         account_name = cur.fetchall()
         print("Already unfollowed {}".format(account_name[0]['name']))
+
+def profile_data(cur, username, curr_user):
+    query = "SELECT * from Account WHERE username = %s"
+    cur.execute(query, (username,))
+    profile = cur.fetchall()[0]
+    query = "SELECT * from {} WHERE id_uniq = %s".format(profile['followers'])
+    cur.execute(query, (curr_user['id_uniq'],))
+    profile['isfollow'] = bool(cur.fetchall())
+    profile['membersince'] = str(profile['last_visit'].month)+"/"+str(profile['last_visit'].year)[2:]
+    query = "SELECT * from {}".format(profile['upvotes'])
+    cur.execute(query)
+    profile['count'] = len(cur.fetchall())
+    query = "SELECT * from {}".format(profile['institutes'])
+    cur.execute(query)
+    insti = cur.fetchall()
+    insti_list = []
+    for institution in insti:
+        query = "SELECT name, id_uniq from Institution WHERE id_uniq = %s"
+        cur.execute(query, (institution['id_uniq'],))
+        insti_list.append(cur.fetchall()[0])
+    profile['insti_list'] = insti_list
+    query = "SELECT * from {}".format(profile['followers'])
+    cur.execute(query)
+    followers = cur.fetchall()
+    follower_list = []
+    for follower in followers:
+        query = "SELECT username, id_uniq from Account WHERE id_uniq = %s"
+        cur.execute(query, (follower['id_uniq'],))
+        follower_list.append(cur.fetchall()[0])
+    profile['follower_list'] = follower_list
+    query = "SELECT * from {}".format(profile['following'])
+    cur.execute(query)
+    following_all = cur.fetchall()
+    following_list = []
+    for following in following_all:
+        query = "SELECT username, id_uniq from Account WHERE id_uniq = %s"
+        cur.execute(query, (following['id_uniq'],))
+        following_list.append(cur.fetchall()[0])
+    profile['following_list'] = following_list
+    query = "SELECT * from {}".format(profile['tag_list'])
+    cur.execute(query)
+    tags = cur.fetchall()
+    tag_list = []
+    for tag in tags:
+        query = "SELECT name, id_uniq from Tag WHERE id_uniq = %s"
+        cur.execute(query, (tag['id_uniq'],))
+        tag_list.append(cur.fetchall()[0])
+    profile['tag_list'] = tag_list
+    query = "SELECT * from {}".format(profile['posts'])
+    cur.execute(query)
+    post_list_specific = cur.fetchall()
+    print("yolisst",post_list_specific)
+    feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow)
+    num = 50
+    count = 0
+    for post_id in post_list_specific:
+        if count == num:
+            break
+        post_id = post_id['id_uniq']
+        query = "SELECT * from Post WHERE BINARY id_uniq = %s"
+        cur.execute(query, (post_id,))
+        post_data = cur.fetchall()[0]
+        if post_data['public_post'] and post_data['visibility']:
+            print(0)
+            count += 1
+            upvote_table = post_data['upvotes']
+            query = "SELECT count(id_uniq) from {}".format(upvote_table)
+            cur.execute(query)
+            upvotes_count = cur.fetchall()[0]['count(id_uniq)']
+            query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(upvote_table)
+            cur.execute(query, (curr_user['id_uniq'],))
+            already_upvoted = bool(cur.fetchall())
+            time = relativedelta(datetime.now(),post_data['creation_time'])
+            if time.years:
+                time_str = "{} year{}".format(time.years, "" if time.years==1 else "s")
+            elif time.months:
+                time_str = "{} month{}".format(time.months,  "" if time.months==1 else "s")
+            elif time.days:
+                time_str = "{} day{}".format(time.days,  "" if time.days==1 else "s")
+            elif time.hours:
+                time_str = "{} hour{}".format(time.hours,  "" if time.hours==1 else "s")
+            elif time.minutes:
+                time_str = "{} minute{}".format(time.minutes,  "" if time.minutes==1 else "s")
+            else:
+                time_str = "{} second{}".format(time.seconds,  "" if time.seconds==1 else "s")
+            time = datetime.now() - post_data['creation_time']
+            author_id = post_data['author_uniq']
+            query = "SELECT username from Account WHERE BINARY id_uniq = %s"
+            cur.execute(query, (author_id,))
+            author_username = cur.fetchall()[0]['username']
+            title = post_data['title']
+            content = post_data['content']
+            query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(post_data['author_uniq']+"_ers")
+            cur.execute(query, (curr_user["id_uniq"],))
+            already_follow = bool(cur.fetchall())
+            feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow)))
+    return profile, feed
+
+def find_contribution_individual(cur, user_id):
+    '''Returns the number of posts posted by a user'''
+    query = "SELECT * from Account WHERE BINARY id_uniq = '{}';".format(user_id)
+    # print(query)
+    cur.execute(query)
+    value = cur.fetchall()
+    # print(value)
+    if value:
+        value = value[0]
+        contribution = value['posts']
+        query = "select * from {} ;".format(contribution)
+        cur.execute(query)
+        ans = cur.fetchall()
+        # print(ans)
+        return len(ans)
+    return 0
+
+def contribution_user(cur):
+    '''Returns the number of posts posted by all users'''
+    data = []
+    query = "SELECT * from Account ;"
+    cur.execute(query)
+    value = cur.fetchall()
+    # print('value\n'*20 ,value)
+
+    for sets in value:
+        data.append((find_contribution_individual(cur, sets['id_uniq']), sets['username'], sets['id_uniq']))
+    
+    data.sort(reverse=True)
+    # print(data )
+    return data[:5]
+
+def contribution_inst(cur):
+    '''Returns the number of posts posted by all institutions'''
+    data = []
+    query = "SELECT * from Institution ;"
+    cur.execute(query)
+    Institutions = cur.fetchall()
+
+    for sets in Institutions:
+        member_list = sets['members']
+        query = "SELECT * from {} ;".format(member_list)
+        cur.execute(query)
+        members = cur.fetchall()
+        ans1 = 0
+        for member in members:
+            ans1 += find_contribution_individual(cur, member['id_uniq'])
+
+        query = "SELECT * from {};".format(sets['posts'])
+        cur.execute(query)
+        ans2 = len(cur.fetchall())
+        data.append((ans1 + ans2, sets['name'], sets['id_uniq']))
+
+        # ans1 = sum of posts from members in that institution
+        # ans2 = total post posted in that institution
+    
+    data.sort(reverse=True)
+    # print(data)
+    return data[:5]
+    
+
+def find_likes_post(cur, post_id):
+    '''Returns the number of likes on a post'''
+    query = "SELECT * FROM {}_upv;".format(post_id)
+    cur.execute(query)
+    upvotes = cur.fetchall()
+    return len(upvotes)
+
+def find_likes_user(cur, user_id):
+    '''Returns the number of likes on all posts of a user'''
+    query = "SELECT * from Account WHERE BINARY id_uniq = '{}';".format(user_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    if value:
+        value = value[0]
+        posts = value['posts']
+        query = "select * from {} ;".format(posts)
+        cur.execute(query)
+        ans = cur.fetchall()
+        likes = 0
+        for post in ans:
+            likes += find_likes_post(cur, post['id_uniq'])
+        return likes
+    return 0
+
+def likes_user(cur):
+    '''Returns the number of likes on all posts of all users'''
+    data = []
+    query = "SELECT * from Account ;"
+    cur.execute(query)
+    users = cur.fetchall()
+    for acc in users:
+        data.append((find_likes_user(cur, acc['id_uniq']), acc['username'], acc['id_uniq'])) 
+    data.sort(reverse=True)
+    # print(data)
+    return data[:5]       
+    
+
+def likes_inst(cur):
+    '''Returns the number of likes on all posts of all institutions : ans2'''
+    data = []
+    query = "SELECT * from Institution ;"
+    cur.execute(query)
+    Institutions = cur.fetchall()
+    for insti in Institutions:
+        members = insti['members']
+        query = "SELECT * from {} ;".format(members)
+        cur.execute(query)
+        members = cur.fetchall()
+        ans1 = 0
+        for member in members:
+            ans1 += find_likes_user(cur, member['id_uniq'])
+        
+        query = "SELECT * from {};".format(insti['posts'])
+        cur.execute(query)
+        posts = cur.fetchall()
+        ans2 = 0
+        for post in posts:
+            ans2 += find_likes_post(cur, post['id_uniq'])
+        data.append((ans2, insti['name'], insti['id_uniq']))
+    data.sort(reverse=True)
+    print(data)
+    return data[:5]

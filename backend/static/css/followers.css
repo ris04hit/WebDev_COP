@@ -11,6 +11,16 @@ border: 8px solid;
 
 border-image-source: linear-gradient(219.1deg, rgba(143, 0, 255, 0.75) 0%, rgba(250, 0, 255, 0.809443) 31.71%, rgba(130, 0, 255, 0.869973) 64%, #4C11FF 92.13%);
 border-image-slice: 1;
+overflow-y: scroll;
+overflow-x: hidden;
+}
+
+#rect_main_followers {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#rect_main_followers::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 .line_ers{
@@ -38,9 +48,9 @@ line-height: 32px;
 color: #FFFFFF;
 }
 
-#profile_name_ers{
-    position: absolute;
-width: 59px;
+.profile_name_ers{
+position: absolute;
+width: 250px;
 height: 25px;
 left: 80px;
 top: 77px;
@@ -55,7 +65,11 @@ color: #B6EADA;
 
 }
 
-#profile_photo_ers{
+.profile_rect_ers{
+    position: absolute;
+}
+
+.profile_photo_ers{
     position: absolute;
     width: 40px;
     height: 40px;
@@ -66,7 +80,7 @@ color: #B6EADA;
     background: #FFFFFF;
 }
 
-#remove_follower{
+.remove_follower{
     position: absolute;
 width: 60px;
 height: 25px;

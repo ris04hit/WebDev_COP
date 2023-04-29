@@ -19,44 +19,54 @@
         <div id="profile">
             <rect id="pfp_profile"></rect>
             <div id="name_profile">
-                Mechan
+                {{profile['name']}}
             </div>
-            <div id="follow_profile">
-                Follow
-            </div>
+            {% if user['username']!=profile['username'] %}
+                <form type="POST" action="{{url_for('follow_from_profile', id = profile['id_uniq'])}}">
+                    <button class="button_inv" id="follow_profile" type="submit">
+                        {% if profile['isfollow'] %}
+                            <div id="unfollow_profile_js">
+                                Unfollow
+                            </div>
+                        {% else %}
+                            <div id="follow_profile_js">
+                                Follow
+                            </div>
+                        {% endif %}
+                    </button>
+                </form>
+            {% endif %}
         </div>
 
         <div id="info_profile">
             <div class="text7" id="member_profile">
-                members since - <div class="text_profile">2/23</div>
+                members since - <div class="text_profile">{{profile['membersince']}}</div>
             </div>
-            <div class="text7" id="last_profile">
+            <!-- <div class="text7" id="last_profile">
                 Last visited - <div class="text_profile">2 hr ago</div>
-            </div>
-            <div class="text7" id="upvote_profile">
-                Upvotes - <div class="text_profile">2k+</div>
+            </div> -->
+            <div class="text7" id="last_profile">
+                Upvotes - <div class="text_profile">{{profile['count']}}</div>
             </div>
             <div class="text7" id="email_profile">
                 email address - 
-                <a href="mailt:xyz@gmail.com">
+                <a href="mailt:{{profile['email_id']}}">
                     <div class="text_profile">
-                        xyz@gmail.com
+                        {{profile['email_id']}}
                     </div>
                 </a>
             </div>
             <div class="text7" id="org_profile">
                 Organisation - 
-                <a href="{{url_for('institute')}}">
                     <div class="text_profile">
-                        IIT-Delhi
+                        {{profile['organisation']}}
                     </div>
-                </a>
             </div>
             <div class="text7" id="web_profile">
                 website - 
-                <a href="https://www.meechan.com">
+                <a href="{{profile['website_address']}}">
                     <div class="text_profile">
-                        www.meechan.com
+                        {{profile['website_address']}}
                     </div>
                 </a>
             </div>
@@ -64,21 +74,21 @@
 
         <div id="option_profile">
             <rect id="rect_profile1"></rect>
-            <button class="rect_option_profile" id="rect_option_profile1">
+            <!-- <button class="rect_option_profile" id="rect_option_profile1">
             <div class="text8" id="history_profile">
                 History
             </div>
-            </button>
-            <button class="rect_option_profile" id="rect_option_profile2">
+            </button> -->
+            <!-- <button class="rect_option_profile" id="rect_option_profile2">
             <div class="text8" id="setting_profile">
                 Settings
             </div>
-            </button>
-            <button class="rect_option_profile" id="rect_option_profile3">
+            </button> -->
+            <!-- <button class="rect_option_profile" id="rect_option_profile3">
             <div class="text8" id="bookmark_profile">
                 Bookmarks
             </div>
-            </button>
+            </button> -->
             <button class="rect_option_profile" id="rect_option_profile4">
             <div class="text8" id="insti_profile">
                 Institutions
@@ -105,15 +115,22 @@
                     <button type="button", id = "create_ins">Create Institution</button>
                 </a>
                 <hr class = "line_ins">
-                <a href="profile.html">
-                    <rect id = "profile_rect_ins">
-                        <rect id = "profile_photo_ins"></rect>
-                        <rect id = "profile_name_ins">
-                            IIT Delhi
-                        </rect>
-                    </rect>
-                </a>
-                <rect type = "button" id = "remove_ins"> Remove </rect>
+                {% for institute in profile['insti_list'] %}
+                    {% set ct = loop.index %}
+                    <div id = "profile_rect_ins{{ct}}" style="top: {{70*(ct-1)}}px;" class="profile_rect_ins">
+                        <a href="{{url_for('institute', insti_id = institute['id_uniq'])}}">
+                            <rect class = "profile_photo_ins"></rect>
+                            <rect class = "profile_name_ins">
+                                {{institute['name']}}
+                            </rect>
+                        </a>
+                        {% if (user['username']==profile['username']) %}
+                            <form action = "{{url_for('remove_insti', insti_id = institute['id_uniq'])}}" type="POST">
+                                <button type = "submit" class="button_inv remove_ins"> Remove </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </rect>
             <button type="button", id = "close_ins">Close</button>
         </body>
@@ -125,15 +142,22 @@
                 Followers
             </div>
             <hr class = "line_ers">
-            <a href="profile.html">
-                <rect id = "profile_rect_ers">
-                    <rect id = "profile_photo_ers"></rect>
-                    <rect id = "profile_name_ers">
-                        Excitedleopard
-                    </rect>
-                </rect>
-            </a>
-            <rect type = "button" id = "remove_follower"> Remove </rect>
+            {% for follower in profile['follower_list'] %}
+                {% set ct = loop.index %}
+                <div id="profile_rect_ers{{ct}}" style="top: {{70*(ct-1)}}px;" class="profile_rect_ers">
+                    <a href="{{url_for('profile',username = follower['username'])}}">
+                        <rect class = "profile_photo_ers"></rect>
+                        <rect class = "profile_name_ers">
+                            {{follower['username']}}
+                        </rect>
+                    </a>
+                    {% if (user['username']==profile['username']) %}
+                        <form action = "{{url_for('remove_follower', id = follower['id_uniq'])}}" type="POST">
+                            <button type = "submit" class="button_inv remove_follower"> Remove </button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </rect>
         <button type="button", id = "close_followers">Close</button>
         </div>
@@ -144,45 +168,35 @@
                 Following
             </div>
             <hr class = "line_ing">
-            <a href="profile.html">
-                <rect id = "profile_rect_ing">
-                    <rect id = "profile_photo_ing"></rect>
-                    <rect id = "profile_name_ing">
-                        Excitedleopard
-                    </rect>
-                </rect>
-            </a>
-            <rect type = "button" id = "remove_following"> Remove </rect>
+            {% for following in profile['following_list'] %}
+                {% set ct = loop.index %}
+                <div id = "profile_rect_ing{{ct}}" style="top: {{70*(ct-1)}}px;" class="profile_rect_ing">
+                    <a href="{{url_for('profile', username=following['username'])}}">
+                        <rect class = "profile_photo_ing"></rect>
+                        <rect class = "profile_name_ing">
+                            {{following['username']}}
+                        </rect>
+                    </a>
+                    {% if user['username']==profile['username'] %}
+                    <form action = "{{url_for('remove_following', id = following['id_uniq'])}}" type = "POST">
+                        <button type = "submit" class="button_inv remove_following"> Remove </button>
+                    </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </rect>
         <button type="button", id = "close_following">Close</button>
         </div>
 
         <div id="interests">
-            <div class="multiple_post" id="interest_rect_profile">
+            <div class="multiple_post" id="interest_rect_profile" style="height: {{58*(profile['tag_list']|length)+116}}px">
                 <div class="text4" id="interest_text_profile">
                     Interests
                 </div>
-                <a href="{{url_for('tag')}}">
-                    <button class="button4" id="button_profile1">Chemistry</button>
-                </a>
-                <a href="{{url_for('tag')}}">
-                    <button class="button4" id="button_profile2">Physics</button>
-                </a>
-                <a href="{{url_for('tag')}}">
-                    <button class="button4" id="button_profile3">Linux</button>
-                </a>
-                <a href="{{url_for('tag')}}">
-                    <button class="button4" id="button_profile4">Chess</button>
-                </a>
-                <a href="{{url_for('tag')}}">
-                    <button class="button4" id="button_profile5">Stock Market</button>
-                </a>
-                <a href="{{url_for('tag')}}">
-                    <button class="button4" id="button_profile6">Computer Science</button>
-                </a>
-                <a href="{{url_for('tag')}}">
-                    <button class="button4" id="button_profile7">Cosmology</button>
-                </a>
+                {% for tag in profile['tag_list'] %}
+                    {% set ct = loop.index %}
+                    <button class="button4 button_profile1" style="top: {{58*ct}}px">{{tag['name']}}</button>
+                {% endfor %}
             </div>
         </div>
         <div id="div_main_set" class="pop_up">
@@ -239,5 +253,103 @@
             </rect>
             <button type="button", id = "close_setting">Close</button>
         </div>
+
+        <div class="multiple_post" id="mul_post_home1">
+
+            <div id="tag_pop_home" class="pop_up">
+                <div class="close_pop">
+                    Close
+                </div>
+                <rect id="rect_tag_home">
+                    <form>
+                        <input type="text" id="search_tag_home" class="form1" placeholder="Search tag">
+                    </form>
+                    <rect id="hr_tag_home"></rect>
+                    <div id="button_tag_home"></div>
+                </rect>
+            </div>
+    
+            <div id="sort_pop_home" class="pop_up">
+                <rect id="rect_sort_home">
+                    <button id="button_sort_home1" class="button_inv" name="button_sort_home1" type="submit">
+                        <rect id="rect_time_home"></rect>
+                        <div id="text_sort_home1" class="text7">
+                            By Time
+                        </div>
+                    </button>
+                    <button id="button_sort_home2" class="button_inv" name="button_sort_home1" type="submit">
+                        <rect id="rect_up_home"></rect>
+                        <div id="text_sort_home2" class="text7">
+                            By upvotes
+                        </div>
+                    </button>
+                </rect>
+            </div>
+    
+            <div class="outer_post" id="out_post_home1">
+                <form>
+                    <input class="form3" id="inp_home1" placeholder="Search">
+                </form>
+                <!-- <button class="form3" id="button_home2">
+                    <div class="text1" id="text_home5">
+                        Add Tag
+                    </div>
+                </button> -->
+                <button class="form3" id="button_home3">
+                    <div class="text1" id="text_home6">
+                        Sort
+                    </div>
+                </button>
+            </div>
+            {% for post_info in feed %}
+            {% set ct = loop.index %}
+            <div class="outer_post out_post_home2" id="out_post_home_id-{{ct-1}}">
+                <a href="{{url_for('post', post_id=post_info[0])}}">
+                    <rect class="inner_post inner_post_home">
+                        <rect class="profile_bar" id="pbar_home">
+                            <rect id="rect_home5"></rect>
+                            <div class="text_home7">
+                                Posted {{post_info[3]}} ago
+                            </div>
+                        </rect>
+                        <rect id="rect_home4"></rect>
+                    </rect>
+                </a>
+    
+                <div class="post_author">
+                    <a href="{{url_for('profile', username=post_info[4])}}">
+                        <div class="text_home8">
+                            {{post_info[4]}}
+                        </div>
+                        <rect id="rect_profile_home"></rect>
+                    </a>
+                </div>
+    
+                <form action="{{url_for('follow_account')}}" method="post" style="display: none;">
+                    <button class="button button_inv" type="submit" id="follow_button-{{ct-1}}"
+                        name="follow_button-{{ct-1}}">
+                        <div class="follow text_home9"></div>
+                    </button>
+                </form>
+    
+                <form action="{{url_for('upvote_for_post_from_profile', count=ct-1)}}" type="post">
+                    <button class="button_inv" type="submit" id="triangle_upvote_button-{{ct-1}}"
+                        name="triangle_upvote_button-{{ct-1}}">
+                        <div class="triangle-up" id="del_home1"></div>
+                    </button>
+                </form>
+    
+                <div class="text1" id="text_home10">
+                    <div class="upvote">{{post_info[1]}}</div>
+                </div>
+                <div class="text3 text_home3"></div>
+                <rect class="cover_content_home">
+                    <div class="text4 text_home4"></div>
+                </rect>
+            </div>
+            {% endfor %}
+        </div>
+    
+
     </body>
 </html>

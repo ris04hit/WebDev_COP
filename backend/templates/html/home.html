@@ -104,11 +104,11 @@
             <form>
                 <input class="form3" id="inp_home1" placeholder="Search">
             </form>
-            <button class="form3" id="button_home2">
+            <!-- <button class="form3" id="button_home2">
                 <div class="text1" id="text_home5">
                     Add Tag
                 </div>
-            </button>
+            </button> -->
             <button class="form3" id="button_home3">
                 <div class="text1" id="text_home6">
                     Sort
@@ -175,127 +175,56 @@
             <div id="text_home12" class="text5">
                 Top Contributers (Institution)
             </div>
-            <a href="{{url_for('create_institution')}}">
-                <div id="text6_1">
-                    IIT-Delhi
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_2">
-                    IIT-Bombay
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_3">
-                    IIT-Ropar
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_4">
-                    IIT-Kanpur
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_5">
-                    IIT-Madras
-                </div>
-            </a>
+            {% for item in stats[0] %}
+                {% set ct = loop.index %}
+                <a href="{{url_for('institute', insti_id = item[2])}}">
+                    <div class="text6" style="top: {{(10+14*ct)}}%">
+                        {{item[1]}}
+                    </div>
+                </a>
+            {% endfor %}
         </div>
 
         <div class="outer_post" id="out_post_home6">
             <div id="text_home12" class="text5">
                 Top Contributers (Individual)
             </div>
-            <div id="text_home12" class="text5">
-                Top Contributers (Individual)
-            </div>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_1">
-                    Dstone
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_2">
-                    Samuel69
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_3">
-                    cmurphy
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_4">
-                    kingsara
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_5">
-                    kevin52
-                </div>
-            </a>
+            {% for item in stats[1] %}
+                {% set ct = loop.index %}
+                <a href="{{url_for('profile', username = item[1])}}">
+                    <div class="text6" style="top: {{(10+14*ct)}}%">
+                        {{item[1]}}
+                    </div>
+                </a>
+            {% endfor %}
         </div>
 
         <div class="outer_post" id="out_post_home7">
             <div id="text_home12" class="text5">
-                Most liked posts
+                Most liked Institutes
             </div>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_1">
-                    Playing Chess is a good habit
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_2">
-                    Lets eat together
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_3">
-                    Flat Earth is real!
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_4">
-                    Scientists found variant of Covid
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_5">
-                    World will be destroyed in 2012
-                </div>
-            </a>
+            {% for item in stats[2] %}
+                {% set ct = loop.index %}
+                <a href="{{url_for('institute', insti_id = item[2])}}">
+                    <div class="text6" style="top: {{(10+14*ct)}}%">
+                        {{item[1]}}
+                    </div>
+                </a>
+            {% endfor %}
         </div>
 
         <div class="outer_post" id="out_post_home8">
             <div id="text_home12" class="text5">
-                Most viewed posts
+                Most liked Users
             </div>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_1">
-                    Suicide at IIT Delhi
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_2">
-                    Increasing population is concern!
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_3">
-                    Say no to PDA
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_4">
-                    Cheers for COP Assignment
-                </div>
-            </a>
-            <a href="{{url_for('institute')}}">
-                <div id="text6_5">
-                    One Piece is real !!!!
-                </div>
-            </a>
+            {% for item in stats[3] %}
+                {% set ct = loop.index %}
+                <a href="{{url_for('profile', username = item[1])}}">
+                    <div class="text6" style="top: {{(10+14*ct)}}%">
+                        {{item[1]}}
+                    </div>
+                </a>
+            {% endfor %}
         </div>
     </div>
 

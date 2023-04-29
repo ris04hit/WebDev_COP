@@ -350,78 +350,18 @@
     top: 4%;
 }
 
-#text6_1{
+.text6{
     position: absolute;
     width: 90%;
     left: 5%;
-    top: 22%;
-    height: 15%;
+    height: 10%;
     font-family: 'Abel';
     font-style: normal;
     font-weight: 400;
     font-size: 1.25vw;
     color: #FFFFFF;
-    overflow: hidden;
-}
-
-#text6_2{
-    position: absolute;
-    width: 90%;
-    height: 70%;
-    left: 5%;
-    text-align: left;
-    font-family: 'Abel';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.25vw;
-    top: 36%;
-    color: #FFFFFF;
-    overflow: hidden;
-}
-
-#text6_3{
-    position: absolute;
-    width: 90%;
-    height: 70%;
-    left: 5%;
-    text-align: left;
-    font-family: 'Abel';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.25vw;
-    top: 50%;
-    color: #FFFFFF;
-    overflow: hidden;
-}
-
-#text6_4{
-    position: absolute;
-    width: 90%;
-    height: 70%;
-    left: 5%;
-    text-align: left;
-    font-family: 'Abel';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.25vw;
-    top: 64%;
-    color: #FFFFFF;
-    overflow: hidden;
-}
-
-#text6_5{
-    position: absolute;
-    width: 90%;
-    height: 70%;
-    left: 5%;
-    text-align: left;
-    font-family: 'Abel';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.25vw;
-    top: 78%;
-    color: #FFFFFF;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 #out_post_home6{
