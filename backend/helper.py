@@ -639,7 +639,7 @@ def profile_data(cur, username, curr_user):
     query = "SELECT * from {} WHERE id_uniq = %s".format(profile['followers'])
     cur.execute(query, (curr_user['id_uniq'],))
     profile['isfollow'] = bool(cur.fetchall())
-    profile['membersince'] = str(profile['last_visit'].month)+"/"+str(profile['last_visit'].year)[2:]
+    profile['membersince'] = str(profile['creation_time'].month)+"/"+str(profile['creation_time'].year)[2:]
     query = "SELECT * from {}".format(profile['upvotes'])
     cur.execute(query)
     profile['count'] = len(cur.fetchall())
@@ -728,6 +728,103 @@ def profile_data(cur, username, curr_user):
             already_follow = bool(cur.fetchall())
             feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow)))
     return profile, feed
+
+def institute_data(cur, inst_id, curr_user):
+    query = "SELECT * from Institution WHERE BINARY id_uniq = %s"
+    cur.execute(query, (inst_id,))
+    insti_data = cur.fetchall()[0]
+    members = []
+    top_contributor = {}
+    query = "SELECT * from Account"
+    cur.execute(query)
+    users = cur.fetchall()
+    for user in users:
+        query = "SELECT * from {}".format(user['institutes'])
+        cur.execute(query)
+        user_insti = cur.fetchall()
+        flag = False
+        for i in user_insti:
+            if inst_id == i['id_uniq']:
+                flag = True
+                break
+        if flag:
+            members.append(user['username'])
+    insti_data['members'] = members
+    insti_data['isfollow'] = curr_user['username'] in members
+    insti_data['membersince'] = str(insti_data['creation_time'].month)+"/"+str(insti_data['creation_time'].year)[2:]
+    query = "SELECT * from Account WHERE BINARY id_uniq = %s"
+    cur.execute(query, (insti_data['admin_uniq'],))
+    insti_data['admin_username'] = cur.fetchall()[0]['username']
+    query = "SELECT * from Post"
+    cur.execute(query)
+    post_list_specific = []
+    post_data = cur.fetchall()
+    for post_item in post_data:
+        query = 'SELECT * from {}'.format(post_item['institutes'])
+        cur.execute(query)
+        post_insti = cur.fetchall()
+        flag = False
+        for i in post_insti:
+            if inst_id == i['id_uniq']:
+                flag = True
+                break
+        if flag:
+            post_list_specific.append(post_item['id_uniq'])
+            if post_item['author_uniq'] in top_contributor:
+                top_contributor[post_item['author_uniq']] += 1
+            else:
+                top_contributor[post_item['author_uniq']] = 1
+    top_list = []
+    for author_id in top_contributor:
+        query = "SELECT * from Account WHERE id_uniq = %s"
+        cur.execute(query, (author_id,))
+        author_data = cur.fetchall()[0]
+        top_list.append((top_contributor[author_id], author_data['username']))
+    insti_data['top_contributor'] = top_list[:10]
+    feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow, author_id)
+    num = 50
+    count = 0
+    for post_id in post_list_specific:
+        if count == num:
+            break
+        query = "SELECT * from Post WHERE BINARY id_uniq = %s"
+        cur.execute(query, (post_id,))
+        post_data = cur.fetchall()[0]
+        if post_data['public_post'] and post_data['visibility']:
+            print(0)
+            count += 1
+            upvote_table = post_data['upvotes']
+            query = "SELECT count(id_uniq) from {}".format(upvote_table)
+            cur.execute(query)
+            upvotes_count = cur.fetchall()[0]['count(id_uniq)']
+            query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(upvote_table)
+            cur.execute(query, (curr_user['id_uniq'],))
+            already_upvoted = bool(cur.fetchall())
+            time = relativedelta(datetime.now(),post_data['creation_time'])
+            if time.years:
+                time_str = "{} year{}".format(time.years, "" if time.years==1 else "s")
+            elif time.months:
+                time_str = "{} month{}".format(time.months,  "" if time.months==1 else "s")
+            elif time.days:
+                time_str = "{} day{}".format(time.days,  "" if time.days==1 else "s")
+            elif time.hours:
+                time_str = "{} hour{}".format(time.hours,  "" if time.hours==1 else "s")
+            elif time.minutes:
+                time_str = "{} minute{}".format(time.minutes,  "" if time.minutes==1 else "s")
+            else:
+                time_str = "{} second{}".format(time.seconds,  "" if time.seconds==1 else "s")
+            time = datetime.now() - post_data['creation_time']
+            author_id = post_data['author_uniq']
+            query = "SELECT username from Account WHERE BINARY id_uniq = %s"
+            cur.execute(query, (author_id,))
+            author_username = cur.fetchall()[0]['username']
+            title = post_data['title']
+            content = post_data['content']
+            query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(post_data['author_uniq']+"_ers")
+            cur.execute(query, (curr_user["id_uniq"],))
+            already_follow = bool(cur.fetchall())
+            feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow), author_id))
+    return insti_data, feed
 
 def find_contribution_individual(cur, user_id):
     '''Returns the number of posts posted by a user'''

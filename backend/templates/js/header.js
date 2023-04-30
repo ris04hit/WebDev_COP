@@ -9,7 +9,7 @@ class Header extends HTMLElement {
         <header id = "desktop_header">
             <rect id="rect_header">
             <div id = "not_show_signup">
-                <a href="{{url_for('home', username=username)}}">
+                <a href="{{url_for('home')}}">
                     <rect id = "rect_home"></rect>
                     <div id = "home">Home</div><br>
                 </a>

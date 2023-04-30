@@ -17,9 +17,17 @@ from wtforms.validators import InputRequired, Length, ValidationError
 app = Flask(__name__)
 app.secret_key = "devang"
 
-# lm = LoginManager()
-# lm.init_app(app)
-# lm.login_view = 'login'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+class User(UserMixin):
+    def __init__(self, user_id) -> None:
+        self.id = user_id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
 
 # @login_manager.user_loader
 # def load_user(user_id):
@@ -39,9 +47,16 @@ post_ = []
 profile_data = []
 stats = []
 my_post = []
+institute_data = []
+inst_post = []
 
 db = MySQLdb.connect(host=app.config['MYSQL_HOST'], user=app.config['MYSQL_USER'], password=app.config['MYSQL_PASSWORD'], db=app.config['MYSQL_DB'])
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return 'Logged out'
 
 @app.route('/')
 def start():
@@ -55,6 +70,7 @@ def start():
     return render_template('html/start.html', message1="", message2="", show_forget=False)
 
 @app.route('/post/upvote', methods = ['POST'])
+@login_required
 def upvote_for_post():
     cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     if request.method == "POST":
@@ -74,38 +90,39 @@ def upvote_for_post():
         mysql.connection.commit()
         cur.close()
     
-    return redirect("/home/"+session['user']['username'])
+    return redirect("/home")
 
 
 @app.route('/home/follow', methods = ['POST']) # how to show the account name here ??
+@login_required
 def follow_account():
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    if request.method == "POST":
-        key_id = request.form.keys()
-        key_id = list(key_id)[0]
-        temp_ind = key_id.index("-")
-        post_num = int(key_id[temp_ind+1:])
-        # print(post_num)
-        sender_id = session['user']['id_uniq']
-        profile_username = feed[post_num][4]
-        query = "SELECT id_uniq from Account WHERE username = '{}'".format(profile_username)
-        cur.execute(query)
-        receiver_id = cur.fetchall()[0]['id_uniq']
-        if feed[post_num][-1]:
-            # print('already following !')
-            helper.unfollow_help(cur, sender_id, receiver_id)
-            # print('unfollowed !')
-        else:
+    key_id = request.form.keys()
+    key_id = list(key_id)[0]
+    temp_ind = key_id.index("-")
+    post_num = int(key_id[temp_ind+1:])
+    # print(post_num)
+    sender_id = session['user']['id_uniq']
+    profile_username = feed[post_num][4]
+    query = "SELECT id_uniq from Account WHERE username = '{}'".format(profile_username)
+    cur.execute(query)
+    receiver_id = cur.fetchall()[0]['id_uniq']
+    if feed[post_num][-1]:
+        # print('already following !')
+        helper.unfollow_help(cur, sender_id, receiver_id)
+        # print('unfollowed !')
+    else:
 
-            # print('not following !')
-            helper.follow_help(cur, sender_id, receiver_id)
-            # print('followed !')
-        mysql.connection.commit()
-        cur.close()
-        return redirect("/home/"+session['user']['username'])
+        # print('not following !')
+        helper.follow_help(cur, sender_id, receiver_id)
+        # print('followed !')
+    mysql.connection.commit()
+    cur.close()
+    return redirect("/home")
 
 
 @app.route('/home/post', methods = ['POST'])
+@login_required
 def post_input():
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     if request.method == "POST":
@@ -214,7 +231,7 @@ def post_input():
 
     mysql.connection.commit()
     cur.close()
-    return redirect("/home/"+session['user']['username'])
+    return redirect("/home")
 
 
 @app.route('/js')
@@ -226,26 +243,32 @@ def main_js():
     return render_template('js/main.js')
 
 @app.route('/about')
+@login_required
 def about():
     return render_template('html/about_us.html')
 
 @app.route('/api')
+@login_required
 def apis():
     return render_template('html/apis.html')
 
 @app.route('/apimethods')
+@login_required
 def api_meth():
     return render_template('html/apimethods.html')
 
 @app.route('/apiobjects')
+@login_required
 def api_obj():
     return render_template('html/apiobj.html')
 
 @app.route('/institution/create')
+@login_required
 def create_institution():
     return render_template('html/create_institution.html')
 
 @app.route('/js/institution/create')
+@login_required
 def create_institution_js():
     return render_template('js/create_institution.js')
 
@@ -257,8 +280,10 @@ def header():
 def header_js():
     return render_template('js/header.js', username = session['user']['username'])
 
-@app.route('/home/<string:username>')
-def home(username):
+@app.route('/home')
+@login_required
+def home():
+    username = session['user']['username']
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
@@ -266,7 +291,6 @@ def home(username):
     query = "SELECT * from Account WHERE BINARY username = %s"
     cur.execute(query,(username,))
     user = cur.fetchall()[0]
-    session['user'] = user
     global feed
     feed = helper.feed(cur, user)
     global stats
@@ -278,19 +302,32 @@ def home(username):
     print(stats)
     cur.close()
     mysql.connection.commit()
-    return render_template('html/home.html', feed = feed, follow = helper.follow_help, stats = stats)
+    return render_template('html/home.html', feed = feed, follow = helper.follow_help, stats = stats, user = session['user'])
 
 @app.route('/js/home')
+@login_required
 def home_js():
     return render_template('js/home.js.j2', feed = feed)
 
 @app.route('/institute/<string:insti_id>')
+@login_required
 def institute(insti_id):
-    return render_template('html/institute.html')
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in profile page")
+    global institute_data
+    global inst_post
+    institute_data, inst_post = helper.institute_data(cur, insti_id, session['user'])
+    print(institute_data)
+    print(inst_post)
+    cur.close()
+    return render_template('html/institute.html', profile = institute_data, user = session['user'], feed = inst_post)
 
 @app.route('/js/institute')
+@login_required
 def institute_js():
-    return render_template('js/institute.js')
+    return render_template('js/institute.js.j2', feed = inst_post, profile = institute_data)
 
 @app.route('/load/home')
 def loader1():
@@ -305,10 +342,12 @@ def loader3():
     return render_template('html/loader3.html')
 
 @app.route('/load/institution')
+@login_required
 def loader4():
     return render_template('html/loader4.html')
 
 @app.route('/js/load/home')
+@login_required
 def loader1_js():
     return render_template('js/loader1.js')
 
@@ -325,6 +364,7 @@ def loader4_js():
     return render_template('js/loader4.js')
 
 @app.route('/post/<string:post_id>')
+@login_required
 def post(post_id): # id_uniq
     # changr code here
     cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -507,10 +547,12 @@ def zipname(post_id):
         return ""
 
 @app.route('/js/post')
+@login_required
 def post_js():
     return render_template('js/post.js.j2', comments = comment_list, post = post_)
 
 @app.route('/profile/<string:username>')
+@login_required
 def profile(username):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -525,8 +567,9 @@ def profile(username):
     return render_template('html/profile.html', profile = profile_data, user = session['user'], feed = my_post)
 
 @app.route('/js/profile')
+@login_required
 def profile_js():
-    return render_template('js/profile.js.j2', feed = my_post)
+    return render_template('js/profile.js.j2', feed = my_post, profile = profile_data)
 
 @app.route('/signup')
 def signup():
@@ -537,12 +580,18 @@ def signup_js():
     return render_template('js/signup.js')
 
 @app.route('/tag')
+@login_required
 def tag():
     return render_template('html/tag.html')
 
 @app.route('/js/tag')
+@login_required
 def tag_js():
     return render_template('js/tag.js')
+
+@app.route('/plz_login')
+def please_login():
+    return render_template('html/need_login.html')
 
 @app.route('/login', methods = ['POST'])
 def login_form():
@@ -553,7 +602,7 @@ def login_form():
     if request.method == "POST":
         username = request.form["inp_start1"]
         password = request.form["inp_start2"]
-        query = "SELECT id_obj, id_uniq,  username FROM Account WHERE BINARY username = %s"
+        query = "SELECT * FROM Account WHERE BINARY username = %s"
         cur.execute(query, (username,))
         user = cur.fetchall()
         msg = ""
@@ -565,8 +614,9 @@ def login_form():
             ids = cur.fetchall()
             cur.close()
             if helper.hash_pwd(password)==ids[0]['pass']:
-                # login_user(user[0]['username'])
-                return redirect("/home/"+user[0]['username'])
+                session['user'] = user[0]
+                login_user(User(user[0]['username']))
+                return redirect("/home")
             msg = "Invalid Password"
             return render_template('html/start.html', message1=msg, message2 = "", show_forget=False)
         cur.close()
@@ -582,7 +632,7 @@ def login_otp_form():
         if request.method == "POST":
             if request.form["submit_button_start"] == "submit_start1":
                 email = request.form["email_start"]
-                query = "SELECT email_id FROM Account WHERE email_id = %s"
+                query = "SELECT * WHERE email_id = %s"
                 cur.execute(query, (email,))
                 user = cur.fetchall()
                 if user:
@@ -608,7 +658,7 @@ def login_otp_form():
                         username = user[0]['username']
                         del otp[email]
                         cur.close()
-                        return redirect("/home/"+username)
+                        return redirect("/home")
                     else:
                         msg = "Invalid OTP"
                         cur.close()
@@ -728,6 +778,7 @@ def profile_photo():
 
 # For searching Institutes/Name/Username
 @app.route('/search', methods=['POST'])
+@login_required
 def search_results():
      query = request.form.get('query')
      cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -764,8 +815,10 @@ def search_results():
 
      return jsonify({'results': to_show})
 
-@app.route('/home/<string:username>/SORT=<string:sort>')
-def home_sort(username, sort):
+@app.route('/home/SORT=<string:sort>')
+@login_required
+def home_sort(sort):
+    username = session['user']['username']
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     except:
@@ -784,6 +837,7 @@ def home_sort(username, sort):
     return render_template('html/home.html', feed = feed, follow = helper.follow_help, stats = stats)    
 
 @app.route('/profile/<string:username>/SORT=<string:sort>')
+@login_required
 def profile_sort(username, sort):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -793,6 +847,8 @@ def profile_sort(username, sort):
     cur.execute(query,(username,))
     user = cur.fetchall()[0]
     global my_post
+    global profile_data
+    profile_data, my_post = helper.profile_data(cur, username, session['user'])
     if sort=="time":
         my_post = sorted(my_post, key = lambda x : x[7])
     elif sort=="upvotes":
@@ -801,7 +857,26 @@ def profile_sort(username, sort):
         print(i[0], i[5])
     return render_template('html/profile.html', feed = my_post, user = session['user'], profile = profile_data)   
 
+@app.route('/institute/<string:id>/SORT=<string:sort>')
+@login_required
+def institute_sort(id, sort):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in start page")
+    global institute_data
+    global inst_post
+    institute_data, inst_post = helper.institute_data(cur, id, session['user'])
+    if sort=="time":
+        inst_post = sorted(inst_post, key = lambda x : x[7])
+    elif sort=="upvotes":
+        inst_post = sorted(inst_post, key = lambda x : x[1], reverse=True)
+    for i in inst_post:
+        print(i[0], i[5])
+    return render_template('html/institute.html', feed = inst_post, user = session['user'], profile = institute_data) 
+
 @app.route('/translate/post/<string:content>')
+@login_required
 def translate(content):
     url = "https://microsoft-translator-text.p.rapidapi.com/translate"
     querystring = {"to[0]": "hi", "api-version": "3.0", "from": "en", "profanityAction": "NoAction", "textType": "plain"}
@@ -824,6 +899,7 @@ def translate(content):
     # return {"translated_text": response.json()}
 
 @app.route('/profile/delete_insti/<string:insti_id>')
+@login_required
 def remove_insti(insti_id):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -836,6 +912,7 @@ def remove_insti(insti_id):
     return redirect('/profile/'+session['user']['username'])
 
 @app.route('/profile/delete_follower/<string:id>')
+@login_required
 def remove_follower(id):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -849,6 +926,7 @@ def remove_follower(id):
     return redirect('/profile/'+session['user']['username'])
 
 @app.route('/profile/delete_following/<string:id>')
+@login_required
 def remove_following(id):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -862,6 +940,7 @@ def remove_following(id):
     return redirect('/profile/'+session['user']['username'])
 
 @app.route('/post/upvote_post/<string:post_id>')
+@login_required
 def upvote_from_post_page(post_id):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -876,6 +955,7 @@ def upvote_from_post_page(post_id):
     return redirect('/post/'+post_id)
 
 @app.route('/post/follow_user/<string:id>/<string:post_id>')
+@login_required
 def follow_from_post_page(id, post_id):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -891,6 +971,7 @@ def follow_from_post_page(id, post_id):
     return redirect('/post/'+post_id)
 
 @app.route('/profile/follow/<string:id>')
+@login_required
 def follow_from_profile(id):
     try:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -904,7 +985,42 @@ def follow_from_profile(id):
     cur.close()
     return redirect('/profile/'+profile_data['username'])
 
+@app.route('/institute/follow/<int:count>')
+@login_required
+def follow_account_inst(count):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in follow_profile page")
+    print(institute_data)
+    if inst_post[count][8]:
+        helper.unfollow_help(cur, session['user']['id_uniq'], inst_post[count][9])
+    else:
+        helper.follow_help(cur, session['user']['id_uniq'], inst_post[count][9])
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/institute/'+institute_data['id_uniq'])
+
+@app.route('/institute/join/<string:id>')
+@login_required
+def join_institute(id):
+    try:
+        cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    except:
+        print("Can not connect to database in join_institute page")
+    print(session)
+    if institute_data['isfollow']:
+        query = "DELETE FROM {} WHERE BINARY id_uniq = %s".format(session['user']['institutes'])
+        cur.execute(query, (id,))
+    else:
+        query = "INSERT INTO {} (id_obj, id_uniq) values (%s, %s)".format(session['user']['institutes'])
+        cur.execute(query, ('I', id))
+    mysql.connection.commit()
+    cur.close()
+    return redirect('/institute/'+institute_data['id_uniq'])
+
 @app.route('/profile/upvote_post2/<int:count>')
+@login_required
 def upvote_for_post_from_profile(count):
     print("\n\n0\n\n")
     cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -922,6 +1038,26 @@ def upvote_for_post_from_profile(count):
     cur.close()
     
     return redirect("/profile/"+profile_data['username'])
+
+@app.route('/institute/upvote_post2/<int:count>')
+@login_required
+def upvote_for_post_from_inst(count):
+    print("\n\n0\n\n")
+    cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    post_num = count
+    if inst_post[post_num][2]:
+        # print("Now downvoting !")
+        helper.downvote_for_post_help(cur, session['user']['id_uniq'], inst_post[post_num][0])
+        # print('downvoted to post !')
+    else:
+        # print("Not upvoted till now !")
+        # print(my_post[post_num][0])
+        helper.upvote_for_post_help(cur, session['user']['id_uniq'], inst_post[post_num][0])
+        # print('done')
+    mysql.connection.commit()
+    cur.close()
+    
+    return redirect("/institute/"+institute_data['id_uniq'])
 
 def init_db():
     with app.app_context():

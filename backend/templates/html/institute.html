@@ -10,45 +10,58 @@
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_insti">
+        <header-component></header-component>
         <div id="profile">
             <rect id="pfp_profile_insti"></rect>
             <div id="name_profile">
-                Mechan
+                {{profile['name']}}
             </div>
-            <div id="follow_profile">
-                Follow
-            </div>
+            {% if user['username']!=profile['username'] %}
+                <form type="POST" action="{{url_for('join_institute', id = profile['id_uniq'])}}">
+                    <button class="button_inv" id="follow_profile" type="submit">
+                        {% if profile['isfollow'] %}
+                            <div id="unfollow_profile_js">
+                                Leave
+                            </div>
+                        {% else %}
+                            <div id="follow_profile_js">
+                                Join
+                            </div>
+                        {% endif %}
+                    </button>
+                </form>
+            {% endif %}
         </div>
 
         <div id="info_profile">
             <div class="text7" id="member_profile_insti">
-                members since - <div class="text_profile">2/23</div>
+                members since - <div class="text_profile">{{profile['membersince']}}</div>
             </div>
-            <div class="text7" id="last_profile_insti">
+            <!-- <div class="text7" id="last_profile_insti">
                 Last visited - <div class="text_profile">2 hr ago</div>
-            </div>
+            </div> -->
             <div class="text7" id="upvote_profile_insti">
                 Upvotes - <div class="text_profile">2k+</div>
             </div>
             <div class="text7" id="email_profile_insti">
                 email address - 
-                <a href="mailt:xyz@gmail.com">
+                <a href="mailto:{{profile['email_id']}}">
                     <div class="text_profile">
-                        xyz@gmail.com
+                        {{profile['email_id']}}
                     </div>
                 </a>
             </div>
-            <div class="text7" id="org_profile_insti">
+            <!-- <div class="text7" id="org_profile_insti">
                 Organisation - 
                 <div class="text_profile">
                     IIT-Delhi
                 </div>
-            </div>
+            </div> -->
             <div class="text7" id="web_profile_insti">
-                website - 
-                <a href="https://www.meechan.com">
+                admin - 
+                <a href="{{url_for('profile', username = profile['admin_username'])}}">
                     <div class="text_profile">
-                        www.meechan.com
+                        {{profile['admin_username']}}
                     </div>
                 </a>
             </div>
@@ -62,18 +75,117 @@
                 </div>
 
                 <ol class="text7" id="top_ol_insti">
-                    <li class="list2">
-                        <a href="{{url_for('profile', username = '')}}">
-                            <rect class="pfp_insti"></rect>
-                            <div class="name_text_insti">
-                                <div class="text7">
-                                    Mechan
+                    {% for contributor in profile['top_contributor'] %}
+                        <li class="list2">
+                            <a href="{{url_for('profile', username = contributor[1])}}">
+                                <rect class="pfp_insti"></rect>
+                                <div class="name_text_insti">
+                                    <div class="text7">
+                                        {{contributor[1]}}
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </li>
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ol>
             </div>
         </div>
+
+        <div class="multiple_post" id="mul_post_home1">
+
+            <div id="tag_pop_home" class="pop_up">
+                <div class="close_pop">
+                    Close
+                </div>
+                <rect id="rect_tag_home">
+                    <form>
+                        <input type="text" id="search_tag_home" class="form1" placeholder="Search tag">
+                    </form>
+                    <rect id="hr_tag_home"></rect>
+                    <div id="button_tag_home"></div>
+                </rect>
+            </div>
+    
+            <div id="sort_pop_home" class="pop_up">
+                <rect id="rect_sort_home">
+                    <button id="button_sort_home1" class="button_inv" name="button_sort_home1" type="submit">
+                        <rect id="rect_time_home"></rect>
+                        <div id="text_sort_home1" class="text7">
+                            By Time
+                        </div>
+                    </button>
+                    <button id="button_sort_home2" class="button_inv" name="button_sort_home1" type="submit">
+                        <rect id="rect_up_home"></rect>
+                        <div id="text_sort_home2" class="text7">
+                            By upvotes
+                        </div>
+                    </button>
+                </rect>
+            </div>
+    
+            <div class="outer_post" id="out_post_home1">
+                <form>
+                    <input class="form3" id="inp_home1" placeholder="Search">
+                </form>
+                <!-- <button class="form3" id="button_home2">
+                    <div class="text1" id="text_home5">
+                        Add Tag
+                    </div>
+                </button> -->
+                <button class="form3" id="button_home3">
+                    <div class="text1" id="text_home6">
+                        Sort
+                    </div>
+                </button>
+            </div>
+            {% for post_info in feed %}
+            {% set ct = loop.index %}
+            <div class="outer_post out_post_home2" id="out_post_home_id-{{ct-1}}">
+                <a href="{{url_for('post', post_id=post_info[0])}}">
+                    <rect class="inner_post inner_post_home">
+                        <rect class="profile_bar" id="pbar_home">
+                            <rect id="rect_home5"></rect>
+                            <div class="text_home7">
+                                Posted {{post_info[3]}} ago
+                            </div>
+                        </rect>
+                        <rect id="rect_home4"></rect>
+                    </rect>
+                </a>
+    
+                <div class="post_author">
+                    <a href="{{url_for('profile', username=post_info[4])}}">
+                        <div class="text_home8">
+                            {{post_info[4]}}
+                        </div>
+                        <rect id="rect_profile_home"></rect>
+                    </a>
+                </div>
+    
+                <form action="{{url_for('follow_account_inst', count = ct-1)}}" type="post">
+                    <button class="button button_inv" type="submit" id="follow_button-{{ct-1}}"
+                        name="follow_button-{{ct-1}}">
+                        <div class="follow text_home9"></div>
+                    </button>
+                </form>
+    
+                <form action="{{url_for('upvote_for_post_from_inst', count=ct-1)}}" type="post">
+                    <button class="button_inv" type="submit" id="triangle_upvote_button-{{ct-1}}"
+                        name="triangle_upvote_button-{{ct-1}}">
+                        <div class="triangle-up" id="del_home1"></div>
+                    </button>
+                </form>
+    
+                <div class="text1" id="text_home10">
+                    <div class="upvote">{{post_info[1]}}</div>
+                </div>
+                <div class="text3 text_home3"></div>
+                <rect class="cover_content_home">
+                    <div class="text4 text_home4"></div>
+                </rect>
+            </div>
+            {% endfor %}
+        </div>
+
     </body>
 </html>

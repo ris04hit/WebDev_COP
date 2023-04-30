@@ -33,22 +33,22 @@
             </a>
 
             <div class="menu-content">
-                <a class="links-hidden" href="#">
+                <a class="links-hidden" href="{{url_for('home')}}">
                     <div id="nav_butt">
                         Home
                     </div>
                 </a>
-                <a class="links-hidden" href="#">
+                <a class="links-hidden" href="{{url_for('about')}}">
                     <div id="nav_butt">
                         About
                     </div>
                 </a>
-                <a class="links-hidden" href="#">
+                <a class="links-hidden" href="{{url_for('apis')}}">
                     <div id="nav_butt">
                         API
                     </div>
                 </a>
-                <a class="links-hidden" href="#">
+                <a class="links-hidden" href="{{url_for('profile', username = user['username'])}}">
                     <div id="nav_butt">
                         Profile
                     </div>
