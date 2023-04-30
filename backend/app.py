@@ -41,6 +41,7 @@ mysql = MySQL(app)
 
 otp = {}
 otp_signup = {}
+otp_institute = {}
 feed = []
 comment_list = []
 post_ = []
@@ -262,10 +263,75 @@ def api_meth():
 def api_obj():
     return render_template('html/apiobj.html')
 
-@app.route('/institution/create')
+@app.route('/institution/create', methods=["POST", "GET"])
 @login_required
 def create_institution():
-    return render_template('html/create_institution.html')
+    cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    msg = ""
+    if request.method == "POST":
+        username_inst = request.form['username_inst']
+        email_inst = request.form['email_inst']
+        otp_inst = request.form['otp_inst']
+        passcode_inst = request.form['passcode_inst']
+        country_inst = request.form['country_inst']
+        state_inst = request.form['state_inst']
+        city_inst = request.form['city_inst']
+        web_inst = request.form['web_inst']
+        desc_inst = request.form['desc_inst']
+        # git = request.form['git_signup']
+        # org = request.form['org_signup']
+        # image = request.form['image_profile_signup']
+        # name = request.form['name_signup']
+        if request.form['send_button_signup_inst'] == 'send_otp_signup_inst':
+            if not helper.check_username(username_inst):
+                msg = "Username can only contain alphabets, number and _"
+            if not helper.unique_username(cur, username_inst):
+                msg = "Username already exists"
+            elif not email_inst:
+                msg = "Please enter Email"
+            else:
+                msg = "Enter OTP"
+                global otp_institute
+                otp_institute[email_inst] = '123456'
+                otp_sub = str(otp_institute[email_inst])+" is your OTP for Synergy Signup"
+                otp_body = "Hi "+username_inst+"\nWelcome to Synergy,\n"+otp_sub
+                #helper.mail(email,otp_sub, otp_body)
+            cur.close()
+            return render_template("html/create_institution.html", message1=msg, username=username_inst, email=email_inst, country=country_inst, state=state_inst, city=city_inst, web=web_inst, desc = desc_inst)
+        elif request.form['send_button_signup_inst'] == 'create_account_signup_inst':
+            if email_inst in otp_institute:
+                if otp_inst == otp_institute[email_inst]:
+                    if helper.password_strength(passcode_inst)!=1:
+                        msg = "Password strength is low"
+                        cur.close()
+                        return render_template("html/create_institution.html", message1=msg, username=username_inst, email=email_inst, country=country_inst, state=state_inst, city=city_inst, web=web_inst, desc=desc_inst)
+                    hash_password = helper.hash_pwd(passcode_inst)
+                    id_uniq = helper.id_gen(cur, 'I', username_inst, "Institution")
+                    query = "INSERT INTO Institution (id_obj, id_uniq, name, email_id, members,  posts, description, admin_obj, admin_uniq, visibility, api_visibility) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    cur.execute(query,('I',id_uniq, username_inst, email_inst, id_uniq+"_mem", id_uniq+"_pos",desc_inst, 'A', session['user']['id_uniq'], True, True)) #how to get the account which is making the institution !
+                    query = "INSERT INTO Personal (id_obj, id_uniq, pass) values (%s, %s, %s)"
+                    cur.execute(query, ('I', id_uniq, hash_password))
+                    query = "INSERT INTO Id (id_obj, id_uniq) values (%s, %s)"
+                    cur.execute(query, ('A', id_uniq))
+                    helper.create_linked_table(cur, id_uniq, "_mem", 'A')
+                    helper.create_linked_table(cur, id_uniq, "_pos", 'P')
+                    del otp_institute[email_inst]
+                    cur.close()
+                    mysql.connection.commit()
+                    return redirect("/home")
+                else:
+                    msg = "Invalid OTP"
+                    cur.close()
+                    return render_template("html/create_institution.html", message1=msg, username_inst=username_inst, email_inst=email_inst, country_inst=country_inst, state_inst=state_inst, city_inst=city_inst, web=web_inst, desc=desc_inst)
+            else:
+                msg = "No valid OTP for "+email_inst
+                cur.close()
+                return render_template("html/create_institution.html", message1=msg, username=username_inst, email=email_inst, country=country_inst, state=state_inst, city=city_inst, web=web_inst, desc=desc_inst)
+        msg = "There was some error please try again"
+        cur.close()
+        return render_template("html/create_institution.html", message1=msg)
+    else:
+        return render_template("html/create_institution.html", message1=msg)
 
 @app.route('/js/institution/create')
 @login_required

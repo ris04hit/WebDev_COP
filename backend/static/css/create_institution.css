@@ -208,3 +208,8 @@ animation: flash 0.5s none infinite alternate;
     left: 1003px;
     top: 637px;
 }
+
+#message_signup1 {
+    left: 60px;
+    top: 240px;
+}

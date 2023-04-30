@@ -39,11 +39,9 @@
                 </a> -->
                 {% for tag in tag_list %}
                 {% set ct = loop.index %}
-                <a href="{{url_for('tag', tag_id = tag[0])}}">
                     <button class="button5 button_tag_post" id="button_post{{ct-1}}" style="top: {{74*ct}}px;">
                         {{tag[1]}}
                     </button>
-                </a>
                 {% endfor %}
             </div>
         </div>

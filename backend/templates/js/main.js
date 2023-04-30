@@ -62,7 +62,7 @@ $(document).ready(function(){
               var top = -13;
               for (var count=0; count< search_list.length && count < 10; count++){
                   top = top + 41;
-                  var code = `<div id = "search_text-${count}" class="text4" style = "top : ${top}px; left : 29px; overflow-x: hidden; overflow-y : hidden">${search_list[count]}</div><rect class="search_line header_search_line" style = "top : ${top+30}px; width : 220px; overflow-x: hidden; overflow-y : hidden"></rect>`
+                  var code = `<div id = "search_text-${count}" class="text4" style = "top : ${top}px; height : ${30}px; left : 29px; overflow-x: hidden; overflow-y : hidden">${search_list[count]}</div><rect class="search_line header_search_line" style = "top : ${top+30}px; width : 220px; overflow-x: hidden; overflow-y : hidden"></rect>`
                   html = html.concat(code);
                 }
               console.log(html);
