@@ -108,6 +108,9 @@
     font-size: 60px;
     line-height: 76px;
     
+    overflow-y: hidden;
+    overflow-x: hidden;
+
     color: #B6EADA;
 }
 
@@ -127,12 +130,13 @@
     color: #008DFF;    
 }
 
+
 #mul_post_home1 {
-    width: 60vw;
+    width: 900px;
     /* width: 903px; */
     /* left: 60px; */
-    left: 7vw;
-    top: 25.5vw;
+    left: 100px;
+    top: 389px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -191,21 +195,21 @@
 
 .out_post_home2 {
     position: absolute;
-    width: 96%;
-    left: 2%;
+    width: 860px;
+    left: 18px;
 }
 
 .inner_post_home {
-    width: 98%;
-    left: 1%;
-    top: 2%;
+    width: 842px;
+    left: 9px;
+    top: 16px;
 }
 
 #pbar_home {
-    width: 100%;
-    height: 50px;
-    left: 0px;
-    top: 0px;
+    width: 842px;
+    height: 52px;
+    left: -2px;
+    top: -2px;
 }
 
 .text_home7 {
@@ -222,23 +226,24 @@
     color: #FFFFFF;
 }
 
+
 #rect_home5 {
     position: absolute;
     width: 0px;
-    height: 100%;
-    left: 19%;
-    top: 0%;
+    height: 30px;
+    left: 150px;
+    top: 7px;
     
     border: 1.5px solid #B6EADA;
 }
 
 .text_home8 {
     position: absolute;
-    width: 10%;
-    height: 100%;
-    left: 10%;
-    top: 4%;
-    font-size: 125%;
+    width: 100px;
+    height: 50px;
+    left: 70px;
+    top: 27px;
+    font-size: 20px;
     text-align: left;
     font-family: 'Abel';
     font-style: normal;
@@ -250,8 +255,8 @@
     position: absolute;
     width: 5%;
     height: 8%;
-    left: 22%;
-    top: 4%;
+    left: 180px;
+    top: 28px;
     
     font-family: 'Abel';
     font-style: normal;
@@ -268,22 +273,22 @@
     position: absolute;
     width: 40px;
     height: 40px;
-    left: 4%;
-    top: 3%;
+    left: 20px;
+    top: 23px;
     border-radius: 20px;
     background: #D9D9D9;
 }
 
 #del_home1 {
     left: 24px;
-    bottom: 23px;
+    bottom: 35px;
 }
 
 #text_home10 {
     width: 24px;
     height: 29px;
-    left: 59px;
-    bottom: 24px;
+    left: 68px;
+    bottom: 35px;
     font-size: 23px;
     line-height: 29px;
 }

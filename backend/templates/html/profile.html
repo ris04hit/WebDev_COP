@@ -10,16 +10,16 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/settings.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="{{url_for('header_js',user=user)}}"></script>
+        <script src="{{url_for('header_js')}}"></script>
         <script src="{{url_for('profile_js')}}"></script>
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_profile">
         <header-component></header-component>
         <div id="profile">
-            <rect id="pfp_profile"></rect>
+            <img id="pfp_profile"  src="{{url_for('profile_photoFeed', id_uniq=profile['id_uniq'])}}"></img>
             <div id="name_profile">
-                {{profile['name']}}
+                {{profile['username']}}
             </div>
             {% if user['username']!=profile['username'] %}
                 <form type="POST" action="{{url_for('follow_from_profile', id = profile['id_uniq'])}}">
@@ -34,6 +34,14 @@
                             </div>
                         {% endif %}
                     </button>
+                </form>
+            {% else %}
+                <form action="{{url_for('logout')}}">
+                    <div id="follow_profile">
+                        <button class="button_inv" id="logout_button" type="submit">
+                            <img src="{{url_for('static',filename='data/logout.png')}}" id="logout_img">
+                        </button>
+                    </div>
                 </form>
             {% endif %}
         </div>
@@ -307,7 +315,7 @@
                 <a href="{{url_for('post', post_id=post_info[0])}}">
                     <rect class="inner_post inner_post_home">
                         <rect class="profile_bar" id="pbar_home">
-                            <rect id="rect_home5"></rect>
+                            <!-- <rect id="rect_home5"></rect> -->
                             <div class="text_home7">
                                 Posted {{post_info[3]}} ago
                             </div>
@@ -321,7 +329,7 @@
                         <div class="text_home8">
                             {{post_info[4]}}
                         </div>
-                        <rect id="rect_profile_home"></rect>
+                        <img id="rect_profile_home"  src="{{url_for('profile_photoFeed', id_uniq=profile['id_uniq'])}}"></img>
                     </a>
                 </div>
     
@@ -349,7 +357,6 @@
             </div>
             {% endfor %}
         </div>
-    
 
     </body>
 </html>

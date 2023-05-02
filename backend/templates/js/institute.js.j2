@@ -33,10 +33,10 @@ function feed_display() {
         else{
             $(follow_div).html("Follow");
         }
-        top += height;        
+        top += (height+15);        
     {% endfor %}
     //}
-    total_height = Math.min(1800, total_height + top + 14);
+    total_height = Math.min(1825, total_height + top + 25);
     $("#mul_post_home1").css('height',"".concat(total_height).concat("px"));
 
 }

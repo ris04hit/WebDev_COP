@@ -156,10 +156,10 @@
 }
 
 #pbar_home {
-    width: 100%;
+    width: 100.5%;
     height: 50px;
-    left: 0px;
-    top: 0px;
+    left: -2px;
+    top: -2px;
 }
 
 .text_home7 {
@@ -456,7 +456,6 @@
 
 #rect_sort_home {
     box-sizing: border-box;
-
     position: absolute;
     width: 121px;
     height: 92px;
@@ -858,4 +857,12 @@
 
 
 
+}
+
+#searchPost_result_rect{
+    z-index: 10000;
+    position: absolute;
+    left: 15px;
+    top: 70px;
+    width: 563px;
 }

@@ -131,23 +131,25 @@
 }
 
 #interest_rect_profile {
-    width: 278px;
+    width: 248px;
     height: 529px;
-    left: 1085px;
-    top: 714px;
+    left: 1150px;
+    top: 550px;
 }
 
 #interest_text_profile {
+    /* text-align: center; */
     width: 88px;
     height: 32px;
-    left: 97px;
+    left: 77px;
     top: 4px;
+    
 }
 
 .button_profile1 {
     width: 160px;
     height: 43px;
-    left: 65px;
+    left: 45px;
     top: 58px;
 }
 
@@ -239,11 +241,11 @@
 }
 
 #mul_post_home1 {
-    width: 60vw;
+    width: 800px;
     /* width: 903px; */
     /* left: 60px; */
-    left: 7vw;
-    top: 46.5vw;
+    left: 300px;
+    top: 550px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -302,21 +304,21 @@
 
 .out_post_home2 {
     position: absolute;
-    width: 96%;
-    left: 2%;
+    width: 768px;
+    left: 16px;
 }
 
 .inner_post_home {
-    width: 98%;
-    left: 1%;
-    top: 2%;
+    width: 752px;
+    left: 8px;
+    top: 16px;
 }
 
 #pbar_home {
-    width: 100%;
-    height: 50px;
-    left: 0px;
-    top: 0px;
+    width: 752px;
+    height: 52px;
+    left: -2px;
+    top: -2px;
 }
 
 .text_home7 {
@@ -337,7 +339,7 @@
     position: absolute;
     width: 0px;
     height: 100%;
-    left: 19%;
+    left: 185px;
     top: 0%;
     
     border: 1.5px solid #B6EADA;
@@ -345,11 +347,11 @@
 
 .text_home8 {
     position: absolute;
-    width: 10%;
-    height: 100%;
-    left: 10%;
-    top: 4%;
-    font-size: 125%;
+    width: 100px;
+    height: 50px;
+    left: 70px;
+    top: 28px;
+    font-size: 20px;
     text-align: left;
     font-family: 'Abel';
     font-style: normal;
@@ -379,22 +381,23 @@
     position: absolute;
     width: 40px;
     height: 40px;
-    left: 4%;
-    top: 3%;
+    left: 20px;
+    top: 23px;
     border-radius: 20px;
     background: #D9D9D9;
 }
 
 #del_home1 {
     left: 24px;
-    bottom: 23px;
+    bottom: 25px;
 }
 
 #text_home10 {
+    position: absolute;
     width: 24px;
     height: 29px;
-    left: 59px;
-    bottom: 24px;
+    left: 68px;
+    bottom: 23px;
     font-size: 23px;
     line-height: 29px;
 }
@@ -621,3 +624,4 @@
     overflow-y: hidden;
     overflow-x: hidden;
 }
+

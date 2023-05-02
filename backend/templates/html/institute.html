@@ -5,14 +5,14 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="{{url_for('header_js',user=user)}}"></script>
+        <script src="{{url_for('header_js')}}"></script>
         <script src="{{url_for('institute_js')}}"></script>
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
     <body  id="body_insti">
         <header-component></header-component>
         <div id="profile">
-            <rect id="pfp_profile_insti"></rect>
+            <img id="pfp_profile_insti"  src="{{url_for('profile_photoFeed', id_uniq=profile['id_uniq'])}}"></img>
             <div id="name_profile">
                 {{profile['name']}}
             </div>
@@ -35,13 +35,13 @@
 
         <div id="info_profile">
             <div class="text7" id="member_profile_insti">
-                members since - <div class="text_profile">{{profile['membersince']}}</div>
+                created on - <div class="text_profile">{{profile['membersince']}}</div>
             </div>
             <!-- <div class="text7" id="last_profile_insti">
                 Last visited - <div class="text_profile">2 hr ago</div>
             </div> -->
             <div class="text7" id="upvote_profile_insti">
-                Upvotes - <div class="text_profile">2k+</div>
+                Upvotes - <div class="text_profile">{{profile['upvotes']}}</div>
             </div>
             <div class="text7" id="email_profile_insti">
                 email address - 
@@ -78,7 +78,7 @@
                     {% for contributor in profile['top_contributor'] %}
                         <li class="list2">
                             <a href="{{url_for('profile', username = contributor[1])}}">
-                                <rect class="pfp_insti"></rect>
+                                <img class="pfp_insti"  src="{{url_for('profile_photoFeed', id_uniq=contributor[2])}}"></img>
                                 <div class="name_text_insti">
                                     <div class="text7">
                                         {{contributor[1]}}
@@ -158,7 +158,7 @@
                         <div class="text_home8">
                             {{post_info[4]}}
                         </div>
-                        <rect id="rect_profile_home"></rect>
+                        <img id="rect_profile_home"  src="{{url_for('profile_photoFeed', id_uniq=post_info[9])}}"></img>
                     </a>
                 </div>
     

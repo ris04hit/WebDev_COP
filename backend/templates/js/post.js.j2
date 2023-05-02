@@ -1,8 +1,8 @@
-
+var photo_exist = true;
+let CommentData;
 
 // display post
 function post_display(){
-    var photo_exist = true;
     var zip_filename = "filename";
     if (photo_exist) {
         var size = parseInt($('#text_post4').height()) + 1000;
@@ -11,8 +11,10 @@ function post_display(){
         $("#image_inside_post").css('top', size - 600);
     }
     else{
+        $("#image_inside_post").hide();
         var size = parseInt($('#text_post4').height()) + 503;
     }
+    $("#text_post4").html(`{{post['content']}}`);
     $.ajax({
         url: "/zipname/{{post['id_uniq']}}",
         type: "GET",
@@ -21,15 +23,86 @@ function post_display(){
           $("#zip_name_post").html(data);
         }
       });
+    $.ajax({
+        url: "/postComments/{{post['id_uniq']}}",
+        type: "GET",
+        post_id : '{{post["id_uniq"]}}',
+        success: function(data) {
+            CommentData = data;
+        }
+      });
     $("#zip_name_post").css('top', size+20);
     $('#inner_post_post').css('height', size);
     var top = 117 + size;
     $('#footer_post_div').css('top', top);
     var top = 183 + size;
     $('#rect_comment_post').css('top', top);
-    $('#line_comment_post').css('top', top+50);
-    $('#add_comment_post').css('top', top+7);
-    $('#button_post_0').css('top', top+13);
+    $('#line_comment_post').css('top', 50);
+    $('#add_comment_post').css('top', 7);
+    $('#button_post_0').css('top', 13);
+
+}
+
+function Display_comment(comment_list, mcp, cp, bsc, ccp, ncp, pfc){
+    var top = 0;
+    $("#"+mcp).css('top',top+60);
+    var html = "";
+    $("#"+mcp).html(html)
+    var top = 0;
+    console.log(comment_list.length);
+    for (let i = 0; i < comment_list.length; i++){
+        console.log(comment_list[i][0]);
+        html = `        
+                <div class="comment" id="${cp+i}" style="top: ${top}px;">
+                    <a href="/profile/${comment_list[i][0]['author_name']}" class="text1">
+                        <img id="${pfc+i}" class='pfp_comment'> 
+                        <div class="name_comment">
+                            ${comment_list[i][0]['author_name']}
+                        </div>
+                    </a>
+                    <div class="text10 comment_time_post1">
+                        ${comment_list[i][0]['creation_time']} ago
+                    </div>
+                    <div class="comment_content_post1 name_content" id="${ccp+i}">
+                        ${comment_list[i][0]['content']}
+                    </div>
+                    <div id="${bsc+i}" class="abs">
+                        <form action="/post/comment/upv/${comment_list[i][0]['id_uniq']}">
+                            <button class="button6" id="button_comment_post1">
+                                <div class="triangle-up2" id="triangle_post" type="submit"></div>
+                            <div class="upvote_comment">
+                                ${comment_list[i][0]['upvct']}
+                            </div>
+                            </button>
+                        </form>
+                        <form action="/comment/comment/${comment_list[i][0]['id_uniq']}" method="POST">
+                        <input class="button6" id="button_comment_post2" placeholder="Add Reply" name="button_comment_post2">
+                        <button class="button6 curs" id="button_comment_post3" type="submit">
+                            Reply
+                        </button>
+                        </form>
+                    </div>
+
+                    <rect class="nest_comment_post1"  id=${ncp+i} style="display:none;"></rect>
+                    <div class="mul_comment_post" id="${mcp+i}"></div>
+                </div>
+        `
+        $("#"+mcp).append(html);
+        Display_comment(comment_list[i][0]['comment_list'], mcp+i, cp+i, bsc+i, ccp+i, ncp+i, pfc+i);
+        if (i==10){
+            console.log("a"+html);
+        }
+        $("#"+bsc+i).css('top', parseInt($("#"+ccp+i).css('height'))+"px");
+        $("#"+ncp+i).css('top', parseInt($("#"+bsc+i).css('top'))+120+"px");
+        $("#"+mcp+i).css('top', parseInt($("#"+bsc+i).css('top'))+120+"px");
+        $("#"+ncp+i).css('height', parseInt($("#"+mcp+i).css("height")));
+        top = parseInt($("#"+ncp+i).css('height')) + parseInt($("#"+ncp+i).css('top')) + top;
+        $("#"+pfc+i).attr('src', `/pfpFeed/${comment_list[i][0]["author_uniq"]}`);
+        if (parseInt($("#"+mcp+i).css('height'))!=0){
+            $("#"+ncp+i).show();
+        }
+    }
+    $("#"+mcp).css('height',top+"px");
 }
 
 
@@ -38,8 +111,21 @@ $(document).ready(function(){
 
     $("#text_post7").click(function(){
         $("#comment_section_post").toggle();
+        Display_comment(CommentData, "mul_comment_post", "comment_post", "bottom_shift_comment", "comment_content_post", "nest_comment_post", "pfp_comment") ;
+        console.log(CommentData);
     })
     $("#image_post").click(function(){
         $("#comment_section_post").toggle();
+        Display_comment(CommentData, "mul_comment_post", "comment_post", "bottom_shift_comment", "comment_content_post", "nest_comment_post", "pfp_comment") ;
+    })
+    $("#image_inside_post").on("error", function() {
+        if ($(this).attr('src') === ""){
+            photo_exist = true
+            post_display();
+        }
+        else{
+            photo_exist = false;
+            post_display();
+        }
     })
 })

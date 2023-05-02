@@ -60,16 +60,19 @@ def feed(cur, user):
     tag_list = user['tag_list']
     query = 'SELECT * from {}'.format(tag_list)
     cur.execute(query)
-    print(tag_list)
     tag_list = list(cur.fetchall())
-    print(tag_list)
-    if len(tag_list)<50:
-        query = 'SELECT id_uniq from Tag'
-        cur.execute(query)
-        tag_list.extend(list((cur.fetchall())[:50-len(tag_list)]))
+    # if len(tag_list)<50:
+    #     query = 'SELECT id_uniq from Tag'
+    #     cur.execute(query)
+    #     tag_list.extend(list((cur.fetchall())[:50-len(tag_list)]))
+
     tag_list = sql_to_list(tag_list,'id_uniq')
-    print(tag_list)
     post_dic = {}
+    query ="SELECT * from Post"
+    cur.execute(query)
+    p_data = cur.fetchall()
+    for i in p_data:
+        post_dic[i['id_uniq']] = 1
     for tag_id in tag_list:
         query = "SELECT * from {}".format(tag_id+"_pos")
         cur.execute(query)
@@ -78,12 +81,12 @@ def feed(cur, user):
         for post_id in post_list:
             if post_id in post_dic:
                 post_dic[post_id]+=1
-            else:
-                post_dic[post_id] = 1
+            # else:
+            #     post_dic[post_id] = 1
     num = 50    # number of posts in feed
-    post_list_specific = sorted(post_dic, key=post_dic.get, reverse=True)
+    post_list_specific = sorted(post_dic, key=post_dic.get, reverse=True)[:num]
     count = 0
-    feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow)
+    feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow, author_id)
     for post_id in post_list_specific:
         if count == num:
             break
@@ -122,7 +125,7 @@ def feed(cur, user):
             query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(post_data['author_uniq']+"_ers")
             cur.execute(query, (user["id_uniq"],))
             already_follow = bool(cur.fetchall())
-            feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow)))
+            feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow), author_id))
     return feed
 
 def check_username(username):
@@ -137,6 +140,12 @@ def unique_username(cur, username):
     '''Return False if username already exists'''
     query = "SELECT username from Account WHERE BINARY username = %s"
     cur.execute(query, (username,))
+    return not bool(cur.fetchall())
+
+def unique_email_id(cur, email_id):
+    '''Return False if username already exists'''
+    query = "SELECT username from Account WHERE BINARY email_id = %s"
+    cur.execute(query, (email_id,))
     return not bool(cur.fetchall())
 
 def id_gen(cur, id_obj, username, table):
@@ -157,7 +166,7 @@ def id_gen(cur, id_obj, username, table):
     #     num = str(int(id_uniq[10:])+1).zfill(10)
     # else:
     #     num = "0000000000"
-    return id_obj+encoded_username+str(num)
+    return encoded_username+str(num)
 
 def create_linked_table(cur, id_uniq, suffix, ins_obj):
     if len(ins_obj)==1:
@@ -171,59 +180,6 @@ def create_linked_table(cur, id_uniq, suffix, ins_obj):
         query = "CREATE TABLE {} (id_obj ENUM({}) NOT NULL, id_uniq VARCHAR(200) NOT NULL UNIQUE, PRIMARY KEY (id_obj, id_uniq))".format(id_uniq+suffix, ", ".join(obj_list))
         cur.execute(query)
 
-# def follow(cur, sender_id, profile_id):
-#     ''' inputs are the uniq values ! '''
-#     profile_followers = profile_id + str('_ers')
-#     sender_following = sender_id + str('_ing')
-#     query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     if len(value) == 0 :
-#         query = ("INSERT INTO {} (id_obj, id_uniq) VALUES ( '{}', '{}');".format(profile_followers, 'A', sender_id))
-#         cur.execute(query)
-#         # insert into the following list !
-#         query = "SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id)
-#         cur.execute(query)
-#         value = cur.fetchall()
-#         if len(value) == 0 :
-#             query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('{}', '{}');".format(sender_following, 'A', profile_id)
-#             cur.execute(query)
-#         else:
-#             print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
-#     else:
-#         uniq = profile_id
-#         query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
-#         cur.execute(query)
-#         account_name = cur.fetchall()
-#         print('You have already followed {}'.format(account_name[0]['name']))
-
-# def unfollow(cur, sender_id, profile_id):
-#     ''' Inputs values are id_uniq type !'''
-#     # following from mani's ac to mecan's ac
-#     sender_following = sender_id + str('_ing')
-#     profile_followers = profile_id + str('_ers')
-#     query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     # print('val', value)
-#     if len(value) > 0 :
-#         query = "DELETE FROM {} WHERE id_uniq = '{}';".format(profile_followers, value[0]['id_uniq'])
-#         cur.execute(query)
-#         # deleting from the following list !
-#         query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(sender_following, profile_id))
-#         cur.execute(query)
-#         value = cur.fetchall()
-#         if len(value) > 0:
-#             query = "DELETE FROM {} WHERE id_uniq = '{}';".format(sender_following, value[0]['id_uniq'])
-#             cur.execute(query)
-#         else:
-#             print('#'*20 + '\n   DATABASE IS CORRUPTED !!\n')
-#     else:
-#         query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(profile_id)
-#         cur.execute(query)
-#         account_name = cur.fetchall()
-#         print("Already unfollowed {}".format(account_name[0]['name']))
-
 def upvote_for_post_help(cur, sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvotes_table (obj, uniq, count = 0)'''
     post_upvote_table = post_id + str('_upv')
@@ -234,10 +190,8 @@ def upvote_for_post_help(cur, sender_id, post_id):
     if len(value) == 0:
         query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(post_upvote_table, sender_id)
         cur.execute(query)
-        print('upvoted')
         upvoted = True
     else :
-        print('already upvoted to post')
         return 
     
     query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
@@ -258,44 +212,40 @@ def upvote_for_post_help(cur, sender_id, post_id):
         count += 1
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
-        print('checked !')
     return 
 
-# def upvote_for_comment(cur, sender_id, comment_id):
-#     '''requirements comments_upvote table, comment_publisher_upvote table (obj, uniq, count = 0)'''
-#     comment_upvote_table = comment_id + str('_upv')
-#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     upvoted = False
-#     if len(value) == 0:
-#         query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(comment_upvote_table, sender_id)
-#         cur.execute(query)
-#         print('upvoted to coomment')
-#         upvoted = True
-#     else :
-#         print('already upvoted to comment')
-#         return 
+def upvote_for_comment(cur, sender_id, comment_id):
+    '''requirements comments_upvote table, comment_publisher_upvote table (obj, uniq, count = 0)'''
+    comment_upvote_table = comment_id + str('_upv')
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    upvoted = False
+    if len(value) == 0:
+        query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(comment_upvote_table, sender_id)
+        cur.execute(query)
+        upvoted = True
+    else :
+        return 
     
-#     query = "SELECT author_uniq FROM Comment WHERE id_uniq = '{}' ;".format(comment_id)
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     comment_publisher_id = value[0]['author_uniq']
-#     comment_publisher_upvotes_table = comment_publisher_id + str('_upv')
+    query = "SELECT author_uniq FROM Comment WHERE id_uniq = '{}' ;".format(comment_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    comment_publisher_id = value[0]['author_uniq']
+    comment_publisher_upvotes_table = comment_publisher_id + str('_upv')
 
-#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table, sender_id)
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     if len(value) == 0 :
-#         query = "INSERT INTO {} (id_obj, id_uniq, count) VALUES ('A', '{}', 1) ;".format(comment_publisher_upvotes_table, sender_id)
-#         cur.execute(query)
-#     elif upvoted:
-#         count = value[0]['count']
-#         count += 1
-#         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
-#         cur.execute(query)
-#         print('checked !')
-#     return 
+    query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table, sender_id)
+    cur.execute(query)
+    value = cur.fetchall()
+    if len(value) == 0 :
+        query = "INSERT INTO {} (id_obj, id_uniq, count) VALUES ('A', '{}', 1) ;".format(comment_publisher_upvotes_table, sender_id)
+        cur.execute(query)
+    elif upvoted:
+        count = value[0]['count']
+        count += 1
+        query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
+        cur.execute(query)
+    return 
 
 
 def upvote_for_post_help(cur, sender_id, post_id):
@@ -309,10 +259,8 @@ def upvote_for_post_help(cur, sender_id, post_id):
         query = "INSERT INTO {} (id_obj, id_uniq) VALUES ('A', '{}') ;".format(post_upvote_table, sender_id)
         cur.execute(query)
         # mysql.connection.commit()
-        print('upvoted to post from function')
         upvoted = True
     else :
-        print('already upvoted to post')
         return 
     
     query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
@@ -334,50 +282,10 @@ def upvote_for_post_help(cur, sender_id, post_id):
         count += 1
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
-        print('checked !')
     # mysql.connection.commit()
     return 
 
     
-# def downvote_for_post_help(cur, sender_id, post_id):
-#     ''' requirements post_upvote_table, post_publisher_upvote_table '''
-#     post_upvote_table = post_id + str('_upv')
-#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     downvoted = False
-#     if len(value) > 0:
-#         query = "DELETE FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
-#         cur.execute(query)
-#         print('downvoted post')
-#         downvoted = True
-#     else:
-#         print('already downvoted to post !')
-#         return 
-    
-#     # finding post_publisher_id 
-#     query = "SELECT author_uniq FROM Post WHERE id_uniq = '{}' ;".format(post_id)
-
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     post_publisher_id = value[0]['author_uniq']
-#     post_publisher_upvotes_table = post_publisher_id + str('_upv')
-
-#     query = "SELECT * FROM {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table, sender_id)
-#     cur.execute(query)
-#     value = cur.fetchall()
-#     if len(value) > 0 and downvoted:
-#         count = value[0]['count']
-#         count -= 1
-#         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
-#         cur.execute(query)
-#         print('checked !')
-#     elif len(value) == 0 :
-#         print('database error !')
-#     return 
-
-
-
 
 def downvote_for_post_help(cur, sender_id, post_id):
     ''' requirements post_upvote_table, post_publisher_upvote_table '''
@@ -389,10 +297,8 @@ def downvote_for_post_help(cur, sender_id, post_id):
     if len(value) > 0:
         query = "DELETE FROM {} WHERE id_uniq = '{}' ;".format(post_upvote_table, sender_id)
         cur.execute(query)
-        print('downvoted post')
         downvoted = True
     else:
-        print('already downvoted to post !')
         return 
     
     # finding post_publisher_id 
@@ -411,7 +317,6 @@ def downvote_for_post_help(cur, sender_id, post_id):
         count -= 1
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(post_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
-        print('checked !')
     elif len(value) == 0 :
         print('database error !')
     return 
@@ -427,10 +332,8 @@ def downvote_for_comment(cur, sender_id, comment_id):
     if len(value) > 0:
         query = "DELETE FROM {} WHERE id_uniq = '{}' ;".format(comment_upvote_table, sender_id)
         cur.execute(query)
-        print('downvoted comment')
         downvoted = True
     else:
-        print('already downvoted to comment !')
         return 
     
     # finding comment_publisher_id 
@@ -449,27 +352,28 @@ def downvote_for_comment(cur, sender_id, comment_id):
         count -= 1
         query = "UPDATE {} SET count = {} WHERE id_uniq = '{}' ;".format(comment_publisher_upvotes_table,  count, sender_id)
         cur.execute(query)
-        print('checked !')
     elif len(value) == 0 :
         print('database error !')
     return 
 
-def comment_to_post(cur, publisher_id, post_id, text):
+def comment_to_post(cur, publisher_id, post_id, text, username):
     ''' all the input ids are uniqs '''
     
     # generating comment id at time of creation !
-    code = id_gen(cur, post_id, publisher_id, 'Comment')
+    code = id_gen(cur, "C", username, 'Comment')
     temp = ""
+    print(code)
     for char in code :
-        asc = ord(char)
-        if (97 <= asc and asc <= 122) or (65 <= asc and asc <= 90):
+        if char.isalnum():
             temp += char
+        else:
+            temp += 'c'
     comment_id = temp
 
 
     query = "SELECT * FROM Id WHERE id_uniq = '{}' ;".format(comment_id)
     cur.execute(query)
-    value = cur.fetchall();
+    value = cur.fetchall()
     if len(value) == 0:
         # inserting this comment_id into Id table
         query = "INSERT INTO Id (id_obj, id_uniq) VALUES ('C', '{}') ;".format(comment_id)
@@ -480,7 +384,7 @@ def comment_to_post(cur, publisher_id, post_id, text):
         table_list = ['upv', 'com', 'rep']
         for name in table_list:
             query1 = query.format(comment_id, name)
-            print(query1, name)
+            ##print(query1, name)
             cur.execute(query1)
 
         # inserting this comment into Comment table as entry !
@@ -489,25 +393,23 @@ def comment_to_post(cur, publisher_id, post_id, text):
 
         # inserting comment_id into post's comment list
         query = "INSERT INTO {}_com (id_obj, id_uniq) VALUES ('C', '{}') ;".format(post_id, comment_id)
+        print(query)
         cur.execute(query)
     else:
         print('already done !')
-    print('commented to post !')
     return 
 
-def comment_to_comment(cur, publisher_id, comment_id, text):
+def comment_to_comment(cur, publisher_id, comment_id, text, username):
     ''' all the input ids are uniqs '''
     
     # generating comment id at time of creation !
-    code = id_gen(cur, comment_id, publisher_id, 'Comment')
+    code = id_gen(cur, "C", username, 'Comment')
     temp = ""
     for char in code :
-        asc = ord(char)
-        if (97 <= asc and asc <= 122) or (65 <= asc and asc <= 90):
+        if char.isalnum():
             temp += char
     comment_hash = temp
 
-    print(comment_hash, 'hash')
     
     query = "SELECT * FROM Id WHERE id_uniq = '{}' ;".format(comment_hash)
     cur.execute(query)
@@ -522,7 +424,7 @@ def comment_to_comment(cur, publisher_id, comment_id, text):
         table_list = ['upv', 'com', 'rep']
         for name in table_list:
             query1 = query.format(comment_hash, name)
-            print(query1, name)
+
             cur.execute(query1)
 
         # inserting this comment into Comment table as entry !
@@ -542,18 +444,17 @@ def comment_to_comment(cur, publisher_id, comment_id, text):
 
 def comment_get (cur, comment_id):
     query = "SELECT * FROM Comment WHERE id_uniq = '{}' ;".format(comment_id['id_uniq'])
-    print("\n\n",query,"\n\n")
     cur.execute(query)
     comment_list = cur.fetchall()
     return_list = []
     for comment in comment_list:
-        print("\n\n\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ",comment,"\n\n\n")
         author = comment['author_uniq']
         query = "SELECT * FROM Account WHERE id_uniq = '{}' ;".format(author)
         cur.execute(query)
         author = cur.fetchall()[0]
         comment['author_name'] = author['username']
         creation_time = comment['creation_time']
+        comment['time_sort'] = creation_time
         time = relativedelta(datetime.now(),creation_time)
         if time.years:
             time_str = "{} year{}".format(time.years, "" if time.years==1 else "s")
@@ -568,6 +469,9 @@ def comment_get (cur, comment_id):
         else:
             time_str = "{} second{}".format(time.seconds,  "" if time.seconds==1 else "s")
         comment['creation_time'] = time_str
+        query = "SELECT * from {}".format(comment['upvotes'])
+        cur.execute(query)
+        comment['upvct'] = len(cur.fetchall())
         comment_table = comment['comments']
         query = "SELECT * FROM {} ;".format(comment_table)
         cur.execute(query)
@@ -575,7 +479,9 @@ def comment_get (cur, comment_id):
         comment['comment_list'] = []
         for commentnest in comment_list:
             comment['comment_list'].append(comment_get(cur, commentnest))
-    print("\nHelloriz\n",comment)
+            comment['comment_list'] = sorted(comment['comment_list'], key = lambda x: x[0]['time_sort'], reverse=True)
+        return_list.append(comment)
+    # print(return_list)
     return return_list
 
 
@@ -603,7 +509,6 @@ def follow_help(cur, sender_id, profile_id):
         query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(uniq)
         cur.execute(query)
         account_name = cur.fetchall()
-        print('You have already followed {}'.format(account_name[0]['name']))
 
 def unfollow_help(cur, sender_id, profile_id):
     ''' Inputs values are id_uniq type !'''
@@ -613,7 +518,6 @@ def unfollow_help(cur, sender_id, profile_id):
     query = ("SELECT * from {} WHERE id_uniq= '{}' ;".format(profile_followers, sender_id))
     cur.execute(query)
     value = cur.fetchall()
-    # print('val', value)
     if len(value) > 0 :
         query = "DELETE FROM {} WHERE id_uniq = '{}';".format(profile_followers, value[0]['id_uniq'])
         cur.execute(query)
@@ -630,7 +534,6 @@ def unfollow_help(cur, sender_id, profile_id):
         query = "SELECT name FROM Account WHERE id_uniq = '{}' ;".format(profile_id)
         cur.execute(query)
         account_name = cur.fetchall()
-        print("Already unfollowed {}".format(account_name[0]['name']))
 
 def profile_data(cur, username, curr_user):
     query = "SELECT * from Account WHERE username = %s"
@@ -677,12 +580,13 @@ def profile_data(cur, username, curr_user):
     for tag in tags:
         query = "SELECT name, id_uniq from Tag WHERE id_uniq = %s"
         cur.execute(query, (tag['id_uniq'],))
-        tag_list.append(cur.fetchall()[0])
+        result = cur.fetchall()
+        result[0]['name'] = result[0]['name'].replace("&apos;", "'")
+        tag_list.append(result[0])
     profile['tag_list'] = tag_list
     query = "SELECT * from {}".format(profile['posts'])
     cur.execute(query)
     post_list_specific = cur.fetchall()
-    print("yolisst",post_list_specific)
     feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow)
     num = 50
     count = 0
@@ -694,7 +598,6 @@ def profile_data(cur, username, curr_user):
         cur.execute(query, (post_id,))
         post_data = cur.fetchall()[0]
         if post_data['public_post'] and post_data['visibility']:
-            print(0)
             count += 1
             upvote_table = post_data['upvotes']
             query = "SELECT count(id_uniq) from {}".format(upvote_table)
@@ -759,6 +662,7 @@ def institute_data(cur, inst_id, curr_user):
     cur.execute(query)
     post_list_specific = []
     post_data = cur.fetchall()
+    upv_set = set()
     for post_item in post_data:
         query = 'SELECT * from {}'.format(post_item['institutes'])
         cur.execute(query)
@@ -774,12 +678,18 @@ def institute_data(cur, inst_id, curr_user):
                 top_contributor[post_item['author_uniq']] += 1
             else:
                 top_contributor[post_item['author_uniq']] = 1
+            query = "SELECT * from {}".format(post_item['upvotes'])
+            cur.execute(query)
+            upv_data = cur.fetchall()
+            for upv in upv_data:
+                upv_set.add(upv['id_uniq'])
+    insti_data['upvotes'] = len(upv_set)
     top_list = []
     for author_id in top_contributor:
         query = "SELECT * from Account WHERE id_uniq = %s"
         cur.execute(query, (author_id,))
         author_data = cur.fetchall()[0]
-        top_list.append((top_contributor[author_id], author_data['username']))
+        top_list.append((top_contributor[author_id], author_data['username'], author_data['id_uniq']))
     insti_data['top_contributor'] = top_list[:10]
     feed = []   # stores (post_id, upvotes_count, already_upvoted, time_str, author_username,title, content, time, already_follow, author_id)
     num = 50
@@ -791,7 +701,6 @@ def institute_data(cur, inst_id, curr_user):
         cur.execute(query, (post_id,))
         post_data = cur.fetchall()[0]
         if post_data['public_post'] and post_data['visibility']:
-            print(0)
             count += 1
             upvote_table = post_data['upvotes']
             query = "SELECT count(id_uniq) from {}".format(upvote_table)
@@ -823,23 +732,21 @@ def institute_data(cur, inst_id, curr_user):
             query = "SELECT * from {} WHERE BINARY id_uniq = %s".format(post_data['author_uniq']+"_ers")
             cur.execute(query, (curr_user["id_uniq"],))
             already_follow = bool(cur.fetchall())
+            # title.replace("''", "&apos;")
             feed.append((post_id, upvotes_count, int(already_upvoted), time_str, author_username, title, content, time, int(already_follow), author_id))
     return insti_data, feed
 
 def find_contribution_individual(cur, user_id):
     '''Returns the number of posts posted by a user'''
     query = "SELECT * from Account WHERE BINARY id_uniq = '{}';".format(user_id)
-    # print(query)
     cur.execute(query)
     value = cur.fetchall()
-    # print(value)
     if value:
         value = value[0]
         contribution = value['posts']
         query = "select * from {} ;".format(contribution)
         cur.execute(query)
         ans = cur.fetchall()
-        # print(ans)
         return len(ans)
     return 0
 
@@ -849,13 +756,11 @@ def contribution_user(cur):
     query = "SELECT * from Account ;"
     cur.execute(query)
     value = cur.fetchall()
-    # print('value\n'*20 ,value)
 
     for sets in value:
         data.append((find_contribution_individual(cur, sets['id_uniq']), sets['username'], sets['id_uniq']))
     
     data.sort(reverse=True)
-    # print(data )
     return data[:5]
 
 def contribution_inst(cur):
@@ -883,7 +788,6 @@ def contribution_inst(cur):
         # ans2 = total post posted in that institution
     
     data.sort(reverse=True)
-    # print(data)
     return data[:5]
     
 
@@ -920,7 +824,6 @@ def likes_user(cur):
     for acc in users:
         data.append((find_likes_user(cur, acc['id_uniq']), acc['username'], acc['id_uniq'])) 
     data.sort(reverse=True)
-    # print(data)
     return data[:5]       
     
 
@@ -947,5 +850,4 @@ def likes_inst(cur):
             ans2 += find_likes_post(cur, post['id_uniq'])
         data.append((ans2, insti['name'], insti['id_uniq']))
     data.sort(reverse=True)
-    print(data)
     return data[:5]

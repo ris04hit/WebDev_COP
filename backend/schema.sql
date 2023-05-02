@@ -8,8 +8,8 @@
 
 -- whereever get VARCHAR(100) means it is of set type thing and hence need to be stored in a different schema 
 
-DROP DATABASE IF EXISTS Synergy_db;
-CREATE DATABASE Synergy_db;
+-- DROP DATABASE IF EXISTS Synergy_db;
+-- CREATE DATABASE Synergy_db;
 USE Synergy_db;
 
 

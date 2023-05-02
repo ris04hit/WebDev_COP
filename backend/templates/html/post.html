@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/header.css')}}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abel">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="{{url_for('header_js',user=user)}}"></script>
+        <script src="{{url_for('header_js')}}"></script>
         <script src="{{url_for('post_js')}}"></script>
         <script src="{{url_for('main_js')}}" defer></script>
     </head>
@@ -70,7 +70,7 @@
                         </div>
                     </button>
                 </form>
-            <rect id="rect_profile_post"></rect>
+            <img id="rect_profile_post" src="{{ url_for('profile_photoPost') }}"></img> 
 
             <div id="title_post" class="text1">
                 {{post['title']}}
@@ -80,9 +80,8 @@
                 <source src="{{url_for('static',filename='data/Chess Game.mp4')}}" type="video/mp4">
             </video> -->
             <div id="text_post4" class="text4">
-                {{post['content']}}
             </div>
-            <img src="" id="image_inside_post">
+            <img src="" id="image_inside_post"   >
             <!-- <div id="text_post5" class="text4">
                 There are many openings for white in chess, namely the London System, French system,
                 Sicilian Najdorf, etc. For beginners, the most popular opening is the London system
@@ -116,74 +115,18 @@
         </div>
 
         <div id="comment_section_post" class="pop_up">
-            <div class="inner_post" id="rect_comment_post"></div>
-            <rect id="line_comment_post"></rect>
-            <form>
-                <input type="text" class="form3" id="add_comment_post" placeholder="Add Comment">
-                <button class="button1" id="button_post_0">
-                    Add
-                </button>
-            </form>
-
-            <div id="mul_comment_post">
-                {% for comment in comments %}
-                    {% set ct = loop.index %}
-                    <div class="comment" id="comment_post{ct}">
-                        <a href="{{url_for('profile', username='')}}" class="text1">
-                            <rect class="pfp_comment"></rect> 
-                            <div class="name_comment">
-                                {{comment['author_name']}}
-                            </div>
-                        </a>
-                        <div class="text10" id="comment_time_post1">
-                            6hrs ago
-                        </div>
-                        <div class="name_comment" id="comment_content_post1">
-                            Blah Blah Blah Blah
-                        </div>
-                        <button class="button6" id="button_comment_post1">
-                            <div class="triangle-up2" id="triangle_post"></div>
-                            <div class="upvote_comment">
-                                34
-                            </div>
-                        </button>
-                        <button class="button6" id="button_comment_post2">
-                            Reply
-                        </button>
-                        <button class="button6 curs" id="button_comment_post3">
-                            Report
-                        </button>
-
-                        <rect id="nest_comment_post1"></rect>
-
-                        <div class="comment" id="comment_post2">
-                            <a href="{{url_for('profile', username='')}}" class="text1">
-                                <rect class="pfp_comment"></rect> 
-                                <div class="name_comment">
-                                    Excitedleopard
-                                </div>
-                            </a>
-                            <div class="text10" id="comment_time_post1">
-                                6hrs ago
-                            </div>
-                            <div class="name_comment" id="comment_content_post1">
-                                Blah Blah Blah Blah
-                            </div>
-                            <button class="button6" id="button_comment_post1">
-                                <div class="triangle-up2" id="triangle_post"></div>
-                                <div class="upvote_comment">
-                                    34
-                                </div>
-                            </button>
-                            <button class="button6" id="button_comment_post2">
-                                Reply
-                            </button>
-                            <button class="button6" id="button_comment_post3">
-                                Report
-                            </button>
-                        </div>
+            <div class="inner_post" id="rect_comment_post">
+                <rect id="line_comment_post"></rect>
+                <form action="{{url_for('comment_for_post', post_id = post['id_uniq'])}}" method="POST">
+                    <input type="text" class="form3" id="add_comment_post" placeholder="Add Comment" name="add_comment_post">
+                    <button class="button1" id="button_post_0" type="submit">
+                        Add
+                    </button>
+                </form>
+                <div id="left_shift_comment">
+                    <div id="mul_comment_post0" class="mul_comment_post">
                     </div>
-                {% endfor %}
+                </div>
             </div>
         </div>
     </body>
